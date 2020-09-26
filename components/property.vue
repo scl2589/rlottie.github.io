@@ -18,7 +18,7 @@
               class="mr-2"
             >
             </v-btn>
-            <span>{{color.slice(0, 7)}}</span>
+            <span>{{ color }}</span>
           </template>
           <v-color-picker
             value="#7417BE"
@@ -83,7 +83,7 @@ module.exports = {
   name: 'property',
   data: function () {
     return {
-      color: 'pink',
+      color: "#FFFFFF",
       xPos: 250,
       yPos: 250,
       scale: 100,
@@ -114,6 +114,22 @@ module.exports = {
         setFillOpacity( this.selectedLayer.name + ".**", Number(opacity));
         setStrokeOpacity( this.selectedLayer.name + ".**", Number(opacity));
       }
+    },
+    // changeColor(color) {
+    //   setFillColor(this.selectedLayer.name + ".**", color.rgba.r/255, color.rgba.g/255, color.rgba.b/255);
+    //   setStrokeColor(this.selectedLayer.name + ".**", color.rgba.r/255, color.rgba.g/255, color.rgba.b/255);
+    // }
+  },
+  watch: {
+    color() {
+      var hex = this.color.replace( "#", "" ); 
+      var value = hex.match( /[a-f\d]/gi ); 
+      value = hex.match( /[a-f\d]{2}/gi ); 
+      var r = parseInt( value[0], 16 )/255; 
+      var g = parseInt( value[1], 16 )/255; 
+      var b = parseInt( value[2], 16 )/255; 
+      setFillColor(this.selectedLayer.name + ".**", r, g, b);
+      setStrokeColor(this.selectedLayer.name + ".**", r, g, b);
     }
   }
 }
