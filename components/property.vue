@@ -1,10 +1,9 @@
 <template>
   <div class="bg-sidebar sidebar">
     <p class="title">Property</p>
-    <p>{{ selectedLayer }}</p>
     <!-- color controller -->
     <div class="property">
-      <p class="property-title">color</p>
+      <p class="property-title">Color</p>
       <div class="text-left">
         <v-menu 
           offset-y 
@@ -32,33 +31,45 @@
     
     <!-- position controller -->
     <div class="property">
-      <p class="property-title">position</p>
+      <p class="property-title">Position</p>
       <div class="position d-flex">
         <v-text-field
           solo
           prefix="x"
           v-model="xPos"
           class="mr-3"
-          hide-details
         ></v-text-field>
         <v-text-field
           solo
           prefix="y"
           v-model="yPos"
-          hide-details
         ></v-text-field>
       </div>
     </div>
 
     <!-- scale controller -->
     <div class="property">
-      <p class="property-title">scale</p>
-      <div class="scale">
-         <v-text-field
-          solo
-          suffix="%"
-          v-model="scale"
-        ></v-text-field>
+      <p class="property-title">Scale</p>
+      <div class="preference">
+        <div class="position d-flex">
+          <v-text-field
+            solo
+            prefix="W"
+            v-model="selectedLayer.scaleWidth"
+            class="mr-3"
+            @change="changeScaleWidth(selectedLayer.scaleWidth)"
+            hint="The number should be greater and equal to 0 "
+            placeholder="100"
+          ></v-text-field>
+          <v-text-field
+            solo
+            prefix="H"
+            v-model="selectedLayer.scaleHeight"
+            @change="changeScaleHeight(selectedLayer.scaleHeight)"
+            placeholder="100"
+            hint="The number should be greater than or equal to 0 "
+          ></v-text-field>
+        </div>
       </div>
     </div>
   </div>
@@ -73,7 +84,6 @@ module.exports = {
       color: 'pink',
       xPos: 250,
       yPos: 250,
-      scale: 100,
     }
   },
   props: {
@@ -89,6 +99,30 @@ module.exports = {
         width: '30px',
         borderRadius: menu ? '50%' : '4px',
         transition: 'border-radius 200ms ease-in-out'
+      }
+    }
+  },
+  methods: {
+    changeScaleWidth(scaleWidth) {
+      if (scaleWidth >= 0) {
+        if (this.selectedLayer.scaleHeight) {
+          if (this.selectedLayer.scaleHeight >= 0) {
+            setScale(this.selectedLayer.name + ".**", Number(scaleWidth), Number(this.selectedLayer.scaleHeight))
+          }
+        } else {
+          setScale(this.selectedLayer.name + ".**", Number(scaleWidth), 100)
+        }
+      }
+    },
+    changeScaleHeight(scaleHeight) {
+      if (scaleHeight >= 0) {
+         if (this.selectedLayer.scaleWidth) {
+           if (this.selectedLayer.scaleWidth >= 0) {
+             setScale(this.selectedLayer.name + ".**", Number(this.selectedLayer.scaleWidth), Number(scaleHeight))
+           }
+        } else {
+          setScale(this.selectedLayer.name + ".**", 100, Number(scaleHeight))
+        }
       }
     }
   }
@@ -120,4 +154,11 @@ p {
   color: rgba(15, 128, 170, 0.77);
 }
 
+.v-messages.theme--light {
+  color: white !important;
+}
+
+.v-input {
+  width: 50% !important;
+}
 </style>
