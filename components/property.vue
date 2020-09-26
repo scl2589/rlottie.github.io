@@ -36,13 +36,17 @@
         <v-text-field
           solo
           prefix="x"
-          v-model="xPos"
+          v-model="selectedLayer.xPos"
+          placeholder="0"
+          @change="changeXPos(selectedLayer.xPos)"
           class="mr-3"
         ></v-text-field>
         <v-text-field
           solo
           prefix="y"
-          v-model="yPos"
+          v-model="selectedLayer.yPos"
+          placeholder="0"
+          @change="changeYPos(selectedLayer.yPos)"
         ></v-text-field>
       </div>
     </div>
@@ -82,8 +86,6 @@ module.exports = {
   data: function () {
     return {
       color: 'pink',
-      xPos: 250,
-      yPos: 250,
     }
   },
   props: {
@@ -123,6 +125,20 @@ module.exports = {
         } else {
           setScale(this.selectedLayer.name + ".**", 100, Number(scaleHeight))
         }
+      }
+    },
+    changeXPos(xPos) {
+      if (this.selectedLayer.yPos) {
+        setPosition(this.selectedLayer.name + ".**", Number(xPos), Number(this.selectedLayer.yPos))
+      } else {
+        setPosition(this.selectedLayer.name + ".**", Number(xPos), 0)
+      }
+    },
+    changeYPos(yPos) {
+      if (this.selectedLayer.xPos) {
+         setPosition(this.selectedLayer.name + ".**", Number(this.selectedLayer.xPos), Number(yPos))
+      } else {
+        setPosition(this.selectedLayer.name + ".**", 0, Number(yPos))
       }
     }
   }
