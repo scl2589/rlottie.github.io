@@ -43,23 +43,25 @@ module.exports = {
     return {
       'searchKeyword': null,
       'clickedLayer': null,
-      'layers': [
-        {
-          name: 'layer1',
-          visible: true,
-          selected: false
-        },
-        {
-          name: 'layer2',
-          visible: true,
-          selected: false
-        },
-        {
-          name: 'layer3',
-          visible: true,
-          selected: false
-        },
-      ],
+      // layers: [
+      //   {
+      //     name: 'layer1',
+      //     visible: true,
+      //     selected: false
+      //   },
+      //   {
+      //     name: 'layer2',
+      //     visible: true,
+      //     selected: false
+      //   },
+      //   {
+      //     name: 'layer3',
+      //     visible: true,
+      //     selected: false
+      //   },
+      // ],
+      layers: [],
+      windowReadyState: false
     }
   },
   methods: {
@@ -70,6 +72,8 @@ module.exports = {
       }
     },
     clickLayer(layer) {
+      this.layers2 = getLayerList() 
+      console.log(this.layers2)
       if (this.clickedLayer) {
         this.clickedLayer.selected = !this.clickedLayer.selected
         if (this.clickedLayer === layer) {
@@ -84,6 +88,24 @@ module.exports = {
         this.$emit('layer-selected', layer)
       } 
     }
+  },
+  created() {
+    console.log("leftPanel created")
+    setTimeout(() => {
+      this.layers = getLayerList();
+      for(let i=0;i<this.layers.length;i++) {
+        console.log(this.layers[i].name+ " " + this.layers[i].inFrame + " " + this.layers[i].outFrame);
+      }
+      // [0, 1] <- [0, 255]
+      setFillColor("el.**", (123/255), 0, 0);
+      setStrokeColor("el.**", (123/255), 0, 0);
+      setFillOpacity("b1.**", 50);
+      // setStrokeOpacity
+      setStrokeWidth("b.**", 35);
+      setPosition("el.**", 20, -30);
+      setScale("el.**", 100, 100);
+      setRotation("el.**", 360);
+    }, 500);
   },
 }
 </script>

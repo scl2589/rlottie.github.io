@@ -9,6 +9,7 @@ function setup() {
     Module.onRuntimeInitialized = _ => {
       RLottieModule.init();
     };
+    console.log("Rlottie Module loaded");
   };
 }
 
