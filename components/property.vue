@@ -1,10 +1,10 @@
 <template>
   <div class="bg-sidebar sidebar">
     <p class="title">Property</p>
-    <p>{{ selectedLayer }}</p>
+    
     <!-- color controller -->
     <div class="property">
-      <p class="property-title">color</p>
+      <p class="property-title">Color</p>
       <div class="text-left">
         <v-menu 
           offset-y 
@@ -29,32 +29,45 @@
         </v-menu>
       </div>
     </div>
-    
+
+    <!-- opacity controller -->
+    <div class="property">
+      <p class="property-title">Opacity</p>
+      <div class="position d-flex">
+        <v-text-field
+          solo
+          v-model="selectedLayer.opacity"
+          placeholder="Opacity"
+          hint="The number should be in between 0 and 100!"
+          class="mr-3"
+          @change="changeOpacity(selectedLayer.opacity)"
+        ></v-text-field>
+      </div>
+    </div>
+
     <!-- position controller -->
     <div class="property">
-      <p class="property-title">position</p>
+      <p class="property-title">Position</p>
       <div class="position d-flex">
         <v-text-field
           solo
           prefix="x"
           v-model="xPos"
           class="mr-3"
-          hide-details
         ></v-text-field>
         <v-text-field
           solo
           prefix="y"
           v-model="yPos"
-          hide-details
         ></v-text-field>
       </div>
     </div>
 
     <!-- scale controller -->
     <div class="property">
-      <p class="property-title">scale</p>
+      <p class="property-title">Scale</p>
       <div class="scale">
-         <v-text-field
+        <v-text-field
           solo
           suffix="%"
           v-model="scale"
@@ -74,6 +87,9 @@ module.exports = {
       xPos: 250,
       yPos: 250,
       scale: 100,
+      opacity: 100,
+      valid: true,
+      lazy: false,
     }
   },
   props: {
@@ -89,6 +105,14 @@ module.exports = {
         width: '30px',
         borderRadius: menu ? '50%' : '4px',
         transition: 'border-radius 200ms ease-in-out'
+      }
+    }
+  },
+  methods: {
+    changeOpacity(opacity) {
+      if (opacity && opacity <= 100 && opacity >= 0) {
+        setFillOpacity( this.selectedLayer.name + ".**", Number(opacity));
+        setStrokeOpacity( this.selectedLayer.name + ".**", Number(opacity));
       }
     }
   }
@@ -120,4 +144,7 @@ p {
   color: rgba(15, 128, 170, 0.77);
 }
 
+.v-messages.theme--light {
+  color: white !important;
+}
 </style>
