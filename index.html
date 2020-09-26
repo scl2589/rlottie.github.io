@@ -66,9 +66,9 @@
   <body>
     <v-app class="window" id="app">
       <div class="row no-gutters">
-        <navbar @canvas-changed="changeCanvas" class="col-12"></navbar>
+        <navbar @canvas-changed="changeCanvas" @file-changed="changeFile" class="col-12"></navbar>
 
-        <leftpanel @layer-selected="layerSelected" class="col-3"></leftpanel>
+        <leftpanel @layer-selected="layerSelected" :layers="layers" :key="componentKey" class="col-3"></leftpanel>
         
         <!-- Player  -->
         <div class="col-6">
@@ -205,10 +205,12 @@
         data() {
           return {
             selection: '',
+            layers: null,
             isLayer: false,
             selectedLayer: null,
             backgroundColor: null,
             canvasShape: 0,
+            componentKey: 0,
             
             // player settings
             content: true,
@@ -258,23 +260,20 @@
           changeCanvas(toggle_one) {
             this.canvasShape = toggle_one
           },
+          changeFile() {
+            this.layers = null;
+            setTimeout(() => {
+              this.layers = getLayerList();
+            }, 500);
+            
+            
+          }
         },
-
-        // beforeCreate: function() {
-        //   console.log("beforeCreate");
-        // },
-
-        // created: function() {
-        //   console.log("created");
-        // },
-
-        // mounted: function() {
-        //   console.log("mounted");
-        // },
-
-        // updated: function() {
-        //   console.log("updated");
-        // }
+        mounted: function() {
+          setTimeout(() => {
+            this.layers = getLayerList();
+          }, 500);
+        },
       });
     </script>
   </body>

@@ -20,13 +20,17 @@
     <!-- layer list -->
     <p class="title px-3 layers-title">Layers</p>
     <div class="layer-list container py-3 px-0">
-      <div v-for="layer in layers" :key="layer.name">
+      <div v-for="(layer, idx) in layers" :key="layer.idx">
         <div class="row no-gutters py-3 px-3 rounded" :class="{ 'bg-green': layer.selected }">
-          <div @click="clickLayer(layer)" class="layer-info row no-gutters">
-            <img class="img-thumbnail layer-thumbnail" src="" :alt="layer.name">
-            <p class="layer-name my-auto ml-4">{{ layer.name }}</p>
+          <div @click="clickLayer(layer)" class="layer-info row no-gutters col-10">
+            <img class="img-thumbnail layer-thumbnail col-4" src="" :alt="layer.idx">
+            <div class="col-8 d-flex align-items-center">
+              <p class="ml-3 mb-0 layer-name">
+                {{ layer.name }}
+              </p>
+            </div>
           </div>
-          <button @click="layer.visible = !layer.visible" class="eye-btn btn ml-auto">
+          <button @click="layer.visible = !layer.visible" class="eye-btn btn ml-auto col-2">
             <i v-if="layer.visible" class="text-white far fa-eye"></i>
             <i v-else class="text-white far fa-eye-slash"></i>
           </button>
@@ -39,28 +43,13 @@
 <script>
 module.exports = {
   name: 'leftPanel',
+  props: {
+    layers: Object
+  },
   data: function () {
     return {
       'searchKeyword': null,
       'clickedLayer': null,
-      // layers: [
-      //   {
-      //     name: 'layer1',
-      //     visible: true,
-      //     selected: false
-      //   },
-      //   {
-      //     name: 'layer2',
-      //     visible: true,
-      //     selected: false
-      //   },
-      //   {
-      //     name: 'layer3',
-      //     visible: true,
-      //     selected: false
-      //   },
-      // ],
-      layers: [],
       windowReadyState: false
     }
   },
@@ -72,8 +61,6 @@ module.exports = {
       }
     },
     clickLayer(layer) {
-      this.layers2 = getLayerList() 
-      console.log(this.layers2)
       if (this.clickedLayer) {
         this.clickedLayer.selected = !this.clickedLayer.selected
         if (this.clickedLayer === layer) {
@@ -88,24 +75,6 @@ module.exports = {
         this.$emit('layer-selected', layer)
       } 
     }
-  },
-  created() {
-    console.log("leftPanel created")
-    setTimeout(() => {
-      this.layers = getLayerList();
-      for(let i=0;i<this.layers.length;i++) {
-        console.log(this.layers[i].name+ " " + this.layers[i].inFrame + " " + this.layers[i].outFrame);
-      }
-      // [0, 1] <- [0, 255]
-      // setFillColor("el.**", (123/255), 0, 0);
-      // setStrokeColor("el.**", (123/255), 0, 0);
-      // setFillOpacity("b1.**", 50);
-      // setStrokeOpacity
-      // setStrokeWidth("b.**", 35);
-      // setPosition("el.**", 20, -30);
-      // setScale("el.**", 100, 100);
-      // setRotation("el.**", 360);
-    }, 500);
   },
 }
 </script>
