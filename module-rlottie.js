@@ -71,6 +71,9 @@ var RLottieModule = (function () {
     var len = obj.lottieHandle.load(jsString);
     obj.frameCount = obj.lottieHandle.frames();
     obj.curFrame = 0;
+    
+    makeLayerList();
+
     // force a render in pause state
     sliderReset();
     obj.update();
@@ -140,6 +143,7 @@ var RLottieModule = (function () {
   }
 
   function makeLayerList() {
+    obj.layers = [];
     var layers_vector = obj.lottieHandle.layers();
     for(let i=0;i<layers_vector.size();i++){
       var layer = layers_vector.get(i).split('/');
