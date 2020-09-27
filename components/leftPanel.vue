@@ -4,7 +4,7 @@
     <div class="preview container py-3 d-flex align-items-center" @click="clickMain">
       <div class="row no-gutters">
         <div class="col-3 d-flex justify-content-center align-items-center">
-          <img class="img-thumbnail preview-thumbnail" src="" alt="preview">
+          <img class="img-thumbnail preview-thumbnail" src="../static/logo.png" alt="preview">
         </div>
         <div class="col-9 d-flex align-items-center">
           <h5 class="ml-4 name mb-0 text-white" id="contentName">FileName</h5>
@@ -48,7 +48,7 @@
         <div class="row no-gutters py-3 px-3 rounded" :class="{ 'accent': layer.selected }">
           <div @click="clickLayer(layer)" class="layer-info row no-gutters col-10">
             <div class="col-4 d-flex justify-content-center align-items-center">
-              <img class="img-thumbnail layer-thumbnail" src="" :alt="layer.idx">
+              <img class="img-thumbnail layer-thumbnail" src="../static/logo.png" :alt="layer.idx">
             </div>
             <div class="col-8 d-flex align-items-center">
               <p class="ml-3 mb-0 layer-name" :title="layer.name">
