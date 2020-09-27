@@ -1,66 +1,120 @@
 <template>
-  <div class="bg-sidebar sidebar">
+  <div class="sidebar scroll-sect" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
     <p class="title">Property</p>
-    <p>{{ selectedLayer }}</p>
     <!-- color controller -->
     <div class="property">
-      <p class="property-title">color</p>
+      <p class="property-title">Color</p>
       <div class="text-left">
-        <v-menu 
+        <v-menu
           offset-y 
           :close-on-content-click="false"
           >
           <template v-slot:activator="{ on }">
             <v-btn
-              :color="color"
+              :color="selectedLayer.color.hex"
               dark
               v-on="on"
               class="mr-2"
             >
             </v-btn>
-            <span>{{color.slice(0, 7)}}</span>
+            <span>{{ selectedLayer.color.hex }}</span>
           </template>
           <v-color-picker
-            value="#7417BE"
-            v-model="color"
+            v-model="selectedLayer.color"
             show-swatches
             class="mx-auto"
         ></v-color-picker>
         </v-menu>
       </div>
     </div>
-    
-    <!-- position controller -->
+
+    <!-- opacity controller -->
     <div class="property">
-      <p class="property-title">position</p>
+      <p class="property-title">Opacity</p>
       <div class="position d-flex">
         <v-text-field
+          light
+          solo
+          v-model="selectedLayer.opacity"
+          placeholder="Opacity"
+          hint="The number should be in between 0 and 100!"
+          class="mr-3"
+          @change="changeOpacity(selectedLayer.opacity)"
+        ></v-text-field>
+      </div>
+    </div>
+
+    <!-- position controller -->
+    <div class="property">
+      <p class="property-title">Position</p>
+      <div class="position d-flex">
+        <v-text-field
+          light
           solo
           prefix="x"
-          v-model="xPos"
+          v-model="selectedLayer.xPos"
+          placeholder="0"
+          @change="changeXPos(selectedLayer.xPos)"
           class="mr-3"
-          hide-details
         ></v-text-field>
         <v-text-field
+          light
           solo
           prefix="y"
-          v-model="yPos"
-          hide-details
+          v-model="selectedLayer.yPos"
+          placeholder="0"
+          @change="changeYPos(selectedLayer.yPos)"
         ></v-text-field>
       </div>
     </div>
 
     <!-- scale controller -->
     <div class="property">
-      <p class="property-title">scale</p>
-      <div class="scale">
+      <!-- <p class="property-title">Scale</p> -->
+      <div class="d-flex align-items-center">
+        <p class="property-title">Scale</p>
+      </div>
+      
+      <div class="preference">
+        <div class="position d-flex">
+          <v-text-field
+            light
+            solo
+            prefix="W"
+            v-model="selectedLayer.scaleWidth"
+            class="mr-3"
+            @change="changeScaleWidth(selectedLayer.scaleWidth)"
+            hint="The number should be greater and equal to 0 "
+            placeholder="100"
+          ></v-text-field>
+          <v-text-field
+            light
+            solo
+            prefix="H"
+            v-model="selectedLayer.scaleHeight"
+            @change="changeScaleHeight(selectedLayer.scaleHeight)"
+            placeholder="100"
+            hint="The number should be greater than or equal to 0"
+          ></v-text-field>
+        </div>
+      </div>
+    </div>
+
+    <!-- rotation controller -->
+    <div class="property m-0">
+      <p class="property-title">Rotation</p>
+      <div class="rotation m-0">
          <v-text-field
+          light
           solo
-          suffix="%"
-          v-model="scale"
+          suffix="°"
+          @change="changeRotation(selectedLayer.rotation)"
+          v-model="selectedLayer.rotation"
+          :placeholder="selectedLayer.rotation"
         ></v-text-field>
       </div>
     </div>
+
   </div>
   
 </template>
@@ -70,10 +124,6 @@ module.exports = {
   name: 'property',
   data: function () {
     return {
-      color: 'pink',
-      xPos: 250,
-      yPos: 250,
-      scale: 100,
     }
   },
   props: {
@@ -90,7 +140,74 @@ module.exports = {
         borderRadius: menu ? '50%' : '4px',
         transition: 'border-radius 200ms ease-in-out'
       }
-    }
+    },
+
+  },
+   watch: {
+    selectedLayer: {
+      deep: true,
+      handler() {
+        if (this.selectedLayer.color.hex !== String()) {
+          var currentLayerColor = this.selectedLayer.color
+          r = currentLayerColor.rgba.r / 255;
+          g = currentLayerColor.rgba.g / 255;
+          b = currentLayerColor.rgba.b / 255;
+          setFillColor(this.selectedLayer.name + ".**", r, g, b);
+          setStrokeColor(this.selectedLayer.name + ".**", r, g, b);
+        }
+      }
+    },
+  },
+  methods: {
+    changeOpacity(opacity) {
+      if (opacity && opacity <= 100 && opacity >= 0) {
+        if (this.selectedLayer.visible) {
+          setFillOpacity( this.selectedLayer.name + ".**", Number(opacity));
+          setStrokeOpacity( this.selectedLayer.name + ".**", Number(opacity));
+        }
+      }
+    },
+    changeScaleWidth(scaleWidth) {
+      if (scaleWidth >= 0) {
+        if (this.selectedLayer.scaleHeight) {
+          if (this.selectedLayer.scaleHeight >= 0) {
+            setScale(this.selectedLayer.name + ".**", Number(scaleWidth), Number(this.selectedLayer.scaleHeight))
+          }
+        } else {
+          setScale(this.selectedLayer.name + ".**", Number(scaleWidth), 100)
+        }
+      }
+    },
+    changeScaleHeight(scaleHeight) {
+      if (scaleHeight >= 0) {
+         if (this.selectedLayer.scaleWidth) {
+           if (this.selectedLayer.scaleWidth >= 0) {
+             setScale(this.selectedLayer.name + ".**", Number(this.selectedLayer.scaleWidth), Number(scaleHeight))
+           }
+        } else {
+          setScale(this.selectedLayer.name + ".**", 100, Number(scaleHeight))
+        }
+      }
+    },
+    changeXPos(xPos) {
+      if (this.selectedLayer.yPos) {
+        setPosition(this.selectedLayer.name + ".**", Number(xPos), Number(this.selectedLayer.yPos))
+      } else {
+        setPosition(this.selectedLayer.name + ".**", Number(xPos), 0)
+      }
+    },
+    changeYPos(yPos) {
+      if (this.selectedLayer.xPos) {
+         setPosition(this.selectedLayer.name + ".**", Number(this.selectedLayer.xPos), Number(yPos))
+      } else {
+        setPosition(this.selectedLayer.name + ".**", 0, Number(yPos))
+      }
+    },
+    changeRotation(rotationDegree) {
+      if (rotationDegree >= 0 && rotationDegree <= 360) {
+        setRotation(this.selectedLayer.name + ".**", Number(rotationDegree))
+      }
+    },
   }
 }
 </script>
@@ -109,15 +226,80 @@ p {
 }
 
 .property {
-  margin: 20px 0 0 0;
+  margin: 10px 0 0 0;
 }
 
 .property-title {
   margin-bottom: 10px;
 }
 
+.rotation {
+  margin: 20px 0 0 0;
+}
+
 .v-text-field__prefix, .v-text-field__suffix {
   color: rgba(15, 128, 170, 0.77);
+}
+
+.v-messages.theme--light {
+  color: white !important;
+}
+
+.v-input {
+  width: 50% !important;
+}
+
+
+/* scroll */
+.scroll-sect {
+  overflow-y: scroll; 
+  height: 92vh;
+}
+
+.scroll-sect-dark::-webkit-scrollbar {
+  width: 8px; 
+  height: 8px;
+}
+
+.scroll-sect-dark::-webkit-scrollbar-track {
+  background: #37474F;
+  /* border-radius: 15px; */
+}
+
+.scroll-sect-dark::-webkit-scrollbar-corner {
+  background: #37474F; 
+}
+
+.scroll-sect-dark::-webkit-scrollbar-thumb {
+  background: #0b6687;
+}
+
+.scroll-sect-dark::-webkit-scrollbar-button {
+  background-color: red;
+  height: 0;
+}
+
+.scroll-sect-light::-webkit-scrollbar {
+  width: 8px; 
+  height: 8px;
+}
+
+.scroll-sect-light::-webkit-scrollbar-track {
+  background: #ECEFF1;
+  /* border-radius: 15px; */
+}
+
+.scroll-sect-light::-webkit-scrollbar-corner {
+  background: #ECEFF1; 
+}
+
+.scroll-sect-light::-webkit-scrollbar-thumb {
+  background: #56a6c2;
+}
+
+.scroll-sect-light::-webkit-scrollbar-button {
+  background-color: red;
+  height: 0;
 }
 
 </style>

@@ -9,6 +9,7 @@ function setup() {
     Module.onRuntimeInitialized = _ => {
       RLottieModule.init();
     };
+    console.log("Rlottie Module loaded");
   };
 }
 
@@ -65,6 +66,7 @@ var RLottieModule = (function () {
     if(!obj.playDir && obj.curFrame <= 0) obj.curFrame = obj.frameCount;
     currentFrame.innerText = String(Math.round(obj.curFrame - 1));
     frameCount.innerText = String(obj.frameCount)
+    app.$root.layers = this.layers;
   }
 
   obj.reload = function (jsString) {
@@ -73,6 +75,7 @@ var RLottieModule = (function () {
     obj.curFrame = 0;
     
     makeLayerList();
+    app.$root.layers = this.layers;
 
     // force a render in pause state
     sliderReset();
@@ -152,7 +155,37 @@ var RLottieModule = (function () {
         inFrame: layer[1],
         outFrame: layer[2],
         visible: true,
-        selected: false
+        selected: false,
+        opacity: 100,
+        xPos: 0,
+        yPos: 0,
+        scaleWidth: 100,
+        scaleHeight: 100,
+        rotation: 0,
+        color: {
+          alpha: Number(),
+          hex: String(),
+          hexa: String(),
+          hsla: {
+            h: Number(),
+            s: Number(),
+            l: Number(),
+            a: Number()
+          },
+          hsva: {
+            h: Number(),
+            s: Number(),
+            v: Number(),
+            a: Number()
+          },
+          hue: Number(),
+          rgba: {
+            r: Number(),
+            g: Number(),
+            b: Number(),
+            a: Number()
+          }
+        }
       })
     }
   }
@@ -210,6 +243,7 @@ function fileSelectionChanged() {
   var input = document.getElementById('fileSelector');
   var contentName = document.getElementById('contentName')
   contentName.innerText = input.files[0].name.slice(0, -5)
+  contentName.title = input.files[0].name.slice(0, -5)
   handleFiles(input.files);
 }
 
@@ -266,6 +300,13 @@ function setScale(keypath, width, height) {
 
 function setRotation(keypath, degree) {
   RLottieModule.lottieHandle.setRotation(keypath, degree);
+}
+
+function moveFrame(frame) {
+  RLottieModule.curFrame = frame;
+  document.getElementById("slider").value = frame;
+  RLottieModule.seek(frame);
+  RLottieModule.pause();
 }
 
 function setPlaySpeed(speed) {

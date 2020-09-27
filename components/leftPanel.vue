@@ -1,10 +1,14 @@
 <template>
-  <div class="bg-sidebar">
+  <div class="sidebar left-sidebar">
     <!-- preview -->
-    <div class="preview container py-3 bg-blue">
+    <div class="preview container py-3 d-flex align-items-center" @click="clickMain">
       <div class="row no-gutters">
-        <img class="img-thumbnail preview-thumbnail" src="" alt="preview">
-        <h5 class="my-auto ml-4" id="contentName">FileName</h5>
+        <div class="col-3 d-flex justify-content-center align-items-center">
+          <img class="img-thumbnail preview-thumbnail" src="" alt="preview">
+        </div>
+        <div class="col-9 d-flex align-items-center">
+          <h5 class="ml-4 name mb-0 text-white" id="contentName">FileName</h5>
+        </div>
       </div>
     </div>
 
@@ -12,23 +16,29 @@
     <div class="search-bar container py-3">
       <p class="title">Search layer</p>
       <div class="row no-gutters">
-        <button @click="getSearchResult" class="btn col-2"><i class="text-white fas fa-search fa-lg"></i></button>
+        <button @click="getSearchResult" class="btn col-2"><i class="fas fa-search fa-lg" :class="{ 'text-white': $vuetify.theme.dark }"></i></button>
         <input v-model="searchKeyword" @keypress.enter="getSearchResult" type="text" class="searchInput rounded-pill col-10 px-3 bg-white">
       </div>
     </div>
 
     <!-- layer list -->
-    <div class="layer-list container py-3 px-0">
-      <p class="title px-3">Layers</p>
-      <div v-for="layer in layers" :key="layer.name">
-        <div class="row no-gutters py-3 px-3 rounded" :class="{ 'bg-green': layer.selected }">
-          <div @click="clickLayer(layer)" class="layer-info row no-gutters">
-            <img class="img-thumbnail layer-thumbnail" src="" :alt="layer.name">
-            <p class="layer-name my-auto ml-4">{{ layer.name }}</p>
+    <p class="title px-3 layers-title">Layers</p>
+    <div class="layer-list container py-3 px-0" :class="{ 'layer-list-dark': $vuetify.theme.dark, 'layer-list-light': !$vuetify.theme.dark }">
+      <div v-for="(layer, idx) in layers" :key="layer.idx">
+        <div class="row no-gutters py-3 px-3 rounded" :class="{ 'accent': layer.selected }">
+          <div @click="clickLayer(layer)" class="layer-info row no-gutters col-10">
+            <div class="col-4 d-flex justify-content-center align-items-center">
+              <img class="img-thumbnail layer-thumbnail" src="" :alt="layer.idx">
+            </div>
+            <div class="col-8 d-flex align-items-center">
+              <p class="ml-3 mb-0 layer-name" :title="layer.name">
+                {{ layer.name }}
+              </p>
+            </div>
           </div>
-          <button @click="layer.visible = !layer.visible" class="eye-btn btn ml-auto">
-            <i v-if="layer.visible" class="text-white far fa-eye"></i>
-            <i v-else class="text-white far fa-eye-slash"></i>
+          <button @click="changeVisibility(layer)" class="eye-btn btn ml-auto col-2">
+            <i v-if="layer.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+            <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
           </button>
         </div>
       </div>
@@ -39,27 +49,14 @@
 <script>
 module.exports = {
   name: 'leftPanel',
+  props: {
+    layers: Object
+  },
   data: function () {
     return {
-      'searchKeyword': null,
-      'clickedLayer': null,
-      'layers': [
-        {
-          name: 'layer1',
-          visible: true,
-          selected: false
-        },
-        {
-          name: 'layer2',
-          visible: true,
-          selected: false
-        },
-        {
-          name: 'layer3',
-          visible: true,
-          selected: false
-        },
-      ],
+      searchKeyword: null,
+      clickedLayer: null,
+      windowReadyState: false
     }
   },
   methods: {
@@ -83,6 +80,23 @@ module.exports = {
       if (layer.selected === true) {
         this.$emit('layer-selected', layer)
       } 
+    },
+    clickMain() {
+      this.clickedLayer = null
+      for (var layer of this.layers) {
+        layer.selected = false
+      }
+      this.$emit('layer-selected', null)
+    },
+    changeVisibility(layer) {
+      layer.visible = !layer.visible
+      if (layer.visible) {
+        setFillOpacity( layer.name + ".**", Number(layer.opacity));
+        setStrokeOpacity( layer.name + ".**", Number(layer.opacity));
+      } else {
+        setFillOpacity( layer.name + ".**", 0);
+        setStrokeOpacity( layer.name + ".**", 0);
+      }
     }
   },
 }
@@ -110,12 +124,90 @@ module.exports = {
   }
 
   .preview-thumbnail {
-    width: 70px;
-    height: 70px;
+    width: 8vh;
+    height: 8vh;
   }
 
   .layer-thumbnail {
     width: 60px;
     height: 60px;
+  }
+
+  .left-sidebar {
+    height: 92vh;
+  }
+
+  .preview {
+    height: 12vh;
+    cursor: pointer;
+  }
+
+  .search-bar {
+    height: 12vh;
+  }
+
+  .layers-title {
+    height: 4vh;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+  }
+
+  .layer-list {
+    height: 62vh;
+    overflow-y: scroll; 
+  }
+
+  .layer-list-dark::-webkit-scrollbar {
+    width: 8px; 
+    height: 8px;
+  }
+
+  .layer-list-dark::-webkit-scrollbar-track {
+    background: #37474F;
+    /* border-radius: 15px; */
+  }
+
+  .layer-list-dark::-webkit-scrollbar-corner {
+    background: #37474F; 
+  }
+
+  .layer-list-dark::-webkit-scrollbar-thumb {
+    background: #0b6687;
+  }
+
+  .layer-list-dark::-webkit-scrollbar-button {
+    background-color: red;
+    height: 0;
+  }
+
+  .layer-list-light::-webkit-scrollbar {
+    width: 8px; 
+    height: 8px;
+  }
+
+  .layer-list-light::-webkit-scrollbar-track {
+    background: #ECEFF1;
+    /* border-radius: 15px; */
+  }
+
+  .layer-list-light::-webkit-scrollbar-corner {
+    background: #ECEFF1; 
+  }
+
+  .layer-list-light::-webkit-scrollbar-thumb {
+    background: #56a6c2;
+  }
+
+  .layer-list-light::-webkit-scrollbar-button {
+    background-color: red;
+    height: 0;
+  }
+
+  .name, .layer-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
   }
 </style>
