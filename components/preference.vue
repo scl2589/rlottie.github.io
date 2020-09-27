@@ -32,11 +32,11 @@
     </div>
 
     <!-- Canvas Resize -->
-    <div class="d-flex flex-column justify-content-center align-items-start preference">
+    <!-- <div class="d-flex flex-column justify-content-center align-items-start preference">
       <label class="mb-2" for="slider2">Canvas Resize</label>
       <input class="canvasSlider" type="range" id="slider2" min="0" max="100" value="100"
         oninput="onResizeSliderDrag(this.value)">
-    </div>
+    </div> -->
 
     <!-- Border Options -->
     <div class="preference">
@@ -80,9 +80,10 @@
       </div>
     </div>
 
+
     <!-- Dimension controller -->
     <div class="preference">
-      <p class="preference-title mb-2">Dimension</p>
+      <p class="preference-title mb-2">Canvas Resize</p>
       <div class="position d-flex">
         <v-text-field
           light
@@ -90,6 +91,7 @@
           prefix="W"
           v-model="width"
           class="mr-3 bg-white"
+          @change="changeXDimension()"
           hide-details
         ></v-text-field>
         <v-text-field
@@ -98,6 +100,7 @@
           prefix="H"
           v-model="height"
           class="bg-white"
+          @change="changeYDimension()"
           hide-details
         ></v-text-field>
       </div>
@@ -111,10 +114,10 @@ module.exports = {
   data: function () {
     return {
       color: '#FFFFFF',
+      width: null,
+      height: null,
       borderColor: '#000000',
       borderWidth: 1,
-      width: 250,
-      height: 250,
     }
   },
   methods: {
@@ -128,10 +131,25 @@ module.exports = {
     color() {
       this.$emit('bg-color-changed', this.color)
     },
+  },
+  methods: {
+    changeXDimension() {
+      var canvas = document.getElementById("myCanvas")
+      canvas.style.width = this.width + "px"
+    },
+    changeYDimension() {
+      var canvas = document.getElementById("myCanvas")
+      canvas.style.height = this.height + "px"
+    },
     borderColor() {
       var canvas = document.getElementById("myCanvas")
       canvas.style.borderColor = this.borderColor
     }
+  },
+  mounted() {
+    var canvas = document.getElementById("myCanvas")
+    this.width = canvas.style.width.slice(0, -2)
+    this.height = canvas.style.height.slice(0, -2)
   }
 }
 </script>

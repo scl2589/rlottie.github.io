@@ -22,8 +22,8 @@
     </div>
 
     <!-- layer list -->
-    <p class="title px-3 layers-title">Layers</p>
-    <div class="layer-list container py-3 px-0" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
+    <div class="d-flex justify-content-between align-items-center px-3">
+      <p class="title layers-title ">Layers</p>
       <div v-if="layers" class="d-flex justify-content-start align-items-center">
         <button @click="changeAllVisibility" class="eye-btn btn">
           <i v-if="allLayersVisible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
@@ -43,7 +43,7 @@
         </v-tooltip>
       </div>
     </div>
-    <div class="layer-list container py-3 px-0" :class="{ 'layer-list-dark': $vuetify.theme.dark, 'layer-list-light': !$vuetify.theme.dark }">
+    <div class="layer-list container py-3 px-0"  :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
       <div v-for="(layer, idx) in layers" :key="layer.idx">
         <div class="row no-gutters py-3 px-3 rounded" :class="{ 'accent': layer.selected }">
           <div @click="clickLayer(layer)" class="layer-info row no-gutters col-10">
@@ -182,7 +182,7 @@ module.exports = {
   }
 
   .search-bar {
-    height: 12vh;
+    height: 15vh;
   }
 
   .layers-title {
@@ -192,7 +192,7 @@ module.exports = {
   }
 
   .layer-list {
-    height: 62vh;
+    height: 59vh;
     overflow-y: scroll; 
   }
 
