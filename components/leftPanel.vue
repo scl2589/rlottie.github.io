@@ -22,8 +22,8 @@
     </div>
 
     <!-- layer list -->
-    <div class="d-flex justify-content-between align-items-center px-3">
-      <p class="title layers-title">Layers</p>
+    <p class="title px-3 layers-title">Layers</p>
+    <div class="layer-list container py-3 px-0" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
       <div v-if="layers" class="d-flex justify-content-start align-items-center">
         <button @click="changeAllVisibility" class="eye-btn btn">
           <i v-if="allLayersVisible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
@@ -194,52 +194,6 @@ module.exports = {
   .layer-list {
     height: 62vh;
     overflow-y: scroll; 
-  }
-
-  .layer-list-dark::-webkit-scrollbar {
-    width: 8px; 
-    height: 8px;
-  }
-
-  .layer-list-dark::-webkit-scrollbar-track {
-    background: #37474F;
-    /* border-radius: 15px; */
-  }
-
-  .layer-list-dark::-webkit-scrollbar-corner {
-    background: #37474F; 
-  }
-
-  .layer-list-dark::-webkit-scrollbar-thumb {
-    background: #0b6687;
-  }
-
-  .layer-list-dark::-webkit-scrollbar-button {
-    background-color: red;
-    height: 0;
-  }
-
-  .layer-list-light::-webkit-scrollbar {
-    width: 8px; 
-    height: 8px;
-  }
-
-  .layer-list-light::-webkit-scrollbar-track {
-    background: #ECEFF1;
-    /* border-radius: 15px; */
-  }
-
-  .layer-list-light::-webkit-scrollbar-corner {
-    background: #ECEFF1; 
-  }
-
-  .layer-list-light::-webkit-scrollbar-thumb {
-    background: #56a6c2;
-  }
-
-  .layer-list-light::-webkit-scrollbar-button {
-    background-color: red;
-    height: 0;
   }
 
   .name, .layer-name {

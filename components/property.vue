@@ -291,50 +291,5 @@ p {
   height: 92vh;
 }
 
-.scroll-sect-dark::-webkit-scrollbar {
-  width: 8px; 
-  height: 8px;
-}
-
-.scroll-sect-dark::-webkit-scrollbar-track {
-  background: #37474F;
-  /* border-radius: 15px; */
-}
-
-.scroll-sect-dark::-webkit-scrollbar-corner {
-  background: #37474F; 
-}
-
-.scroll-sect-dark::-webkit-scrollbar-thumb {
-  background: #0b6687;
-}
-
-.scroll-sect-dark::-webkit-scrollbar-button {
-  background-color: red;
-  height: 0;
-}
-
-.scroll-sect-light::-webkit-scrollbar {
-  width: 8px; 
-  height: 8px;
-}
-
-.scroll-sect-light::-webkit-scrollbar-track {
-  background: #ECEFF1;
-  /* border-radius: 15px; */
-}
-
-.scroll-sect-light::-webkit-scrollbar-corner {
-  background: #ECEFF1; 
-}
-
-.scroll-sect-light::-webkit-scrollbar-thumb {
-  background: #56a6c2;
-}
-
-.scroll-sect-light::-webkit-scrollbar-button {
-  background-color: red;
-  height: 0;
-}
 
 </style>
