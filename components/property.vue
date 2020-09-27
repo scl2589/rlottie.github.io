@@ -6,23 +6,22 @@
     <div class="property">
       <p class="property-title">Color</p>
       <div class="text-left">
-        <v-menu 
+        <v-menu
           offset-y 
           :close-on-content-click="false"
           >
           <template v-slot:activator="{ on }">
             <v-btn
-              :color="color"
+              :color="selectedLayer.color.hex"
               dark
               v-on="on"
               class="mr-2"
             >
             </v-btn>
-            <span>{{ color }}</span>
+            <span>{{ selectedLayer.color.hex }}</span>
           </template>
           <v-color-picker
-            value="#7417BE"
-            v-model="color"
+            v-model="selectedLayer.color"
             show-swatches
             class="mx-auto"
         ></v-color-picker>
@@ -83,7 +82,6 @@ module.exports = {
   name: 'property',
   data: function () {
     return {
-      color: "#FFFFFF",
       xPos: 250,
       yPos: 250,
       scale: 100,
@@ -114,22 +112,21 @@ module.exports = {
         setFillOpacity( this.selectedLayer.name + ".**", Number(opacity));
         setStrokeOpacity( this.selectedLayer.name + ".**", Number(opacity));
       }
-    },
-    // changeColor(color) {
-    //   setFillColor(this.selectedLayer.name + ".**", color.rgba.r/255, color.rgba.g/255, color.rgba.b/255);
-    //   setStrokeColor(this.selectedLayer.name + ".**", color.rgba.r/255, color.rgba.g/255, color.rgba.b/255);
-    // }
+    }
   },
   watch: {
-    color() {
-      var hex = this.color.replace( "#", "" ); 
-      var value = hex.match( /[a-f\d]/gi ); 
-      value = hex.match( /[a-f\d]{2}/gi ); 
-      var r = parseInt( value[0], 16 )/255; 
-      var g = parseInt( value[1], 16 )/255; 
-      var b = parseInt( value[2], 16 )/255; 
-      setFillColor(this.selectedLayer.name + ".**", r, g, b);
-      setStrokeColor(this.selectedLayer.name + ".**", r, g, b);
+    selectedLayer: {
+      deep: true,
+      handler() {
+        if (this.selectedLayer.color.hex !== String()) {
+          var currentLayerColor = this.selectedLayer.color
+          r = currentLayerColor.rgba.r / 255;
+          g = currentLayerColor.rgba.g / 255;
+          b = currentLayerColor.rgba.b / 255;
+          setFillColor(this.selectedLayer.name + ".**", r, g, b);
+          setStrokeColor(this.selectedLayer.name + ".**", r, g, b);
+        }
+      }
     }
   }
 }
