@@ -153,7 +153,8 @@ var RLottieModule = (function () {
         inFrame: layer[1],
         outFrame: layer[2],
         visible: true,
-        selected: false
+        selected: false,
+        rotation: 0
       })
     }
   }
