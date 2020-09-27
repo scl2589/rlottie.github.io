@@ -150,7 +150,6 @@
         ></v-text-field>
       </div>
     </div>
-
   </div>
   
 </template>
@@ -263,6 +262,7 @@ p {
 
 .property {
   margin: 10px 0 0 0;
+
 }
 
 .property-title {
@@ -290,6 +290,4 @@ p {
   overflow-y: scroll; 
   height: 92vh;
 }
-
-
 </style>

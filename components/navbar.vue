@@ -2,10 +2,8 @@
   <div class="navbar d-flex justify-content-between">
     <!-- logo -->
     <div class="d-flex align-items-center">
-      <!-- <a href="/" class="d-flex align-items-center text-decoration-none"> -->
         <img class="logo" src="../static/logo.png" alt="logo">
         <h2 class="ml-3">PrettyView</h2>
-      <!-- </a> -->
     </div>
 
     <!-- button group -->
@@ -19,6 +17,7 @@
           <v-icon class="fas fa-circle text-dark"></v-icon>
         </v-btn>
       </v-btn-toggle>
+
 
       <!-- light/dark mode -->
       <button class="btn mx-2 mode" @click="changeMode" :class="{ 'text-white': !$vuetify.theme.dark }">{{ mode }}</button>
@@ -36,6 +35,7 @@
       </div>
       <button class="btn accent mx-2" :class="{ 'text-white': $vuetify.theme.dark }" data-toggle="modal" data-target="#exportModal">Export <i class="fas fa-download ml-2"></i></button>
 
+
       <!-- Modal -->
       <div class="modal fade text-dark" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -52,6 +52,7 @@
             <div class="modal-footer border-top-0">
               <button type="button" class="btn btn-secondary text-white" data-dismiss="modal">Close</button>
               <button type="button" class="btn accent text-white" :class="{ 'text-white': $vuetify.theme.dark }">Export</button>
+
             </div>
           </div>
         </div>
@@ -87,7 +88,6 @@ module.exports = {
       }
     },
   },
-
   watch: {
     toggle_one() {
       this.$emit('canvas-changed', this.toggle_one)
