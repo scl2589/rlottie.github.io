@@ -40,8 +40,8 @@
 
     <!-- Border Options -->
     <div class="preference">
-      <p class="preference-title mb-2">Border</p>
-      <div class="row d-flex align-items-center">
+      <p class="preference-title mb-0">Border</p>
+      <div class="row d-flex align-items-center no-gutters">
         <div class="text-left col-6 pr-0">
           <v-menu 
             offset-y 
