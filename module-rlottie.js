@@ -154,7 +154,6 @@ var RLottieModule = (function () {
         outFrame: layer[2],
         visible: true,
         selected: false,
-
         opacity: 100,
         xPos: 0,
         yPos: 0,

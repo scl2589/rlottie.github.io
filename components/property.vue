@@ -1,7 +1,6 @@
 <template>
   <div class="bg-sidebar sidebar">
     <p class="title">Property</p>
-    
     <!-- color controller -->
     <div class="property">
       <p class="property-title">Color</p>
@@ -51,13 +50,17 @@
         <v-text-field
           solo
           prefix="x"
-          v-model="xPos"
+          v-model="selectedLayer.xPos"
+          placeholder="0"
+          @change="changeXPos(selectedLayer.xPos)"
           class="mr-3"
         ></v-text-field>
         <v-text-field
           solo
           prefix="y"
-          v-model="yPos"
+          v-model="selectedLayer.yPos"
+          placeholder="0"
+          @change="changeYPos(selectedLayer.yPos)"
         ></v-text-field>
       </div>
     </div>
@@ -65,11 +68,39 @@
     <!-- scale controller -->
     <div class="property">
       <p class="property-title">Scale</p>
-      <div class="scale">
-        <v-text-field
+      <div class="preference">
+        <div class="position d-flex">
+          <v-text-field
+            solo
+            prefix="W"
+            v-model="selectedLayer.scaleWidth"
+            class="mr-3"
+            @change="changeScaleWidth(selectedLayer.scaleWidth)"
+            hint="The number should be greater and equal to 0 "
+            placeholder="100"
+          ></v-text-field>
+          <v-text-field
+            solo
+            prefix="H"
+            v-model="selectedLayer.scaleHeight"
+            @change="changeScaleHeight(selectedLayer.scaleHeight)"
+            placeholder="100"
+            hint="The number should be greater than or equal to 0 "
+          ></v-text-field>
+        </div>
+      </div>
+    </div>
+
+    <!-- rotation controller -->
+    <div class="property m-0">
+      <p class="property-title">Rotation</p>
+      <div class="rotation m-0">
+         <v-text-field
           solo
-          suffix="%"
-          v-model="scale"
+          suffix="°"
+          @change="changeRotation(selectedLayer.rotation)"
+          v-model="selectedLayer.rotation"
+          :placeholder="selectedLayer.rotation"
         ></v-text-field>
       </div>
     </div>
@@ -82,12 +113,6 @@ module.exports = {
   name: 'property',
   data: function () {
     return {
-      xPos: 250,
-      yPos: 250,
-      scale: 100,
-      opacity: 100,
-      valid: true,
-      lazy: false,
     }
   },
   props: {
@@ -106,15 +131,7 @@ module.exports = {
       }
     }
   },
-  methods: {
-    changeOpacity(opacity) {
-      if (opacity && opacity <= 100 && opacity >= 0) {
-        setFillOpacity( this.selectedLayer.name + ".**", Number(opacity));
-        setStrokeOpacity( this.selectedLayer.name + ".**", Number(opacity));
-      }
-    }
-  },
-  watch: {
+   watch: {
     selectedLayer: {
       deep: true,
       handler() {
@@ -127,7 +144,56 @@ module.exports = {
           setStrokeColor(this.selectedLayer.name + ".**", r, g, b);
         }
       }
-    }
+    },
+  },
+  methods: {
+    changeOpacity(opacity) {
+      if (opacity && opacity <= 100 && opacity >= 0) {
+        setFillOpacity( this.selectedLayer.name + ".**", Number(opacity));
+        setStrokeOpacity( this.selectedLayer.name + ".**", Number(opacity));
+      }
+    },
+    changeScaleWidth(scaleWidth) {
+      if (scaleWidth >= 0) {
+        if (this.selectedLayer.scaleHeight) {
+          if (this.selectedLayer.scaleHeight >= 0) {
+            setScale(this.selectedLayer.name + ".**", Number(scaleWidth), Number(this.selectedLayer.scaleHeight))
+          }
+        } else {
+          setScale(this.selectedLayer.name + ".**", Number(scaleWidth), 100)
+        }
+      }
+    },
+    changeScaleHeight(scaleHeight) {
+      if (scaleHeight >= 0) {
+         if (this.selectedLayer.scaleWidth) {
+           if (this.selectedLayer.scaleWidth >= 0) {
+             setScale(this.selectedLayer.name + ".**", Number(this.selectedLayer.scaleWidth), Number(scaleHeight))
+           }
+        } else {
+          setScale(this.selectedLayer.name + ".**", 100, Number(scaleHeight))
+        }
+      }
+    },
+    changeXPos(xPos) {
+      if (this.selectedLayer.yPos) {
+        setPosition(this.selectedLayer.name + ".**", Number(xPos), Number(this.selectedLayer.yPos))
+      } else {
+        setPosition(this.selectedLayer.name + ".**", Number(xPos), 0)
+      }
+    },
+    changeYPos(yPos) {
+      if (this.selectedLayer.xPos) {
+         setPosition(this.selectedLayer.name + ".**", Number(this.selectedLayer.xPos), Number(yPos))
+      } else {
+        setPosition(this.selectedLayer.name + ".**", 0, Number(yPos))
+      }
+    },
+    changeRotation(rotationDegree) {
+      if (rotationDegree >= 0 && rotationDegree <= 360) {
+        setRotation(this.selectedLayer.name + ".**", Number(rotationDegree))
+      }
+    },
   }
 }
 </script>
@@ -153,11 +219,19 @@ p {
   margin-bottom: 10px;
 }
 
+.rotation {
+  margin: 20px 0 0 0;
+}
+
 .v-text-field__prefix, .v-text-field__suffix {
   color: rgba(15, 128, 170, 0.77);
 }
 
 .v-messages.theme--light {
   color: white !important;
+}
+
+.v-input {
+  width: 50% !important;
 }
 </style>
