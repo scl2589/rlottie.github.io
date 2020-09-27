@@ -61,6 +61,20 @@
         ></v-text-field>
       </div>
     </div>
+
+    <!-- rotation controller -->
+    <div class="property m-0">
+      <p class="property-title">Rotation</p>
+      <div class="rotation m-0">
+         <v-text-field
+          solo
+          suffix="°"
+          @change="changeRotation(selectedLayer.rotation)"
+          v-model="selectedLayer.rotation"
+          :placeholder="selectedLayer.rotation"
+        ></v-text-field>
+      </div>
+    </div>
   </div>
   
 </template>
@@ -91,6 +105,14 @@ module.exports = {
         transition: 'border-radius 200ms ease-in-out'
       }
     }
+  },
+
+  methods: {
+    changeRotation(rotationDegree) {
+      if (rotationDegree >= 0 && rotationDegree <= 360) {
+        setRotation(this.selectedLayer.name + ".**", Number(rotationDegree))
+      }
+    },
   }
 }
 </script>
@@ -114,6 +136,10 @@ p {
 
 .property-title {
   margin-bottom: 10px;
+}
+
+.rotation {
+  margin: 20px 0 0 0;
 }
 
 .v-text-field__prefix, .v-text-field__suffix {
