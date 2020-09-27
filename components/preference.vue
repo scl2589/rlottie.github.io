@@ -120,17 +120,14 @@ module.exports = {
       borderWidth: 1,
     }
   },
-  methods: {
-    changeBorderWidth() {
-      var canvas = document.getElementById("myCanvas")
-      console.log(canvas.style)
-      canvas.style.borderWidth = this.borderWidth + "px"
-    }
-  },
   watch: {
     color() {
       this.$emit('bg-color-changed', this.color)
     },
+    borderColor() {
+      var canvas = document.getElementById("myCanvas")
+      canvas.style.borderColor = this.borderColor
+    }
   },
   methods: {
     changeXDimension() {
@@ -141,9 +138,10 @@ module.exports = {
       var canvas = document.getElementById("myCanvas")
       canvas.style.height = this.height + "px"
     },
-    borderColor() {
+    changeBorderWidth() {
       var canvas = document.getElementById("myCanvas")
-      canvas.style.borderColor = this.borderColor
+      console.log(canvas.style)
+      canvas.style.borderWidth = this.borderWidth + "px"
     }
   },
   mounted() {
