@@ -20,6 +20,7 @@
             <span>{{ selectedLayer.color.hex }}</span>
           </template>
           <v-color-picker
+            light
             v-model="selectedLayer.color"
             show-swatches
             class="mx-auto"

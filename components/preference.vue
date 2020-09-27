@@ -21,6 +21,7 @@
           <span>{{color.slice(0, 7)}}</span>
         </template>
         <v-color-picker
+          light
           value="#7417BE"
           v-model="color"
           show-swatches
