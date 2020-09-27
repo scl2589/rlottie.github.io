@@ -1,13 +1,13 @@
 <template>
   <div class="bg-sidebar left-sidebar">
     <!-- preview -->
-    <div class="preview container py-3 bg-blue d-flex align-items-center">
+    <div class="preview container py-3 bg-blue d-flex align-items-center" @click="clickMain">
       <div class="row no-gutters">
         <div class="col-3 d-flex justify-content-center align-items-center">
           <img class="img-thumbnail preview-thumbnail" src="" alt="preview">
         </div>
         <div class="col-9 d-flex align-items-center">
-          <h5 class="ml-4 name" id="contentName">FileName</h5>
+          <h5 class="ml-4 name mb-0" id="contentName">FileName</h5>
         </div>
       </div>
     </div>
@@ -54,8 +54,8 @@ module.exports = {
   },
   data: function () {
     return {
-      'searchKeyword': null,
-      'clickedLayer': null,
+      searchKeyword: null,
+      clickedLayer: null,
       windowReadyState: false
     }
   },
@@ -80,6 +80,13 @@ module.exports = {
       if (layer.selected === true) {
         this.$emit('layer-selected', layer)
       } 
+    },
+    clickMain() {
+      this.clickedLayer = null
+      for (var layer of this.layers) {
+        layer.selected = false
+      }
+      this.$emit('layer-selected', null)
     }
   },
 }
@@ -122,6 +129,7 @@ module.exports = {
 
   .preview {
     height: 12vh;
+    cursor: pointer;
   }
 
   .search-bar {
