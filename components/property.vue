@@ -3,7 +3,7 @@
     <p class="title">Property</p>
     <!-- color controller -->
     <div class="property">
-      <p class="property-title">Color</p>
+      <p class="property-title mb-2">Color</p>
       <div class="text-left">
         <v-menu
           offset-y 
@@ -30,15 +30,28 @@
     </div>
 
     <!-- opacity controller -->
-    <div class="property">
-      <p class="property-title">Opacity</p>
+    <div class="property mt-7">
+      <div class="d-flex align-items-center mb-2">
+        <p class="property-title m-0">Opacity</p>
+        <v-tooltip bottom nudge-right="65" nudge-bottom="60">
+          <template v-slot:activator="{ on, attrs }">
+            <i
+              class="far fa-question-circle fa-sm ml-2"
+              v-bind="attrs"
+              v-on="on"
+            >
+            </i>
+          </template>
+          <span>Number should be between 0 and 100</span>
+        </v-tooltip>
+      </div>
+
       <div class="position d-flex">
         <v-text-field
           light
           solo
           v-model="selectedLayer.opacity"
           placeholder="Opacity"
-          hint="The number should be in between 0 and 100!"
           class="mr-3"
           @change="changeOpacity(selectedLayer.opacity)"
         ></v-text-field>
@@ -47,7 +60,7 @@
 
     <!-- position controller -->
     <div class="property">
-      <p class="property-title">Position</p>
+      <p class="property-title mb-2">Position</p>
       <div class="position d-flex">
         <v-text-field
           light
@@ -71,9 +84,19 @@
 
     <!-- scale controller -->
     <div class="property">
-      <!-- <p class="property-title">Scale</p> -->
-      <div class="d-flex align-items-center">
-        <p class="property-title">Scale</p>
+      <div class="d-flex align-items-center mb-2">
+        <p class="property-title m-0">Scale</p>
+        <v-tooltip bottom nudge-right="100" nudge-bottom="60">
+          <template v-slot:activator="{ on, attrs }">
+            <i
+              class="far fa-question-circle fa-sm ml-2"
+              v-bind="attrs"
+              v-on="on"
+            >
+            </i>
+          </template>
+          <span>Number should be greater than or equal to 0</span>
+        </v-tooltip>
       </div>
       
       <div class="preference">
@@ -85,7 +108,6 @@
             v-model="selectedLayer.scaleWidth"
             class="mr-3"
             @change="changeScaleWidth(selectedLayer.scaleWidth)"
-            hint="The number should be greater and equal to 0 "
             placeholder="100"
           ></v-text-field>
           <v-text-field
@@ -102,8 +124,21 @@
     </div>
 
     <!-- rotation controller -->
-    <div class="property m-0">
-      <p class="property-title">Rotation</p>
+    <div class="property">
+      <div class="d-flex align-items-center mb-2">
+        <p class="property-title m-0">Rotation</p>
+        <v-tooltip bottom nudge-right="60" nudge-bottom="60">
+          <template v-slot:activator="{ on, attrs }">
+            <i
+              class="far fa-question-circle fa-sm ml-2"
+              v-bind="attrs"
+              v-on="on"
+            >
+            </i>
+          </template>
+          <span>Number should be between 0 and 360</span>
+        </v-tooltip>
+      </div>
       <div class="rotation m-0">
          <v-text-field
           light
@@ -234,10 +269,6 @@ p {
   margin-bottom: 10px;
 }
 
-.rotation {
-  margin: 20px 0 0 0;
-}
-
 .v-text-field__prefix, .v-text-field__suffix {
   color: rgba(15, 128, 170, 0.77);
 }
@@ -250,6 +281,9 @@ p {
   width: 50% !important;
 }
 
+.v-tooltip__content {
+  font-size: 10px !important;
+}
 
 /* scroll */
 .scroll-sect {
