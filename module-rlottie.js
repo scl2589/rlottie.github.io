@@ -74,6 +74,7 @@ var RLottieModule = (function () {
     obj.curFrame = 0;
     
     makeLayerList();
+    app.$root.layers = this.layers;
 
     // force a render in pause state
     sliderReset();
