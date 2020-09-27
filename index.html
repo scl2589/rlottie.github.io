@@ -66,6 +66,8 @@
           height: 10vh;
         }
 
+        
+
     </style>
   </head>
 
@@ -82,9 +84,9 @@
             <!-- <p>{{ canvasStyling[canvasShape] }}</p> -->
             <div class="screen my-auto d-flex flex-column justify-content-center align-items-center" id="content">
               <canvas
-               v-show="isContent" 
-               id="myCanvas" 
-               :style="canvasStyling" 
+                v-show="isContent" 
+                id="myCanvas" 
+                :style="canvasStyling" 
               ></canvas>
               <div v-show="!isContent">
                 <h5> Drag and Drop your Lottie JSON file to the window</h5>
@@ -103,7 +105,7 @@
                           :items="speed"
                           :menu-props="{ top: true, offsetY: true }"
                           label="Play Speed"
-                          @change="changeSpeed(defaultSpeed)"
+                          @change="changePlay"
                         ></v-select>
                       </v-col>
                     </v-row>
@@ -117,6 +119,7 @@
                           :items="types"
                           :menu-props="{ top: true, offsetY: true }"
                           label="Play Type"
+                          @change="changePlayType"
                         ></v-select>
                       </v-col>
                     </v-row>
@@ -130,7 +133,7 @@
                           :items="directions"
                           :menu-props="{ top: true, offsetY: true }"
                           label="Play Direction"
-                          @change="changeDirection(defaultDirection)"
+                          @change="changePlay"
                         ></v-select>
                       </v-col>
                     </v-row>
@@ -224,8 +227,9 @@
             defaultType: 'Autoplay',
             defaultDirection: 'Forward',
             speed: ['0.25', '0.5', '0.75', '1.0', '1.25', '1.5', '1.75', '2.0'],
-            types: ['Autoplay', 'Hover', 'Click', 'Bounce'],
+            types: ['Autoplay', 'Hover', 'Bounce'],
             directions: ['Forward', 'Backward'],
+            hoverFlag: false,
           }
         },
         computed: {
@@ -250,7 +254,6 @@
             }
           }
         },
-
         methods: {
           layerSelected(layer) {
             this.isLayer = !!layer
@@ -274,19 +277,35 @@
             }, 500);
           },
 
-          changeSpeed(speed) {
-            setPlaySpeed(Number(speed))
-          },
-          
-          changeDirection(direction) {
-            if (direction === 'Forward') {
+          changePlay() {
+            if (this.defaultDirection === 'Forward') {
               setPlaySpeed(Number(this.defaultSpeed))
-            } else {
+            }
+            else {
               setPlaySpeed(Number(this.defaultSpeed) * -1)
             }
-          }
+          },
+          changePlayType() {
+            if(this.defaultType === "Hover") {
+              RLottieModule.pause();
+              document.getElementById("content").addEventListener("mouseover", RLottieModule.play);
+              document.getElementById("content").addEventListener("mouseout", RLottieModule.pause);
+              this.hoverFlag = true;
+            }
+            if(this.defaultType !== "Hover" && this.hoverFlag) {
+              RLottieModule.play();
+              document.getElementById("content").removeEventListener("mouseover", RLottieModule.play);
+              document.getElementById("content").removeEventListener("mouseout", RLottieModule.pause);
+              this.hoverFlag = false;
+            }
+            if(this.defaultType === "Bounce") {
+              RLottieModule.isBounce = true;
+            }
+            if(this.defaultType !== "Bounce") {
+              RLottieModule.isBounce = false;
+            }
+          },
         },
-
         created() {
           this.$vuetify.theme.dark = true
         },
