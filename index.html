@@ -60,6 +60,14 @@
           /* max-width: 50vw;
           max-height: 50vh; */
         }
+
+        .scroll-sect {
+          overflow-y: scroll; 
+          height: 10vh;
+        }
+
+        
+
     </style>
   </head>
 
@@ -76,9 +84,9 @@
             <!-- <p>{{ canvasStyling[canvasShape] }}</p> -->
             <div class="screen my-auto d-flex flex-column justify-content-center align-items-center" id="content">
               <canvas
-               v-show="isContent" 
-               id="myCanvas" 
-               :style="canvasStyling" 
+                v-show="isContent" 
+                id="myCanvas" 
+                :style="canvasStyling" 
               ></canvas>
               <div v-show="!isContent">
                 <h5> Drag and Drop your Lottie JSON file to the window</h5>
@@ -97,6 +105,7 @@
                           :items="speed"
                           :menu-props="{ top: true, offsetY: true }"
                           label="Play Speed"
+                          @change="changePlay"
                         ></v-select>
                       </v-col>
                     </v-row>
@@ -110,6 +119,7 @@
                           :items="types"
                           :menu-props="{ top: true, offsetY: true }"
                           label="Play Type"
+                          @change="changePlayType"
                         ></v-select>
                       </v-col>
                     </v-row>
@@ -123,6 +133,7 @@
                           :items="directions"
                           :menu-props="{ top: true, offsetY: true }"
                           label="Play Direction"
+                          @change="changePlay"
                         ></v-select>
                       </v-col>
                     </v-row>
@@ -146,8 +157,6 @@
           
           </div>
         </div>
-
-        <!-- <player :background-color="backgroundColor" :canvas-shape="canvasShape" class="col-6"></player> -->
         
         <property v-if="isLayer" :selected-layer="selectedLayer" class="col-3"></property>
 
@@ -217,14 +226,14 @@
             defaultSpeed: '1.0',
             defaultType: 'Autoplay',
             defaultDirection: 'Forward',
-            speed: ['0.5', '1.0', '1.5', '2.0'],
-            types: ['Autoplay', 'Hover', 'Click', 'Bounce'],
+            speed: ['0.25', '0.5', '0.75', '1.0', '1.25', '1.5', '1.75', '2.0'],
+            types: ['Autoplay', 'Hover', 'Bounce'],
             directions: ['Forward', 'Backward'],
+            hoverFlag: false,
           }
         },
         computed: {
-          isContent() {    
-            // var temp = document.getElementById("myCanvas")
+          isContent() {
             if (true) {
               return true
             } else {
@@ -245,7 +254,6 @@
             }
           }
         },
-
         methods: {
           layerSelected(layer) {
             this.isLayer = !!layer
@@ -267,9 +275,37 @@
             setTimeout(() => {
               this.layers = getLayerList();
             }, 500);
-          }
-        },
+          },
 
+          changePlay() {
+            if (this.defaultDirection === 'Forward') {
+              setPlaySpeed(Number(this.defaultSpeed))
+            }
+            else {
+              setPlaySpeed(Number(this.defaultSpeed) * -1)
+            }
+          },
+          changePlayType() {
+            if(this.defaultType === "Hover") {
+              RLottieModule.pause();
+              document.getElementById("content").addEventListener("mouseover", RLottieModule.play);
+              document.getElementById("content").addEventListener("mouseout", RLottieModule.pause);
+              this.hoverFlag = true;
+            }
+            if(this.defaultType !== "Hover" && this.hoverFlag) {
+              RLottieModule.play();
+              document.getElementById("content").removeEventListener("mouseover", RLottieModule.play);
+              document.getElementById("content").removeEventListener("mouseout", RLottieModule.pause);
+              this.hoverFlag = false;
+            }
+            if(this.defaultType === "Bounce") {
+              RLottieModule.isBounce = true;
+            }
+            if(this.defaultType !== "Bounce") {
+              RLottieModule.isBounce = false;
+            }
+          },
+        },
         created() {
           this.$vuetify.theme.dark = true
         },

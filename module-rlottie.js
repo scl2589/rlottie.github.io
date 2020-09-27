@@ -33,6 +33,7 @@ var RLottieModule = (function () {
   obj.wasPlaying = false;
   obj.playDir = true;
   obj.playSpeed = 1;
+  obj.isBounce = false;
 
   obj.init = function () {
     var input = document.getElementById('fileSelector');
@@ -62,8 +63,20 @@ var RLottieModule = (function () {
 
     obj.context.putImageData(imageData, 0, 0);
 
-    if (obj.playDir && obj.curFrame > obj.frameCount) obj.curFrame = 0;
-    if(!obj.playDir && obj.curFrame <= 0) obj.curFrame = obj.frameCount;
+    if (obj.playDir && obj.curFrame > obj.frameCount) {
+      if(this.isBounce) {
+        obj.playSpeed = -obj.playSpeed;
+        obj.playDir = !obj.playDir;
+      }
+      else obj.curFrame = 0;
+    }
+    if(!obj.playDir && obj.curFrame <= 0) {
+      if(this.isBounce) {
+        obj.playSpeed = -obj.playSpeed;
+        obj.playDir = !obj.playDir;
+      } 
+      else obj.curFrame = obj.frameCount;
+    }
     currentFrame.innerText = String(Math.round(obj.curFrame - 1));
     frameCount.innerText = String(obj.frameCount)
     app.$root.layers = this.layers;
