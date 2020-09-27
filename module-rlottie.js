@@ -241,6 +241,7 @@ function fileSelectionChanged() {
   var input = document.getElementById('fileSelector');
   var contentName = document.getElementById('contentName')
   contentName.innerText = input.files[0].name.slice(0, -5)
+  contentName.title = input.files[0].name.slice(0, -5)
   handleFiles(input.files);
 }
 

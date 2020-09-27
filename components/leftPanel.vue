@@ -3,8 +3,12 @@
     <!-- preview -->
     <div class="preview container py-3 bg-blue d-flex align-items-center">
       <div class="row no-gutters">
-        <img class="img-thumbnail preview-thumbnail" src="" alt="preview">
-        <h5 class="my-auto ml-4" id="contentName">FileName</h5>
+        <div class="col-3 d-flex justify-content-center align-items-center">
+          <img class="img-thumbnail preview-thumbnail" src="" alt="preview">
+        </div>
+        <div class="col-9 d-flex align-items-center">
+          <h5 class="ml-4 name" id="contentName">FileName</h5>
+        </div>
       </div>
     </div>
 
@@ -23,9 +27,11 @@
       <div v-for="(layer, idx) in layers" :key="layer.idx">
         <div class="row no-gutters py-3 px-3 rounded" :class="{ 'bg-green': layer.selected }">
           <div @click="clickLayer(layer)" class="layer-info row no-gutters col-10">
-            <img class="img-thumbnail layer-thumbnail col-4" src="" :alt="layer.idx">
+            <div class="col-4 d-flex justify-content-center align-items-center">
+              <img class="img-thumbnail layer-thumbnail" src="" :alt="layer.idx">
+            </div>
             <div class="col-8 d-flex align-items-center">
-              <p class="ml-3 mb-0 layer-name">
+              <p class="ml-3 mb-0 layer-name" :title="layer.name">
                 {{ layer.name }}
               </p>
             </div>
@@ -134,42 +140,33 @@ module.exports = {
   }
 
   .layer-list::-webkit-scrollbar {
-  width: 8px; height: 8px; border: 3px solid white;
-  /* border-radius: 15px; */
+    width: 8px; 
+    height: 8px;
   }
 
-  /* .layer-list::-webkit-scrollbar-button,.layer-list::-webkit-scrollbar-button:END {
-    background-color: white;
-  } */
-
-  /* .layer-list::-webkit-scrollbar-button:start:decrement{
-    background-color: red;
-  } */
-
   .layer-list::-webkit-scrollbar-track {
-    background: white;
+    background: #1D3557;
     border-radius: 15px;
-    /* -webkit-border-radius: 20px white;  */
-    /* border-radius:20px white; */
-    /* -webkit-border-radius: 15px; border-radius: 15px;  */
   }
 
   .layer-list::-webkit-scrollbar-corner {
     background: #1D3557; 
-    /* -webkit-border-radius: 20px white; 
-    border-radius:20px white; */
-    /* -webkit-border-radius: 15px; border-radius: 15px;  */
   }
 
   .layer-list::-webkit-scrollbar-thumb {
-    /* background: #0075ff; */
     background: rgba(15, 128, 170);
-    /* border: 1px solid rgba(15, 128, 170, 0.77); */
-    /* -webkit-border-radius: 15px; border-radius: 15px;  */
   }
 
   .layer-list::-webkit-scrollbar-button {
     background-color: red;
     height: 0;
+  }
+
+  .name, .layer-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-sidebar sidebar">
+  <div class="bg-sidebar sidebar scroll-sect">
     <p class="title">Property</p>
     <!-- color controller -->
     <div class="property">
@@ -212,7 +212,7 @@ p {
 }
 
 .property {
-  margin: 20px 0 0 0;
+  margin: 10px 0 0 0;
 }
 
 .property-title {
@@ -234,4 +234,34 @@ p {
 .v-input {
   width: 50% !important;
 }
+
+
+/* scroll */
+.scroll-sect {
+  overflow-y: scroll; 
+}
+
+.scroll-sect::-webkit-scrollbar {
+  width: 8px; 
+  height: 8px;
+}
+
+.scroll-sect::-webkit-scrollbar-track {
+  background: #1D3557;
+  border-radius: 15px;
+}
+
+.scroll-sect::-webkit-scrollbar-corner {
+  background: #1D3557; 
+}
+
+.scroll-sect::-webkit-scrollbar-thumb {
+  background: rgba(15, 128, 170);
+}
+
+.scroll-sect::-webkit-scrollbar-button {
+  background-color: red;
+  height: 0;
+}
+
 </style>
