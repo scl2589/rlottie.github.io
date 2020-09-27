@@ -5,23 +5,22 @@
     <div class="property">
       <p class="property-title">Color</p>
       <div class="text-left">
-        <v-menu 
+        <v-menu
           offset-y 
           :close-on-content-click="false"
           >
           <template v-slot:activator="{ on }">
             <v-btn
-              :color="color"
+              :color="selectedLayer.color.hex"
               dark
               v-on="on"
               class="mr-2"
             >
             </v-btn>
-            <span>{{color.slice(0, 7)}}</span>
+            <span>{{ selectedLayer.color.hex }}</span>
           </template>
           <v-color-picker
-            value="#7417BE"
-            v-model="color"
+            v-model="selectedLayer.color"
             show-swatches
             class="mx-auto"
         ></v-color-picker>
@@ -131,6 +130,21 @@ module.exports = {
         transition: 'border-radius 200ms ease-in-out'
       }
     }
+  },
+   watch: {
+    selectedLayer: {
+      deep: true,
+      handler() {
+        if (this.selectedLayer.color.hex !== String()) {
+          var currentLayerColor = this.selectedLayer.color
+          r = currentLayerColor.rgba.r / 255;
+          g = currentLayerColor.rgba.g / 255;
+          b = currentLayerColor.rgba.b / 255;
+          setFillColor(this.selectedLayer.name + ".**", r, g, b);
+          setStrokeColor(this.selectedLayer.name + ".**", r, g, b);
+        }
+      }
+    },
   },
   methods: {
     changeOpacity(opacity) {

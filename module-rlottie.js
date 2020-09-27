@@ -154,7 +154,36 @@ var RLottieModule = (function () {
         outFrame: layer[2],
         visible: true,
         selected: false,
-        rotation: 0
+        opacity: 100,
+        xPos: 0,
+        yPos: 0,
+        scaleWidth: 100,
+        scaleHeight: 100,
+        rotation: 0,
+        color: {
+          alpha: Number(),
+          hex: String(),
+          hexa: String(),
+          hsla: {
+            h: Number(),
+            s: Number(),
+            l: Number(),
+            a: Number()
+          },
+          hsva: {
+            h: Number(),
+            s: Number(),
+            v: Number(),
+            a: Number()
+          },
+          hue: Number(),
+          rgba: {
+            r: Number(),
+            g: Number(),
+            b: Number(),
+            a: Number()
+          }
+        }
       })
     }
   }
