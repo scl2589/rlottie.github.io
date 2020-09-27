@@ -4,7 +4,7 @@
     
     <!-- Background color controller -->
     <div class="preference">
-      <p class="preference-title">Background color</p>
+      <p class="preference-title mb-2">Background color</p>
       <div class="text-left">
         <v-menu 
           offset-y 
@@ -21,6 +21,7 @@
           <span>{{color.slice(0, 7)}}</span>
         </template>
         <v-color-picker
+          light
           value="#7417BE"
           v-model="color"
           show-swatches
@@ -31,15 +32,15 @@
     </div>
 
     <!-- Canvas Resize -->
-    <div class="d-flex flex-column justify-content-center align-items-start mt-5 mb-3">
-      <label class="mb-0" for="slider2">Canvas Resize</label>
+    <div class="d-flex flex-column justify-content-center align-items-start preference">
+      <label class="mb-2" for="slider2">Canvas Resize</label>
       <input class="canvasSlider" type="range" id="slider2" min="0" max="100" value="100"
         oninput="onResizeSliderDrag(this.value)">
     </div>
     
     <!-- Dimension controller -->
     <div class="preference">
-      <p class="preference-title">Dimension</p>
+      <p class="preference-title mb-2">Dimension</p>
       <div class="position d-flex">
         <v-text-field
           light
