@@ -37,7 +37,49 @@
       <input class="canvasSlider" type="range" id="slider2" min="0" max="100" value="100"
         oninput="onResizeSliderDrag(this.value)">
     </div>
-    
+
+    <!-- Border Options -->
+    <div class="preference">
+      <p class="preference-title mb-2">Border</p>
+      <div class="row d-flex align-items-center">
+        <div class="text-left col-6 pr-0">
+          <v-menu 
+            offset-y 
+            :close-on-content-click="false"
+            >
+          <template v-slot:activator="{ on }">
+            <v-btn
+              :color="borderColor"
+              dark
+              v-on="on"
+              class="mr-2"
+            >
+            </v-btn>
+            <span>{{borderColor.slice(0, 7)}}</span>
+          </template>
+          <v-color-picker
+            light
+            value="#7417BE"
+            v-model="borderColor"
+            show-swatches
+            class="mx-auto"
+          ></v-color-picker>
+          </v-menu>
+        </div>
+        <div class="col-6 pl-1">
+          <v-text-field
+            light
+            solo
+            prefix="px"
+            v-model="borderWidth"
+            @change="changeBorderWidth"
+            class="bg-white"
+            hide-details
+          ></v-text-field>
+        </div>
+      </div>
+    </div>
+
     <!-- Dimension controller -->
     <div class="preference">
       <p class="preference-title mb-2">Dimension</p>
@@ -69,14 +111,27 @@ module.exports = {
   data: function () {
     return {
       color: '#FFFFFF',
+      borderColor: '#000000',
+      borderWidth: 1,
       width: 250,
       height: 250,
+    }
+  },
+  methods: {
+    changeBorderWidth() {
+      var canvas = document.getElementById("myCanvas")
+      console.log(canvas.style)
+      canvas.style.borderWidth = this.borderWidth + "px"
     }
   },
   watch: {
     color() {
       this.$emit('bg-color-changed', this.color)
     },
+    borderColor() {
+      var canvas = document.getElementById("myCanvas")
+      canvas.style.borderColor = this.borderColor
+    }
   }
 }
 </script>
