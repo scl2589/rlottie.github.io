@@ -34,10 +34,10 @@
           /* border-radius: 50%; */
         }
 
-        .toolbox {
+        /* .toolbox {
           background-color:#1D3557;
           color: #fdfdfd
-        }
+        } */
 
         .toolbox-basic {
           height: 10vh;
@@ -71,9 +71,9 @@
         <leftpanel @layer-selected="layerSelected" :layers="layers" :key="componentKey" class="col-3"></leftpanel>
         
         <!-- Player  -->
-        <div class="col-6">
+        <div class="col-6 bg-white">
           <div class="player d-flex flex-column justify-content-between">
-            <p>{{ canvasStyling[canvasShape] }}</p>
+            <!-- <p>{{ canvasStyling[canvasShape] }}</p> -->
             <div class="screen my-auto d-flex flex-column justify-content-center align-items-center" id="content">
               <canvas
                v-show="isContent" 
@@ -92,7 +92,6 @@
                     <v-row align="center">
                       <v-col cols="12">
                         <v-select
-                          dark
                           color="grey lighten-5"
                           v-model="defaultSpeed"
                           :items="speed"
@@ -106,7 +105,6 @@
                     <v-row align="center">
                       <v-col cols="12">
                         <v-select
-                          dark
                           color="grey lighten-5"
                           v-model="defaultType"
                           :items="types"
@@ -120,7 +118,6 @@
                     <v-row align="center">
                       <v-col cols="12">
                         <v-select
-                          dark
                           color="grey lighten-5"
                           v-model="defaultDirection"
                           :items="directions"
@@ -192,7 +189,30 @@
     <script>
       new Vue({
         el: '#app',
-        vuetify: new Vuetify(),
+        vuetify: new Vuetify({
+          theme: {
+            themes: {
+              dark: {
+                navbar: '#263238',
+                toolbox: '#263238',
+                sidebar: '#37474F',
+                accent: '#098e8f',
+                preview: '#0b6687',
+                icon: '#FFFFFF',
+                mode: '#ECEFF1',
+              },
+              light: {
+                navbar: '#CFD8DC',
+                toolbox: '#CFD8DC',
+                sidebar: '#ECEFF1',
+                accent: '#A8DADC',
+                preview: '#56a6c2',
+                icon: '#000000',
+                mode: '#37474F',
+              }
+            },
+          },
+        }),
 
         components: {
           'navbar': httpVueLoader('./components/navbar.vue'),
@@ -245,6 +265,7 @@
             }
           }
         },
+
         methods: {
           layerSelected(layer) {
             this.isLayer = !!layer
@@ -260,15 +281,20 @@
           changeCanvas(toggle_one) {
             this.canvasShape = toggle_one
           },
+
           changeFile() {
             this.layers = null;
             setTimeout(() => {
               this.layers = getLayerList();
             }, 500);
             
-            
           }
         },
+
+        created() {
+          this.$vuetify.theme.dark = true
+        },
+
         mounted: function() {
           setTimeout(() => {
             this.layers = getLayerList();

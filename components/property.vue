@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-sidebar sidebar scroll-sect">
+  <div class="sidebar scroll-sect" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
     <p class="title">Property</p>
     <!-- color controller -->
     <div class="property">
@@ -33,6 +33,7 @@
       <p class="property-title">Opacity</p>
       <div class="position d-flex">
         <v-text-field
+          light
           solo
           v-model="selectedLayer.opacity"
           placeholder="Opacity"
@@ -48,6 +49,7 @@
       <p class="property-title">Position</p>
       <div class="position d-flex">
         <v-text-field
+          light
           solo
           prefix="x"
           v-model="selectedLayer.xPos"
@@ -56,6 +58,7 @@
           class="mr-3"
         ></v-text-field>
         <v-text-field
+          light
           solo
           prefix="y"
           v-model="selectedLayer.yPos"
@@ -67,10 +70,15 @@
 
     <!-- scale controller -->
     <div class="property">
-      <p class="property-title">Scale</p>
+      <!-- <p class="property-title">Scale</p> -->
+      <div class="d-flex align-items-center">
+        <p class="property-title">Scale</p>
+      </div>
+      
       <div class="preference">
         <div class="position d-flex">
           <v-text-field
+            light
             solo
             prefix="W"
             v-model="selectedLayer.scaleWidth"
@@ -80,12 +88,13 @@
             placeholder="100"
           ></v-text-field>
           <v-text-field
+            light
             solo
             prefix="H"
             v-model="selectedLayer.scaleHeight"
             @change="changeScaleHeight(selectedLayer.scaleHeight)"
             placeholder="100"
-            hint="The number should be greater than or equal to 0 "
+            hint="The number should be greater than or equal to 0"
           ></v-text-field>
         </div>
       </div>
@@ -96,6 +105,7 @@
       <p class="property-title">Rotation</p>
       <div class="rotation m-0">
          <v-text-field
+          light
           solo
           suffix="°"
           @change="changeRotation(selectedLayer.rotation)"
@@ -104,6 +114,7 @@
         ></v-text-field>
       </div>
     </div>
+
   </div>
   
 </template>
@@ -129,7 +140,8 @@ module.exports = {
         borderRadius: menu ? '50%' : '4px',
         transition: 'border-radius 200ms ease-in-out'
       }
-    }
+    },
+
   },
    watch: {
     selectedLayer: {
@@ -239,27 +251,51 @@ p {
 /* scroll */
 .scroll-sect {
   overflow-y: scroll; 
+  height: 92vh;
 }
 
-.scroll-sect::-webkit-scrollbar {
+.scroll-sect-dark::-webkit-scrollbar {
   width: 8px; 
   height: 8px;
 }
 
-.scroll-sect::-webkit-scrollbar-track {
-  background: #1D3557;
-  border-radius: 15px;
+.scroll-sect-dark::-webkit-scrollbar-track {
+  background: #37474F;
+  /* border-radius: 15px; */
 }
 
-.scroll-sect::-webkit-scrollbar-corner {
-  background: #1D3557; 
+.scroll-sect-dark::-webkit-scrollbar-corner {
+  background: #37474F; 
 }
 
-.scroll-sect::-webkit-scrollbar-thumb {
-  background: rgba(15, 128, 170);
+.scroll-sect-dark::-webkit-scrollbar-thumb {
+  background: #0b6687;
 }
 
-.scroll-sect::-webkit-scrollbar-button {
+.scroll-sect-dark::-webkit-scrollbar-button {
+  background-color: red;
+  height: 0;
+}
+
+.scroll-sect-light::-webkit-scrollbar {
+  width: 8px; 
+  height: 8px;
+}
+
+.scroll-sect-light::-webkit-scrollbar-track {
+  background: #ECEFF1;
+  /* border-radius: 15px; */
+}
+
+.scroll-sect-light::-webkit-scrollbar-corner {
+  background: #ECEFF1; 
+}
+
+.scroll-sect-light::-webkit-scrollbar-thumb {
+  background: #56a6c2;
+}
+
+.scroll-sect-light::-webkit-scrollbar-button {
   background-color: red;
   height: 0;
 }

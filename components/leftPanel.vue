@@ -1,13 +1,13 @@
 <template>
-  <div class="bg-sidebar left-sidebar">
+  <div class="sidebar left-sidebar">
     <!-- preview -->
-    <div class="preview container py-3 bg-blue d-flex align-items-center" @click="clickMain">
+    <div class="preview container py-3 d-flex align-items-center" @click="clickMain">
       <div class="row no-gutters">
         <div class="col-3 d-flex justify-content-center align-items-center">
           <img class="img-thumbnail preview-thumbnail" src="" alt="preview">
         </div>
         <div class="col-9 d-flex align-items-center">
-          <h5 class="ml-4 name mb-0" id="contentName">FileName</h5>
+          <h5 class="ml-4 name mb-0 text-white" id="contentName">FileName</h5>
         </div>
       </div>
     </div>
@@ -16,16 +16,16 @@
     <div class="search-bar container py-3">
       <p class="title">Search layer</p>
       <div class="row no-gutters">
-        <button @click="getSearchResult" class="btn col-2"><i class="text-white fas fa-search fa-lg"></i></button>
+        <button @click="getSearchResult" class="btn col-2"><i class="fas fa-search fa-lg" :class="{ 'text-white': $vuetify.theme.dark }"></i></button>
         <input v-model="searchKeyword" @keypress.enter="getSearchResult" type="text" class="searchInput rounded-pill col-10 px-3 bg-white">
       </div>
     </div>
 
     <!-- layer list -->
     <p class="title px-3 layers-title">Layers</p>
-    <div class="layer-list container py-3 px-0">
+    <div class="layer-list container py-3 px-0" :class="{ 'layer-list-dark': $vuetify.theme.dark, 'layer-list-light': !$vuetify.theme.dark }">
       <div v-for="(layer, idx) in layers" :key="layer.idx">
-        <div class="row no-gutters py-3 px-3 rounded" :class="{ 'bg-green': layer.selected }">
+        <div class="row no-gutters py-3 px-3 rounded" :class="{ 'accent': layer.selected }">
           <div @click="clickLayer(layer)" class="layer-info row no-gutters col-10">
             <div class="col-4 d-flex justify-content-center align-items-center">
               <img class="img-thumbnail layer-thumbnail" src="" :alt="layer.idx">
@@ -37,8 +37,8 @@
             </div>
           </div>
           <button @click="layer.visible = !layer.visible" class="eye-btn btn ml-auto col-2">
-            <i v-if="layer.visible" class="text-white far fa-eye"></i>
-            <i v-else class="text-white far fa-eye-slash"></i>
+            <i v-if="layer.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+            <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
           </button>
         </div>
       </div>
@@ -147,25 +147,48 @@ module.exports = {
     overflow-y: scroll; 
   }
 
-  .layer-list::-webkit-scrollbar {
+  .layer-list-dark::-webkit-scrollbar {
     width: 8px; 
     height: 8px;
   }
 
-  .layer-list::-webkit-scrollbar-track {
-    background: #1D3557;
-    border-radius: 15px;
+  .layer-list-dark::-webkit-scrollbar-track {
+    background: #37474F;
+    /* border-radius: 15px; */
   }
 
-  .layer-list::-webkit-scrollbar-corner {
-    background: #1D3557; 
+  .layer-list-dark::-webkit-scrollbar-corner {
+    background: #37474F; 
   }
 
-  .layer-list::-webkit-scrollbar-thumb {
-    background: rgba(15, 128, 170);
+  .layer-list-dark::-webkit-scrollbar-thumb {
+    background: #0b6687;
   }
 
-  .layer-list::-webkit-scrollbar-button {
+  .layer-list-dark::-webkit-scrollbar-button {
+    background-color: red;
+    height: 0;
+  }
+
+  .layer-list-light::-webkit-scrollbar {
+    width: 8px; 
+    height: 8px;
+  }
+
+  .layer-list-light::-webkit-scrollbar-track {
+    background: #ECEFF1;
+    /* border-radius: 15px; */
+  }
+
+  .layer-list-light::-webkit-scrollbar-corner {
+    background: #ECEFF1; 
+  }
+
+  .layer-list-light::-webkit-scrollbar-thumb {
+    background: #56a6c2;
+  }
+
+  .layer-list-light::-webkit-scrollbar-button {
     background-color: red;
     height: 0;
   }

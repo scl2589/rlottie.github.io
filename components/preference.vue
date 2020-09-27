@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-sidebar sidebar">
+  <div class="sidebar">
     <p class="title">Preference</p>
     
     <!-- Background color controller -->
@@ -42,16 +42,19 @@
       <p class="preference-title">Dimension</p>
       <div class="position d-flex">
         <v-text-field
+          light
           solo
           prefix="W"
           v-model="width"
-          class="mr-3"
+          class="mr-3 bg-white"
           hide-details
         ></v-text-field>
         <v-text-field
+          light
           solo
           prefix="H"
           v-model="height"
+          class="bg-white"
           hide-details
         ></v-text-field>
       </div>
