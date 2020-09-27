@@ -28,7 +28,22 @@
         </v-menu>
       </div>
     </div>
-    
+
+    <!-- opacity controller -->
+    <div class="property">
+      <p class="property-title">Opacity</p>
+      <div class="position d-flex">
+        <v-text-field
+          solo
+          v-model="selectedLayer.opacity"
+          placeholder="Opacity"
+          hint="The number should be in between 0 and 100!"
+          class="mr-3"
+          @change="changeOpacity(selectedLayer.opacity)"
+        ></v-text-field>
+      </div>
+    </div>
+
     <!-- position controller -->
     <div class="property">
       <p class="property-title">Position</p>
@@ -99,7 +114,6 @@ module.exports = {
   name: 'property',
   data: function () {
     return {
-      color: 'pink',
     }
   },
   props: {
@@ -119,6 +133,12 @@ module.exports = {
     }
   },
   methods: {
+    changeOpacity(opacity) {
+      if (opacity && opacity <= 100 && opacity >= 0) {
+        setFillOpacity( this.selectedLayer.name + ".**", Number(opacity));
+        setStrokeOpacity( this.selectedLayer.name + ".**", Number(opacity));
+      }
+    },
     changeScaleWidth(scaleWidth) {
       if (scaleWidth >= 0) {
         if (this.selectedLayer.scaleHeight) {
