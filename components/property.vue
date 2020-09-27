@@ -149,8 +149,10 @@ module.exports = {
   methods: {
     changeOpacity(opacity) {
       if (opacity && opacity <= 100 && opacity >= 0) {
-        setFillOpacity( this.selectedLayer.name + ".**", Number(opacity));
-        setStrokeOpacity( this.selectedLayer.name + ".**", Number(opacity));
+        if (this.selectedLayer.visible) {
+          setFillOpacity( this.selectedLayer.name + ".**", Number(opacity));
+          setStrokeOpacity( this.selectedLayer.name + ".**", Number(opacity));
+        }
       }
     },
     changeScaleWidth(scaleWidth) {
