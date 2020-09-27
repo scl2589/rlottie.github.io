@@ -60,6 +60,12 @@
           /* max-width: 50vw;
           max-height: 50vh; */
         }
+
+        .scroll-sect {
+          overflow-y: scroll; 
+          height: 10vh;
+        }
+
     </style>
   </head>
 
@@ -97,6 +103,7 @@
                           :items="speed"
                           :menu-props="{ top: true, offsetY: true }"
                           label="Play Speed"
+                          @change="changeSpeed(defaultSpeed)"
                         ></v-select>
                       </v-col>
                     </v-row>
@@ -123,6 +130,7 @@
                           :items="directions"
                           :menu-props="{ top: true, offsetY: true }"
                           label="Play Direction"
+                          @change="changeDirection(defaultDirection)"
                         ></v-select>
                       </v-col>
                     </v-row>
@@ -146,8 +154,6 @@
           
           </div>
         </div>
-
-        <!-- <player :background-color="backgroundColor" :canvas-shape="canvasShape" class="col-6"></player> -->
         
         <property v-if="isLayer" :selected-layer="selectedLayer" class="col-3"></property>
 
@@ -217,14 +223,13 @@
             defaultSpeed: '1.0',
             defaultType: 'Autoplay',
             defaultDirection: 'Forward',
-            speed: ['0.5', '1.0', '1.5', '2.0'],
+            speed: ['0.25', '0.5', '0.75', '1.0', '1.25', '1.5', '1.75', '2.0'],
             types: ['Autoplay', 'Hover', 'Click', 'Bounce'],
             directions: ['Forward', 'Backward'],
           }
         },
         computed: {
-          isContent() {    
-            // var temp = document.getElementById("myCanvas")
+          isContent() {
             if (true) {
               return true
             } else {
@@ -267,6 +272,18 @@
             setTimeout(() => {
               this.layers = getLayerList();
             }, 500);
+          },
+
+          changeSpeed(speed) {
+            setPlaySpeed(Number(speed))
+          },
+          
+          changeDirection(direction) {
+            if (direction === 'Forward') {
+              setPlaySpeed(Number(this.defaultSpeed))
+            } else {
+              setPlaySpeed(Number(this.defaultSpeed) * -1)
+            }
           }
         },
 

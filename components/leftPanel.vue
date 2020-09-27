@@ -23,7 +23,7 @@
 
     <!-- layer list -->
     <p class="title px-3 layers-title">Layers</p>
-    <div class="layer-list container py-3 px-0" :class="{ 'layer-list-dark': $vuetify.theme.dark, 'layer-list-light': !$vuetify.theme.dark }">
+    <div class="layer-list container py-3 px-0" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
       <div v-for="(layer, idx) in layers" :key="layer.idx">
         <div class="row no-gutters py-3 px-3 rounded" :class="{ 'accent': layer.selected }">
           <div @click="clickLayer(layer)" class="layer-info row no-gutters col-10">
@@ -155,52 +155,6 @@ module.exports = {
   .layer-list {
     height: 62vh;
     overflow-y: scroll; 
-  }
-
-  .layer-list-dark::-webkit-scrollbar {
-    width: 8px; 
-    height: 8px;
-  }
-
-  .layer-list-dark::-webkit-scrollbar-track {
-    background: #37474F;
-    /* border-radius: 15px; */
-  }
-
-  .layer-list-dark::-webkit-scrollbar-corner {
-    background: #37474F; 
-  }
-
-  .layer-list-dark::-webkit-scrollbar-thumb {
-    background: #0b6687;
-  }
-
-  .layer-list-dark::-webkit-scrollbar-button {
-    background-color: red;
-    height: 0;
-  }
-
-  .layer-list-light::-webkit-scrollbar {
-    width: 8px; 
-    height: 8px;
-  }
-
-  .layer-list-light::-webkit-scrollbar-track {
-    background: #ECEFF1;
-    /* border-radius: 15px; */
-  }
-
-  .layer-list-light::-webkit-scrollbar-corner {
-    background: #ECEFF1; 
-  }
-
-  .layer-list-light::-webkit-scrollbar-thumb {
-    background: #56a6c2;
-  }
-
-  .layer-list-light::-webkit-scrollbar-button {
-    background-color: red;
-    height: 0;
   }
 
   .name, .layer-name {
