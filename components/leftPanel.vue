@@ -36,7 +36,7 @@
               </p>
             </div>
           </div>
-          <button @click="layer.visible = !layer.visible" class="eye-btn btn ml-auto col-2">
+          <button @click="changeVisibility(layer)" class="eye-btn btn ml-auto col-2">
             <i v-if="layer.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
             <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
           </button>
@@ -87,6 +87,16 @@ module.exports = {
         layer.selected = false
       }
       this.$emit('layer-selected', null)
+    },
+    changeVisibility(layer) {
+      layer.visible = !layer.visible
+      if (layer.visible) {
+        setFillOpacity( layer.name + ".**", Number(layer.opacity));
+        setStrokeOpacity( layer.name + ".**", Number(layer.opacity));
+      } else {
+        setFillOpacity( layer.name + ".**", 0);
+        setStrokeOpacity( layer.name + ".**", 0);
+      }
     }
   },
 }

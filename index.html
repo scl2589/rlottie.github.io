@@ -187,7 +187,7 @@
     <script src="https://unpkg.com/http-vue-loader"></script> 
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script>
-      new Vue({
+      var app = new Vue({
         el: '#app',
         vuetify: new Vuetify({
           theme: {
@@ -287,18 +287,11 @@
             setTimeout(() => {
               this.layers = getLayerList();
             }, 500);
-            
           }
         },
 
         created() {
           this.$vuetify.theme.dark = true
-        },
-
-        mounted: function() {
-          setTimeout(() => {
-            this.layers = getLayerList();
-          }, 500);
         },
       });
     </script>

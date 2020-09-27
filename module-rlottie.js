@@ -66,6 +66,7 @@ var RLottieModule = (function () {
     var frameCount = document.getElementById("frameCount")
     currentFrame.innerText = String(obj.curFrame - 1)
     frameCount.innerText = String(obj.frameCount)
+    app.$root.layers = this.layers;
   }
 
   obj.reload = function (jsString) {
@@ -74,6 +75,7 @@ var RLottieModule = (function () {
     obj.curFrame = 0;
     
     makeLayerList();
+    app.$root.layers = this.layers;
 
     // force a render in pause state
     sliderReset();
@@ -300,5 +302,9 @@ function setRotation(keypath, degree) {
   RLottieModule.lottieHandle.setRotation(keypath, degree);
 }
 
-
-
+function moveFrame(frame) {
+  RLottieModule.curFrame = frame;
+  document.getElementById("slider").value = frame;
+  RLottieModule.seek(frame);
+  RLottieModule.pause();
+}
