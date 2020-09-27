@@ -31,6 +31,8 @@ var RLottieModule = (function () {
   obj.resizeId = {};
   obj.playing = true;
   obj.wasPlaying = false;
+  obj.playDir = true;
+  obj.playSpeed = 1;
 
   obj.init = function () {
     var input = document.getElementById('fileSelector');
@@ -53,18 +55,16 @@ var RLottieModule = (function () {
 
   obj.render = function () {
     if (obj.canvas.width == 0 || obj.canvas.height == 0) return;
-
-    var buffer = obj.lottieHandle.render(obj.curFrame++, obj.canvas.width, obj.canvas.height);
+    obj.curFrame = Number(obj.curFrame) + obj.playSpeed;
+    var buffer = obj.lottieHandle.render(obj.curFrame, obj.canvas.width, obj.canvas.height);
     var result = Uint8ClampedArray.from(buffer);
     var imageData = new ImageData(result, obj.canvas.width, obj.canvas.height);
 
     obj.context.putImageData(imageData, 0, 0);
 
-    if (obj.curFrame == obj.frameCount) obj.curFrame = obj.frameCount;
-    if (obj.curFrame > obj.frameCount + 1) obj.curFrame = 0;
-    var currentFrame = document.getElementById("currentFrame")
-    var frameCount = document.getElementById("frameCount")
-    currentFrame.innerText = String(obj.curFrame - 1)
+    if (obj.playDir && obj.curFrame > obj.frameCount) obj.curFrame = 0;
+    if(!obj.playDir && obj.curFrame <= 0) obj.curFrame = obj.frameCount;
+    currentFrame.innerText = String(Math.round(obj.curFrame - 1));
     frameCount.innerText = String(obj.frameCount)
     app.$root.layers = this.layers;
   }
@@ -307,4 +307,11 @@ function moveFrame(frame) {
   document.getElementById("slider").value = frame;
   RLottieModule.seek(frame);
   RLottieModule.pause();
+}
+
+function setPlaySpeed(speed) {
+  if(speed == 0) return;
+  if(speed < 0) RLottieModule.playDir = false;
+  else RLottieModule.playDir = true;
+  RLottieModule.playSpeed = speed;
 }
