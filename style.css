@@ -143,16 +143,16 @@ html, body {
 }
 
 /*  */
-.bg-navbar {
+/* .bg-navbar {
   background-color: #1D3557;
   color: white;
-}
+} */
 
-.bg-sidebar {
+/* .bg-sidebar {
   background-color: #0B2545;
   color: white;
   height: 92vh;
-}
+} */
 
 .bg-green {
   background-color: rgba(10, 142, 144, 0.74);
