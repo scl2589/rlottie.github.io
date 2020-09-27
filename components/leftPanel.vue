@@ -22,7 +22,27 @@
     </div>
 
     <!-- layer list -->
-    <p class="title px-3 layers-title">Layers</p>
+    <div class="d-flex justify-content-between align-items-center px-3">
+      <p class="title layers-title">Layers</p>
+      <div v-if="layers" class="d-flex justify-content-start align-items-center">
+        <button @click="changeAllVisibility" class="eye-btn btn">
+          <i v-if="allLayersVisible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+          <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+        </button>
+        <v-tooltip bottom nudge-right="0" nudge-bottom="0">
+          <template v-slot:activator="{ on, attrs }">
+            <i
+              class="far fa-question-circle fa-sm ml-2"
+              v-bind="attrs"
+              v-on="on"
+            >
+            </i>
+          </template>
+          <span v-if="allLayersVisible">Make all layers invisible</span>
+          <span v-else>Make all layers visible</span>
+        </v-tooltip>
+      </div>
+    </div>
     <div class="layer-list container py-3 px-0" :class="{ 'layer-list-dark': $vuetify.theme.dark, 'layer-list-light': !$vuetify.theme.dark }">
       <div v-for="(layer, idx) in layers" :key="layer.idx">
         <div class="row no-gutters py-3 px-3 rounded" :class="{ 'accent': layer.selected }">
@@ -56,13 +76,13 @@ module.exports = {
     return {
       searchKeyword: null,
       clickedLayer: null,
-      windowReadyState: false
+      windowReadyState: false,
+      allLayersVisible: true
     }
   },
   methods: {
     getSearchResult() {
       if (this.searchKeyword !== null) {
-        console.log(this.searchKeyword)
         this.searchKeyword = null
       }
     },
@@ -91,14 +111,33 @@ module.exports = {
     changeVisibility(layer) {
       layer.visible = !layer.visible
       if (layer.visible) {
+        // if (!this.allLayersVisible) {
+        //   this.allLayersVisible = !this.allLayersVisible;
+        // };
         setFillOpacity( layer.name + ".**", Number(layer.opacity));
         setStrokeOpacity( layer.name + ".**", Number(layer.opacity));
       } else {
         setFillOpacity( layer.name + ".**", 0);
         setStrokeOpacity( layer.name + ".**", 0);
       }
+    },
+    changeAllVisibility() {
+      this.allLayersVisible = !this.allLayersVisible
+      if (this.allLayersVisible) {
+        this.layers.forEach(layer => {
+          layer.visible = true
+          setFillOpacity( layer.name + ".**", Number(layer.opacity));
+          setStrokeOpacity( layer.name + ".**", Number(layer.opacity));
+        });
+      } else {
+        this.layers.forEach(layer => {
+          layer.visible = false
+          setFillOpacity( layer.name + ".**", 0);
+          setStrokeOpacity( layer.name + ".**", 0);
+        });
+      }
     }
-  },
+  }
 }
 </script>
 
