@@ -117,7 +117,6 @@
             v-model="selectedLayer.scaleHeight"
             @change="changeScaleHeight(selectedLayer.scaleHeight)"
             placeholder="100"
-            hint="The number should be greater than or equal to 0"
           ></v-text-field>
         </div>
       </div>
