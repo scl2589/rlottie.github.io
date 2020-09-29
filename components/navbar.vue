@@ -9,16 +9,6 @@
     <!-- button group -->
     <div class="d-flex">
 
-      <!-- canvas shape -->
-      <v-btn-toggle light v-model="toggle_one" class="mx-2" mandatory>
-        <v-btn>
-          <v-icon class="fas fa-square-full text-dark"></v-icon>
-        </v-btn>
-        <v-btn>
-          <v-icon class="fas fa-circle text-dark"></v-icon>
-        </v-btn>
-      </v-btn-toggle>
-
       <!-- single/multi view -->
       <button class="btn mx-2 view-count" @click="changeViewCount">{{ viewCount }}</button>
 
@@ -70,7 +60,6 @@ module.exports = {
   name: 'navbar',
   data: function () {
     return {
-      toggle_one: 0,
       mode: 'Light Mode',
       viewCount: 'Multi View'
     }
@@ -98,12 +87,7 @@ module.exports = {
       }
       windowResize();
     }
-  },
-  watch: {
-    toggle_one() {
-      this.$emit('canvas-changed', this.toggle_one)
-    },
-  },
+  }
 }
 </script>
 
