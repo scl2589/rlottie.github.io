@@ -46,19 +46,6 @@ class RLottieModule {
         this.context.putImageData(imageData, 0, 0);
     }
 
-    // relayoutCanvas() {
-    //     var width = document.getElementById("player").clientWidth;
-    //     var height = document.getElementById("player").clientHeight;
-    //     var size = width < height ? width : height;
-    //     // size = size < 350 ? size - 100 : 250;
-    //     size = 500;
-
-    //     this.canvas.width = size;
-    //     this.canvas.height = size;
-    //     this.canvas.style.width = size + "px";
-    //     this.canvas.style.height = size + "px";
-    // }
-
     makeLayerList() {
         this.layers = [];
         var layers_vector = this.lottieHandle.layers();
@@ -344,4 +331,26 @@ function setPlaySpeed(speed) {
     if(speed < 0) rlottieHandler.playDir = false;
     else rlottieHandler.playDir = true;
     rlottieHandler.playSpeed = speed;
+}
+
+function test() {
+    var allLayers = [];
+    var alv = rlottieHandler.rlotties[0].lottieHandle.allLayerTypeList();
+    for(let i=0;i<alv.size();i++) {
+        console.log(alv.get(i));
+    }
+}
+
+var layer = {
+    name: "ear",
+    inFrame: layer[1],
+    outFrame: layer[2],
+    visible: true,
+    selected: false,
+    opacity: 100,
+    xPos: 0,
+    yPos: 0,
+    scaleWidth: 100,
+    scaleHeight: 100,
+    rotation: 0
 }
