@@ -277,7 +277,7 @@ function onResizeSliderDrag(value) {
 }
 
 function getLayerList() {
-  return RLottieModule.layers;
+  // return RLottieModule.layers;
 }
 
 function setFillColor(keypath, r, g, b) {
