@@ -2,8 +2,7 @@
     // load the script depending on web worker support
     var src;
     if (typeof(Worker) !== "undefined") {
-        // src = 'module-rlottie.js';
-        src= "example.js"
+        src = 'module-rlottie.js';
     } else {
         src = 'module-rlottie.js';
     }

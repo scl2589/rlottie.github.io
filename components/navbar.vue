@@ -96,6 +96,7 @@ module.exports = {
         this.viewCount = 'Multi View'
         this.$emit('viewcount-changed', false)
       }
+      windowResize();
     }
   },
   watch: {

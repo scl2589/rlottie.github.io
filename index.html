@@ -75,10 +75,9 @@
 
         <!-- Player  -->
         <div class="col-6 bg-white">
-          <div class="player d-flex flex-column justify-content-between" id="player">
+          <div id="player" class="player d-flex flex-column justify-content-between">
             <div class="screen my-auto mx-auto d-flex justify-content-center align-items-center">
-              <div 
-                class="my-auto mx-auto d-flex justify-content-center align-items-center row" id="content">
+              <div class="my-auto mx-auto d-flex justify-content-center align-items-center row" id="content">
                 <div class="d-flex justify-content-center align-items-center" :class="{ 'col-6': isMultiView, 'col-12': !isMultiView }">
                   <canvas class="common-canvas" :class="{ 'multiview-resizing': isMultiView}" id="myCanvas1" :style="canvasStyling"></canvas>
                 </div>
@@ -167,7 +166,6 @@
     </v-app>
 
     <script src="main.js"></script>
-    <script src="multiview.js"></script>
     <!-- vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
     <!-- dependencies for bootstrap -->
@@ -276,7 +274,7 @@
           changeFile() {
             this.layers = null;
             setTimeout(() => {
-              this.layers = getLayerList();
+              this.layers = getLayerList(rlottieHandler.rlotties[0]);
             }, 500);
           },
 
@@ -290,22 +288,22 @@
           },
           changePlayType() {
             if(this.defaultType === "Hover") {
-              RLottieModule.pause();
-              document.getElementById("content").addEventListener("mouseover", RLottieModule.play);
-              document.getElementById("content").addEventListener("mouseout", RLottieModule.pause);
+              rlottieHandler.pause();
+              document.getElementById("content").addEventListener("mouseover", play);
+              document.getElementById("content").addEventListener("mouseout", pause);
               this.hoverFlag = true;
             }
             if(this.defaultType !== "Hover" && this.hoverFlag) {
-              RLottieModule.play();
-              document.getElementById("content").removeEventListener("mouseover", RLottieModule.play);
-              document.getElementById("content").removeEventListener("mouseout", RLottieModule.pause);
+              rlottieHandler.play();
+              document.getElementById("content").removeEventListener("mouseover", play);
+              document.getElementById("content").removeEventListener("mouseout", pause);
               this.hoverFlag = false;
             }
             if(this.defaultType === "Bounce") {
-              RLottieModule.isBounce = true;
+              rlottieHandler.isBounce = true;
             }
             if(this.defaultType !== "Bounce") {
-              RLottieModule.isBounce = false;
+              rlottieHandler.isBounce = false;
             }
           },
           changeIsMultiView(state) {
