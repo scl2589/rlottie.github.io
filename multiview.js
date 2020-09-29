@@ -1,24 +1,24 @@
 function setup() {
-    var head = document.head;
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'rlottie-wasm.js';
-    head.appendChild(script);
+  var head = document.head;
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'rlottie-wasm.js';
+  head.appendChild(script);
 
-    script.onload = _ => {
-      Module.onRuntimeInitialized = _ => {
-        entry = new MainEntry();
-        var updater = function() {
-            entry.render();
-            window.requestAnimationFrame( updater );  // for subsequent frames
-        };
-        window.requestAnimationFrame( updater );
+  script.onload = _ => {
+    Module.onRuntimeInitialized = _ => {
+      var entry = new MainEntry();
+      var updater = function() {
+          entry.render();
+          window.requestAnimationFrame( updater );  // for subsequent frames
       };
+      window.requestAnimationFrame( updater );
     };
+  };
 }
 
 
-setup();
+// setup();
 
 
 class RLottieView {
@@ -37,7 +37,7 @@ class RLottieView {
   render() {
       if (this.canvas.width == 0  || this.canvas.height == 0) return;
 
-      console.log("render stage ");
+      // console.log("render stage ");
       if (this.curFrame >= this.frameCount) this.curFrame = 0;
       var bufferPointer = this.lottieHandle.render(this.curFrame, 100, 100);
       var result = Uint8ClampedArray.from(bufferPointer);
@@ -49,7 +49,7 @@ class RLottieView {
 
 class MainEntry {
   render() {
-    this.lottieView1.render();
+    // this.lottieView1.render();
     this.lottieView2.render();
     this.lottieView3.render();
     this.lottieView4.render();
@@ -57,7 +57,7 @@ class MainEntry {
   }
 
   constructor() {
-    this.lottieView1 = new RLottieView("myCanvas");
+    // this.lottieView1 = new RLottieView("myCanvas");
     this.lottieView2 = new RLottieView("myCanvas1");
     this.lottieView3 = new RLottieView("myCanvas2");
     this.lottieView4 = new RLottieView("myCanvas3");

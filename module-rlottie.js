@@ -9,7 +9,6 @@ function setup() {
     Module.onRuntimeInitialized = _ => {
       RLottieModule.init();
     };
-    console.log("Rlottie Module loaded");
   };
 }
 
@@ -42,13 +41,14 @@ var RLottieModule = (function () {
     window.addEventListener('drop', handleFileSelect, false);
     window.addEventListener('resize', windowResize);
     relayoutCanvas();
-    obj.canvas = document.getElementById("myCanvas");
+    obj.canvas = document.getElementById("myCanvas1");
     obj.context = obj.canvas.getContext('2d');
 
     obj.lottieHandle = new Module.RlottieWasm();
     obj.frameCount = obj.lottieHandle.frames();
 
     makeLayerList();
+    document.getElementById("frameCount").innerText = String(obj.frameCount)
 
     // hook to the main loop
     mainLoop();
@@ -78,8 +78,6 @@ var RLottieModule = (function () {
       else obj.curFrame = obj.frameCount;
     }
     currentFrame.innerText = String(Math.round(obj.curFrame - 1));
-    frameCount.innerText = String(obj.frameCount)
-    app.$root.layers = this.layers;
   }
 
   obj.reload = function (jsString) {
@@ -88,7 +86,6 @@ var RLottieModule = (function () {
     obj.curFrame = 0;
     
     makeLayerList();
-    app.$root.layers = this.layers;
 
     // force a render in pause state
     sliderReset();
@@ -96,8 +93,10 @@ var RLottieModule = (function () {
   }
 
   obj.update = function () {
-    if (!obj.playing)
-      window.requestAnimationFrame(obj.render);
+    document.getElementById("frameCount").innerText = String(obj.frameCount);
+    if (!obj.playing){
+        window.requestAnimationFrame(obj.render);
+      }
   }
 
   obj.pause = function () {
@@ -135,8 +134,8 @@ var RLottieModule = (function () {
       size = height;
     size = size - 8;
 
-    document.getElementById("myCanvas").width = size;
-    document.getElementById("myCanvas").height = size;
+    document.getElementById("myCanvas1").width = size;
+    document.getElementById("myCanvas1").height = size;
   }
 
   function windowResizeDone() {
@@ -201,8 +200,8 @@ var RLottieModule = (function () {
         }
       })
     }
+    app.$root.layers = obj.layers;
   }
-
   return obj;
 }());
 
@@ -274,8 +273,8 @@ function onResizeSliderDrag(value) {
   if (size < 10)
     size = 10;
   size = size | 0;
-  document.getElementById("myCanvas").width = size;
-  document.getElementById("myCanvas").height = size;
+  document.getElementById("myCanvas1").width = size;
+  document.getElementById("myCanvas1").height = size;
   RLottieModule.update();
 }
 
@@ -327,4 +326,14 @@ function setPlaySpeed(speed) {
   if(speed < 0) RLottieModule.playDir = false;
   else RLottieModule.playDir = true;
   RLottieModule.playSpeed = speed;
+}
+
+function newModule(canvasId) {
+  var entry = new MainEntry();
+  var updater = function() {
+    entry.render();
+    window.requestAnimationFrame( updater );  // for subsequent frames
+  };
+  window.requestAnimationFrame( updater );
+  // entry.lottieView2.lottieHandle.setFillColor("el.**", 1, 0, 0);
 }

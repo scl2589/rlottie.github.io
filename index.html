@@ -30,10 +30,6 @@
           background-color: none
         }
 
-        #myCanvas {
-          border: 1px solid #000000
-        }
-
         .toolbox-basic {
           height: 10vh;
           width: 100%;
@@ -51,40 +47,50 @@
           height: 12vh;
         }
 
-        .screen-canvas {
-          /* max-width: 50vw;
-          max-height: 50vh; */
-        }
-
         .scroll-sect {
           overflow-y: scroll; 
           height: 10vh;
         }
 
-        
+        .common-canvas {
+          border: 1px solid #000000;
+          width: 500px;
+          height: 500px;
+        }
 
+        .multiview-resizing {
+          border: 1px solid #000000;
+          width: 250px;
+          height: 250px;
+        }
     </style>
   </head>
 
   <body>
     <v-app class="window" id="app">
       <div class="row no-gutters">
-        <navbar @canvas-changed="changeCanvas" @file-changed="changeFile" class="col-12"></navbar>
+        <navbar @canvas-changed="changeCanvas" @file-changed="changeFile" @viewcount-changed="changeIsMultiView" class="col-12"></navbar>
 
         <leftpanel @layer-selected="layerSelected" :layers="layers" :key="componentKey" class="col-3"></leftpanel>
-        
+
         <!-- Player  -->
         <div class="col-6 bg-white">
           <div class="player d-flex flex-column justify-content-between">
-            <!-- <p>{{ canvasStyling[canvasShape] }}</p> -->
-            <div class="screen my-auto d-flex flex-column justify-content-center align-items-center" id="content">
-              <canvas
-                v-show="isContent" 
-                id="myCanvas" 
-                :style="canvasStyling" 
-              ></canvas>
-              <div v-show="!isContent">
-                <h5> Drag and Drop your Lottie JSON file to the window</h5>
+            <div class="screen my-auto mx-auto d-flex justify-content-center align-items-center">
+              <div 
+                class="my-auto mx-auto d-flex justify-content-center align-items-center row" id="content">
+                <div class="d-flex justify-content-center align-items-center" :class="{ 'col-6': isMultiView, 'col-12': !isMultiView }">
+                  <canvas class="common-canvas" :class="{ 'multiview-resizing': isMultiView}" id="myCanvas1" :style="canvasStyling"></canvas>
+                </div>
+                <div class="d-flex justify-content-center align-items-center" :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }">
+                  <canvas class="multiview-resizing"  v-show="isMultiView" id="myCanvas2" :style="canvasStyling"></canvas>
+                </div>
+                <div class="d-flex justify-content-center align-items-center" :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }">
+                  <canvas class="multiview-resizing"  v-show="isMultiView" id="myCanvas3" :style="canvasStyling"></canvas>
+                </div>
+                <div class="d-flex justify-content-center align-items-center" :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }">
+                  <canvas class="multiview-resizing"  v-show="isMultiView" id="myCanvas4" :style="canvasStyling"></canvas>
+                </div>
               </div>
             </div>
         
@@ -161,6 +167,7 @@
     </v-app>
 
     <script src="main.js"></script>
+    <script src="multiview.js"></script>
     <!-- vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
     <!-- dependencies for bootstrap -->
@@ -225,6 +232,8 @@
             types: ['Autoplay', 'Hover', 'Bounce'],
             directions: ['Forward', 'Backward'],
             hoverFlag: false,
+
+            isMultiView: false
           }
         },
         computed: {
@@ -239,16 +248,12 @@
             if (this.canvasShape == 0) {
               return {
                 'background-color': this.backgroundColor,
-                'border-radius': 0,
-                'width': '483px',
-                'height': '483px'
+                'border-radius': 0
               }
             } else {
               return {
                 'background-color': this.backgroundColor,
-                'border-radius': '50%',
-                'width': '483px',
-                'height': '483px'
+                'border-radius': '50%'
               }
             }
           }
@@ -303,6 +308,9 @@
               RLottieModule.isBounce = false;
             }
           },
+          changeIsMultiView(state) {
+            this.isMultiView = state
+          }
         },
         created() {
           this.$vuetify.theme.dark = true
