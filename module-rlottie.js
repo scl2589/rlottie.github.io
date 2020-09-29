@@ -340,17 +340,3 @@ function test() {
         console.log(alv.get(i));
     }
 }
-
-var layer = {
-    name: "ear",
-    inFrame: layer[1],
-    outFrame: layer[2],
-    visible: true,
-    selected: false,
-    opacity: 100,
-    xPos: 0,
-    yPos: 0,
-    scaleWidth: 100,
-    scaleHeight: 100,
-    rotation: 0
-}
