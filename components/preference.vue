@@ -132,10 +132,12 @@ module.exports = {
   methods: {
     changeXDimension() {
       var canvas = document.getElementById("myCanvas1")
+      canvas.width = this.width;
       canvas.style.width = this.width + "px"
     },
     changeYDimension() {
       var canvas = document.getElementById("myCanvas1")
+      canvas.height = this.height;
       canvas.style.height = this.height + "px"
     },
     changeBorderWidth() {

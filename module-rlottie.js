@@ -40,13 +40,13 @@ var RLottieModule = (function () {
     window.addEventListener('dragover', handleDragOver, false);
     window.addEventListener('drop', handleFileSelect, false);
     window.addEventListener('resize', windowResize);
-    relayoutCanvas();
     obj.canvas = document.getElementById("myCanvas1");
     obj.context = obj.canvas.getContext('2d');
-
     obj.lottieHandle = new Module.RlottieWasm();
     obj.frameCount = obj.lottieHandle.frames();
 
+    relayoutCanvas();
+    
     makeLayerList();
     document.getElementById("frameCount").innerText = String(obj.frameCount)
 
@@ -125,17 +125,15 @@ var RLottieModule = (function () {
   }
 
   function relayoutCanvas() {
-    var width = document.getElementById("content").clientWidth;
-    var height = document.getElementById("content").clientHeight;
-    var size = width;
-    if (width < height)
-      size = width;
-    else
-      size = height;
-    size = size - 8;
+    var width = document.getElementById("player").clientWidth;
+    var height = document.getElementById("player").clientHeight;
+    var size = width < height ? width : height;
+    size =  size < 600 ? size - 100 : 500;
 
-    document.getElementById("myCanvas1").width = size;
-    document.getElementById("myCanvas1").height = size;
+    obj.canvas.width = size;
+    obj.canvas.height = size;
+    obj.canvas.style.width = size + "px";
+    obj.canvas.style.height = size + "px";
   }
 
   function windowResizeDone() {

@@ -39,9 +39,9 @@ class RLottieView {
 
       // console.log("render stage ");
       if (this.curFrame >= this.frameCount) this.curFrame = 0;
-      var bufferPointer = this.lottieHandle.render(this.curFrame, 100, 100);
+      var bufferPointer = this.lottieHandle.render(this.curFrame, 300, 300);
       var result = Uint8ClampedArray.from(bufferPointer);
-      var imageData = new ImageData(result, 100, 100);
+      var imageData = new ImageData(result, 300, 300);
       this.context.putImageData(imageData, 0, 0);
       this.curFrame = this.curFrame + 1;
   }
@@ -53,14 +53,12 @@ class MainEntry {
     this.lottieView2.render();
     this.lottieView3.render();
     this.lottieView4.render();
-    this.lottieView5.render();
   }
 
   constructor() {
     // this.lottieView1 = new RLottieView("myCanvas");
-    this.lottieView2 = new RLottieView("myCanvas1");
-    this.lottieView3 = new RLottieView("myCanvas2");
-    this.lottieView4 = new RLottieView("myCanvas3");
-    this.lottieView5 = new RLottieView("myCanvas4");
+    this.lottieView2 = new RLottieView("myCanvas2");
+    this.lottieView3 = new RLottieView("myCanvas3");
+    this.lottieView4 = new RLottieView("myCanvas4");
   }
 }
