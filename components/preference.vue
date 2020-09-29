@@ -125,27 +125,29 @@ module.exports = {
       this.$emit('bg-color-changed', this.color)
     },
     borderColor() {
-      var canvas = document.getElementById("myCanvas")
+      var canvas = document.getElementById("myCanvas1")
       canvas.style.borderColor = this.borderColor
     }
   },
   methods: {
     changeXDimension() {
-      var canvas = document.getElementById("myCanvas")
+      var canvas = document.getElementById("myCanvas1")
+      canvas.width = this.width;
       canvas.style.width = this.width + "px"
     },
     changeYDimension() {
-      var canvas = document.getElementById("myCanvas")
+      var canvas = document.getElementById("myCanvas1")
+      canvas.height = this.height;
       canvas.style.height = this.height + "px"
     },
     changeBorderWidth() {
-      var canvas = document.getElementById("myCanvas")
+      var canvas = document.getElementById("myCanvas1")
       console.log(canvas.style)
       canvas.style.borderWidth = this.borderWidth + "px"
     }
   },
   mounted() {
-    var canvas = document.getElementById("myCanvas")
+    var canvas = document.getElementById("myCanvas1")
     this.width = canvas.style.width.slice(0, -2)
     this.height = canvas.style.height.slice(0, -2)
   }
@@ -156,29 +158,22 @@ module.exports = {
 .sidebar {
   padding: 1.2rem;
 }
-
 p {
   margin: 0;
 }
-
 .title {
   font-size: 1.5rem;
 }
-
 .preference {
   margin: 20px 0 0 0;
 }
-
 .preference-title {
   margin-bottom: 10px;
 }
-
 .v-text-field__prefix, .v-text-field__suffix {
   color: rgba(15, 128, 170, 0.77);
 }
-
 .canvasSlider {
   width: 100%;
 }
-
 </style>

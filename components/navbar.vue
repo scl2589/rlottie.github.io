@@ -8,6 +8,7 @@
 
     <!-- button group -->
     <div class="d-flex">
+
       <!-- canvas shape -->
       <v-btn-toggle light v-model="toggle_one" class="mx-2" mandatory>
         <v-btn>
@@ -18,6 +19,8 @@
         </v-btn>
       </v-btn-toggle>
 
+      <!-- single/multi view -->
+      <button class="btn mx-2 view-count" @click="changeViewCount">{{ viewCount }}</button>
 
       <!-- light/dark mode -->
       <button class="btn mx-2 mode" @click="changeMode" :class="{ 'text-white': !$vuetify.theme.dark }">{{ mode }}</button>
@@ -65,19 +68,17 @@
 <script>
 module.exports = {
   name: 'navbar',
-
   data: function () {
     return {
       toggle_one: 0,
       mode: 'Light Mode',
+      viewCount: 'Multi View'
     }
   },
-
   methods: {
     changeFile() {
       this.$emit('file-changed')
     },
-
     changeMode() {
       if (this.mode == 'Light Mode') {
         this.mode = 'Dark Mode'
@@ -87,6 +88,16 @@ module.exports = {
         this.$vuetify.theme.dark = true
       }
     },
+    changeViewCount() {
+      if (this.viewCount === 'Multi View') {
+        this.viewCount = 'Single View'
+        this.$emit('viewcount-changed', true)
+      } else {
+        this.viewCount = 'Multi View'
+        this.$emit('viewcount-changed', false)
+      }
+      windowResize();
+    }
   },
   watch: {
     toggle_one() {
@@ -102,16 +113,13 @@ module.exports = {
     padding-left: 1vw;
     padding-right: 1vw;
   }
-
   .logo {
     height: 5vh; 
   }
-
   .lottie-input {
     background-color: #fdfdfd;
     color: #1D3557;
   }
-
   .filebox input[type="file"] {
     position: absolute;
     width: 1px;
@@ -122,7 +130,6 @@ module.exports = {
     clip:rect(0,0,0,0);
     border: 0;
   }
-
   .filebox label {
     display: inline-block;
     padding: .5em .75em;
@@ -138,8 +145,11 @@ module.exports = {
     margin-bottom: 0;
     height: 48px;
   }
-
   .bg-green {
     background-color: rgba(10, 142, 144, 0.74);
+  }
+  .view-count {
+    background-color: #fdfdfd;
+    color: #1D3557
   }
 </style>
