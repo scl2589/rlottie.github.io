@@ -66,6 +66,7 @@ class RLottieModule {
         this.context = this.canvas.getContext("2d");
         this.lottieHandle = new Module.RlottieWasm();
         this.frameCount = this.lottieHandle.frames();
+        this.makeLayerTree();
         this.curFrame = 0;
     }
 
@@ -76,6 +77,38 @@ class RLottieModule {
         var result = Uint8ClampedArray.from(buffer);
         var imageData = new ImageData(result, this.canvas.width, this.canvas.height);
         this.context.putImageData(imageData, 0, 0);
+    }
+
+    makeLayerTree() {
+        this.layerTree = new LayerNode("", "root", "");
+        var fullLayers = [];
+        var layer_vector = this.lottieHandle.allLayerTypeList();
+        for(let i = 0; i < layer_vector.size(); i++) {
+            fullLayers.push(layer_vector.get(i));
+        }
+        fullLayers.sort();
+        fullLayers.forEach(element => {
+            var layer = element.split(".");
+            var type = "Stroke";
+            if(layer[0] == "Fill Object:") type = "Fill";
+            var curr = this.layerTree;
+            var keypath = "";
+            for(let i = 1; i < layer.length; i++) {
+                if(i != 1) keypath += "."; 
+                keypath += layer[i];
+                let flag = false;
+                for(let j = 0; j < curr.child.length; j++) {
+                    if(curr.child[j].name != layer[i]) continue;
+                    if(curr.child[j].type != type) continue;
+                    curr = curr.child[j];
+                    flag = true;
+                }
+                if(flag) continue;
+                let node = new LayerNode(keypath, layer[i], type);
+                curr.child.push(node);
+                curr = node;
+            }
+        })
     }
 }
 
@@ -95,7 +128,6 @@ class RLottieHandler {
     jsString = "";
     curFrame = 0;
     isHover = false;
-    layerTree = {};
     searchList = [];
 
     constructor(size) {
@@ -110,10 +142,6 @@ class RLottieHandler {
 
         frameCount.innerText = String(this.rlotties[0].frameCount);
         this.slider.max = this.rlotties[0].frameCount;
-        this.makeLayerTree();
-        this.rlotties.forEach(rm => {
-            rm.layerTree = this.layerTree;
-        })
         app.$root.layerTree = this.layerTree;
     }
 
@@ -152,7 +180,7 @@ class RLottieHandler {
             rm.lottieHandle.load(jsString);
             rm.frameCount = rm.lottieHandle.frames();
             rm.curFrame = 0;
-            this.makeLayerTree();
+            rm.makeLayerTree();
         });
 
         this.jsString = jsString;
@@ -204,38 +232,6 @@ class RLottieHandler {
             rm.canvas.style.width = size + "px";
             rm.canvas.style.height = size + "px";
         });
-    }
-
-    makeLayerTree() {
-        this.layerTree = new LayerNode("", "root", "");
-        var fullLayers = [];
-        var layer_vector = this.rlotties[0].lottieHandle.allLayerTypeList();
-        for(let i = 0; i < layer_vector.size(); i++) {
-            fullLayers.push(layer_vector.get(i));
-        }
-        fullLayers.sort();
-        fullLayers.forEach(element => {
-            var layer = element.split(".");
-            var type = "Stroke";
-            if(layer[0] == "Fill Object:") type = "Fill";
-            var curr = this.layerTree;
-            var keypath = "";
-            for(let i = 1; i < layer.length; i++) {
-                if(i != 1) keypath += "."; 
-                keypath += layer[i];
-                let flag = false;
-                for(let j = 0; j < curr.child.length; j++) {
-                    if(curr.child[j].name != layer[i]) continue;
-                    if(curr.child[j].type != type) continue;
-                    curr = curr.child[j];
-                    flag = true;
-                }
-                if(flag) continue;
-                let node = new LayerNode(keypath, layer[i], type);
-                curr.child.push(node);
-                curr = node;
-            }
-        })
     }
 }
 
