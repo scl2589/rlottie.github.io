@@ -63,6 +63,61 @@ class LayerNode {
 class RLottieModule {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
+        this.canvasStyle = {
+            backgroundColor: {
+                alpha: 0,
+                hex: "#FFFFFF",
+                hexa: "#FFFFFF00",
+                hsla: {
+                    h: 0,
+                    s: 0,
+                    l: 1,
+                    a: 0,
+                },
+                hsva: {
+                    h: 0,
+                    s: 0,
+                    v: 0,
+                    a: 1,
+                },
+                hue: 0,
+                rgba: {
+                    r: 255,
+                    g: 255,
+                    b: 255,
+                    a: 0
+                }
+            },
+            borderColor: {
+                alpha: 0,
+                hex: "#000000",
+                hexa: "#00000000",
+                hsla: {
+                    h: 0,
+                    s: 0,
+                    l: 0,
+                    a: 0,
+                },
+                hsva: {
+                    h: 0,
+                    s: 0,
+                    v: 0,
+                    a: 0,
+                },
+                hue: 0,
+                rgba: {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    a: 0
+                }
+            },
+            borderWidth: '1',
+            width: '',
+            height: '',
+            borderShape: 0
+        }
+
         this.context = this.canvas.getContext("2d");
         this.lottieHandle = new Module.RlottieWasm();
         this.frameCount = this.lottieHandle.frames();
@@ -142,8 +197,10 @@ class RLottieHandler {
 
         frameCount.innerText = String(this.rlotties[0].frameCount);
         this.slider.max = this.rlotties[0].frameCount;
+
         app.$root.layers = this.rlotties[0].layerTree.child;
-        app.$root.currentCanvas = this.rlotties[0].canvas;
+        app.$root.selectedCanvas = this.rlotties[0].canvas;
+        app.$root.selectedCanvasStyle = this.rlotties[0].canvasStyle;
     }
 
     render() {
