@@ -12,18 +12,17 @@
           >
         <template v-slot:activator="{ on }">
           <v-btn
-            :color="backgroundColor"
+            :color="canvasstyle.backgroundColor.hex"
             dark
             v-on="on"
             class="mr-2"
           >
           </v-btn>
-          <span>{{backgroundColor.slice(0, 7)}}</span>
+          <span>{{ canvasstyle.backgroundColor.hex }}</span>
         </template>
         <v-color-picker
           light
-          value="#7417BE"
-          v-model="backgroundColor"
+          v-model="canvasstyle.backgroundColor"
           show-swatches
           class="mx-auto"
         ></v-color-picker>
@@ -49,18 +48,17 @@
             >
           <template v-slot:activator="{ on }">
             <v-btn
-              :color="borderColor"
+              :color="canvasstyle.borderColor.hex"
               dark
               v-on="on"
               class="mr-2"
             >
             </v-btn>
-            <span>{{borderColor.slice(0, 7)}}</span>
+            <span>{{ canvasstyle.borderColor.hex }}</span>
           </template>
           <v-color-picker
             light
-            value="#7417BE"
-            v-model="borderColor"
+            v-model="canvasstyle.borderColor"
             show-swatches
             class="mx-auto"
           ></v-color-picker>
@@ -71,10 +69,10 @@
             light
             solo
             suffix="px"
-            v-model="borderWidth"
-            @change="changeBorderWidth"
+            v-model="canvasstyle.borderWidth"
             class="bg-white"
             hide-details
+            @change="changeBorderWidth"
           ></v-text-field>
         </div>
       </div>
@@ -89,19 +87,21 @@
           light
           solo
           prefix="W"
-          v-model="width"
+          suffix="px"
+          v-model="canvasstyle.width"
           class="mr-3 bg-white"
-          @change="changeXDimension()"
           hide-details
+          @change="changeXDimension"
         ></v-text-field>
         <v-text-field
           light
           solo
           prefix="H"
-          v-model="height"
+          suffix="px"
+          v-model="canvasstyle.height"
           class="bg-white"
-          @change="changeYDimension()"
           hide-details
+          @change="changeYDimension"
         ></v-text-field>
       </div>
     </div>
@@ -109,7 +109,7 @@
     <!-- canvas shape -->
     <div class="preference">
       <p class="preference-title mb-2">Canvas Shape</p>
-      <v-btn-toggle light v-model="borderShape" mandatory>
+      <v-btn-toggle light v-model="canvasstyle.borderShape" mandatory @change="changeBorderShape">
         <v-btn>
           <v-icon class="fas fa-square-full text-dark"></v-icon>
         </v-btn>
@@ -127,64 +127,40 @@ module.exports = {
   name: 'preference',
   props: {
     canvasid: Number,
-    canvas: Object
+    canvas: Object,
+    canvasstyle: Object
   },
   data: function () {
     return {
-      backgroundColor: '#FFFFFF',
-      width: null,
-      height: null,
-      borderColor: '#000000',
-      borderWidth: 1,
-      borderShape: 0
-    }
-  },
-  computed: {
-    selectedCanvas() {
-      if (rlottieHandler) {
-        return rlottieHandler.rlotties[this.canvasid].canvas
-      } else {
-        return false
-      }
     }
   },
   watch: {
-    // canvasid() {
-    //   this.backgroundColor = this.selectedCanvas.style.backgroundColor
-    //   this.borderColor = this.selectedCanvas.style.borderColor
-    //   this.borderShape = this.selectedCanvas.style.borderRadius
-    // },
-    backgroundColor() {
-      this.selectedCanvas.style.backgroundColor = this.backgroundColor
-    },
-    borderColor() {
-      this.selectedCanvas.style.borderColor = this.borderColor
-    },
-    borderShape() {
-      if (this.borderShape) {
-        this.selectedCanvas.style.borderRadius = "50%"
-      } else {
-        this.selectedCanvas.style.borderRadius = 0
+    canvasstyle: {
+      deep: true,
+      handler() {
+        this.canvas.style.backgroundColor = this.canvasstyle.backgroundColor.hex
+        this.canvas.style.borderColor = this.canvasstyle.borderColor.hex
       }
     }
   },
   methods: {
     changeXDimension() {
-      this.selectedCanvas.width = this.width;
-      this.selectedCanvas.style.width = this.width + "px"
+      this.canvas.style.width = this.canvasstyle.width + "px"
     },
     changeYDimension() {
-      this.selectedCanvas.height = this.height;
-      this.selectedCanvas.style.height = this.height + "px"
+      this.canvas.style.height = this.canvasstyle.height + "px"
     },
     changeBorderWidth() {
-      this.selectedCanvas.style.borderWidth = this.borderWidth + "px"
+      this.canvas.style.borderWidth = this.canvasstyle.borderWidth + "px"
+    },
+    changeBorderShape() {
+      if (this.canvasstyle.borderShape) {
+        this.canvas.style.borderRadius = "50%"
+      } else {
+        this.canvas.style.borderRadius = 0
+      }
     }
-  },
-  // mounted() {
-  //   this.width = this.selectedCanvas.style.width.slice(0, -2)
-  //   this.height = this.selectedCanvas.style.height.slice(0, -2)
-  // }
+  }
 }
 </script>
 

@@ -178,7 +178,7 @@ module.exports = {
       }
     },
   },
-   watch: {
+  watch: {
     selectedLayer: {
       deep: true,
       handler() {

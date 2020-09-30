@@ -202,7 +202,7 @@
         
         <property v-if="isLayer" :selected-layer="selectedLayer" :canvasid="selectedCanvasId" class="col-3"></property>
 
-        <preference v-else :canvas="selectedCanvas" :canvasid="selectedCanvasId" class="col-3"></preference>
+        <preference v-else :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" class="col-3"></preference>
 
       </div>
     </v-app>
@@ -275,8 +275,8 @@
             // multiview
             isMultiView: false,
             selectedCanvasId: 0,
-            selectedCanvas: document.getElementById("myCanvas1"),
-            currentCanvas: null
+            selectedCanvas: null,
+            selectedCanvasStyle: null
           }
         },
         computed: {
@@ -369,10 +369,14 @@
 
           changeIsMultiView(state) {
             this.isMultiView = state
+            this.isLayer = null
             if (!state) {
               this.selectedCanvasId = 0
+              this.selectedCanvas = rlottieHandler.rlotties[0].canvas
+              this.selectedCanvasStyle = rlottieHandler.rlotties[0].canvasStyle
               this.layerTree = rlottieHandler.rlotties[0].layerTree
               this.selectedLayer = null
+              this.isLayer = null
             }
           },
 
@@ -380,8 +384,10 @@
             if (this.isMultiView) {
               this.selectedCanvasId = id
               this.selectedCanvas = rlottieHandler.rlotties[id].canvas
+              this.selectedCanvasStyle = rlottieHandler.rlotties[id].canvasStyle
               this.layerTree = rlottieHandler.rlotties[id].layerTree
               this.selectedLayer = null
+              this.isLayer = null
             };
           }
         },
