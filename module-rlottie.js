@@ -1,5 +1,7 @@
 var rlottieHandler;
+var thumbnailHandler;
 var mainRLottieModule;
+var layerNodeSize = 0;
 
 function setup() {
     var head = document.head;
@@ -11,8 +13,12 @@ function setup() {
     script.onload = _ => {
         Module.onRuntimeInitialized = _ => {
             rlottieHandler = new RLottieHandler(4);
+            setTimeout(() => {
+                thumbnailHandler = new ThumbnailHandler(rlottieHandler.rlotties[0].layerTree.child, rlottieHandler.jsString);
+            }, 500);
             addListener();
             window.requestAnimationFrame(updater);
+            
         };
     };
 }
@@ -20,7 +26,8 @@ function setup() {
 setup();
 
 class LayerNode {
-    constructor(keypath, name, type) {
+    constructor(keypath, name, type, id) {
+        this.id = id;
         this.keypath = keypath;
         this.name = name;
         this.type = type;
@@ -135,7 +142,7 @@ class RLottieModule {
     }
 
     makeLayerTree() {
-        this.layerTree = new LayerNode("", "root", "");
+        this.layerTree = new LayerNode("**", "root", "", layerNodeSize++);
         var fullLayers = [];
         var layer_vector = this.lottieHandle.allLayerTypeList();
         for(let i = 0; i < layer_vector.size(); i++) {
@@ -159,7 +166,7 @@ class RLottieModule {
                     flag = true;
                 }
                 if(flag) continue;
-                let node = new LayerNode(keypath, layer[i], type);
+                let node = new LayerNode(keypath, layer[i], type, layerNodeSize++);
                 curr.child.push(node);
                 curr = node;
             }
@@ -186,6 +193,7 @@ class RLottieHandler {
     searchList = [];
 
     constructor(size) {
+        layerNodeSize = 0;
         for (let i = 1; i <= size; i++) {
             this.rlotties.push(new RLottieModule("myCanvas" + i));
         }
@@ -234,6 +242,7 @@ class RLottieHandler {
     }
 
     reload(jsString) {
+        layerNodeSize = 0;
         this.rlotties.forEach(rm => {
             rm.lottieHandle.load(jsString);
             rm.frameCount = rm.lottieHandle.frames();
@@ -245,6 +254,8 @@ class RLottieHandler {
         this.slider.max = this.rlotties[0].frameCount;
         this.slider.value = 0;
         this.frameCount = String(this.rlotties[0].frameCount);
+        thumbnailHandler.reload(this.rlotties[0].layerTree.child, this.jsString);
+        app.$root.layers = this.rlotties[0].layerTree.child;
         if (!this.playing) this.play();
     }
 
@@ -278,9 +289,12 @@ class RLottieHandler {
     relayoutCanvas() {
         var width = document.getElementById("player").clientWidth;
         var height = document.getElementById("player").clientHeight;
-        var maxSize = app.$root.isMultiView ? 350 : 600;
+        var maxSize = 350;
         var size = width < height ? width : height;
-        if(app.$root.isMultiView) size /= 2;
+        if(typeof (app.$root.isMultiView) !== "undefined") {
+            maxSize = app.$root.isMultiView ? 350 : 600;
+            if(app.$root.isMultiView) size /= 2;
+        }
         size = size < maxSize ? size - 100 : maxSize - 100;
 
         this.rlotties.forEach(rm => {
@@ -308,6 +322,7 @@ function dfs(node, items) {
 function updater() {
     rlottieHandler.rafId = window.requestAnimationFrame(updater);
     rlottieHandler.render();
+    if(typeof (thumbnailHandler) !== "undefined") thumbnailHandler.render();
 }
 
 function play() {
