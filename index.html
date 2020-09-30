@@ -75,7 +75,7 @@
       <div class="row no-gutters">
         <navbar @file-changed="changeFile" @viewcount-changed="changeIsMultiView" class="col-12"></navbar>
 
-        <leftpanel @layer-selected="layerSelected" :layertree="layerTree" :key="componentKey" :canvasid="selectedCanvasId" class="col-3"></leftpanel>
+        <leftpanel @layer-selected="layerSelected" :layers="layers" :key="componentKey" :canvasid="selectedCanvasId" class="col-3"></leftpanel>
 
         <!-- Player  -->
         <div class="col-6 bg-white">
@@ -256,7 +256,7 @@
         data() {
           return {
             selection: '',
-            layerTree: null,
+            layers: null,
             isLayer: false,
             selectedLayer: null,
             backgroundColor: null,
@@ -275,7 +275,8 @@
             // multiview
             isMultiView: false,
             selectedCanvasId: 0,
-            selectedCanvas: document.getElementById("myCanvas1")
+            selectedCanvas: document.getElementById("myCanvas1"),
+            currentCanvas: null
           }
         },
         computed: {
@@ -324,10 +325,10 @@
           },
 
           changeFile() {
-            this.layerTree = null;
-            setTimeout(() => {
-              this.layerTree = getLayerList(rlottieHandler.rlotties[0]);
-            }, 500);
+            // this.layerTree = null;
+            // setTimeout(() => {
+            //   this.layerTree = getLayerList(rlottieHandler.rlotties[0]);
+            // }, 500);
           },
 
           changePlay() {

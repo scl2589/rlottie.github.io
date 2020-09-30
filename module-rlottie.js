@@ -142,7 +142,9 @@ class RLottieHandler {
 
         frameCount.innerText = String(this.rlotties[0].frameCount);
         this.slider.max = this.rlotties[0].frameCount;
-        app.$root.layerTree = this.layerTree;
+        console.log(this.rlotties[0].layerTree);
+        app.$root.layers = this.rlotties[0].layerTree.child;
+        app.$root.currentCanvas = this.rlotties[0].canvas;
     }
 
     render() {
@@ -336,7 +338,7 @@ function handleFileSelect(event) {
 }
 
 function getLayerList(lottieModule) {
-    return rlottieHandler.rlotties[0].layers;
+    return lottieModule.layerTree;
 }
 
 function setLayerColor(keypath, r, g, b, canvasid, type) {

@@ -250,27 +250,11 @@ module.exports = {
     clickLayer(layer) {
 
       this.$emit('layer-selected', layer)
-      // if (this.clickedLayer) {
-      //   this.clickedLayer.selected = !this.clickedLayer.selected
-      //   if (this.clickedLayer === layer) {
-      //     this.clickedLayer = null
-      //     this.$emit('layer-selected', null)
-      //     return false
-      //   }
-      // }
-      // this.clickedLayer = layer
-      // layer.selected = !layer.selected
-      // if (layer.selected === true) {
-      //   this.$emit('layer-selected', layer)
-      // } 
     },
     
     clickMain() {
       this.clickedLayer = null
       for (var layer of this.layers) {
-        layer.selected = false
-      }
-      for (var layer of this.newLayers) {
         layer.selected = false
       }
       this.$emit('layer-selected', null)
