@@ -284,15 +284,6 @@ module.exports = {
         this.newLayerName = null
       }
     },
-
-    deleteLayer(layerToDelete) {
-      for (var i = 0; i < this.newLayers.length; i++) {
-        if (this.newLayers[i].name === layerToDelete.name) {
-          this.newLayers.splice(i, 1)
-          i--
-        }
-      }
-    },
     clickReset(index) {
       rlottieHandler.reset(index)
     }

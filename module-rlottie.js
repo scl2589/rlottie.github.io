@@ -30,7 +30,7 @@ class LayerNode {
         this.xPos = 0;
         this.yPos = 0;
         this.scaleWidth = 100;
-        this.sacleHeight = 100;
+        this.scaleHeight = 100;
         this.rotation = 0;
         this.color = {
             alpha: Number(),
@@ -341,30 +341,31 @@ function getLayerList(lottieModule) {
     return lottieModule.layerTree;
 }
 
-function setLayerColor(keypath, r, g, b, canvasid, type) {
-    if(type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillColor(keypath, r, g, b);
-    else if(type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeColor(keypath, r, g, b);
+function setLayerColor(node, r, g, b, canvasid) {
+    if(node.type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillColor(node.keypath, r, g, b);
+    else if(node.type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeColor(node.keypath, r, g, b);
+    propertiesCascading(node, [{ name: "color",  value: node.color }]);
 }
 
-function setLayerOpacity(keypath, opacity, canvasid, type) {
-    if(type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillOpacity(keypath, opacity);
-    else if(type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(keypath, opacity);
+function setLayerOpacity(node, opacity, canvasid) {
+    if(node.type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillOpacity(node.keypath, opacity);
+    else if(node.type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(node.keypath, opacity);
+    propertiesCascading(node, [{ name: "opacity", value: opacity }]);
 }
 
-function setStrokeWidth(keypath, width, canvasid) {
-    rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeWidth(keypath, width);
+function setPosition(node, x, y, canvasid) {
+    rlottieHandler.rlotties[canvasid].lottieHandle.setPosition(node.keypath, x, y);
+    propertiesCascading(node, [{ name: "xPos", value: x }, { name: "yPos", valye: y }]);
 }
 
-function setPosition(keypath, x, y, canvasid) {
-    rlottieHandler.rlotties[canvasid].lottieHandle.setPosition(keypath, x, y);
+function setScale(node, width, height, canvasid) {
+    rlottieHandler.rlotties[canvasid].lottieHandle.setScale(node.keypath, width, height);
+    propertiesCascading(node, [{ name: "scaleWidth", value: width }, { name: "scaleHeight", valye: height }]);
 }
 
-function setScale(keypath, width, height, canvasid) {
-    rlottieHandler.rlotties[canvasid].lottieHandle.setScale(keypath, width, height);
-}
-
-function setRotation(keypath, degree, canvasid) {
-    rlottieHandler.rlotties[canvasid].lottieHandle.setRotation(keypath, degree);
+function setRotation(node, degree, canvasid) {
+    rlottieHandler.rlotties[canvasid].lottieHandle.setRotation(node.keypath, degree);
+    propertiesCascading(node, [{ name: "rotation", value: degree }]);
 }
 
 function moveFrame(frame) {
@@ -378,6 +379,15 @@ function setPlaySpeed(speed) {
     if(speed < 0) rlottieHandler.playDir = false;
     else rlottieHandler.playDir = true;
     rlottieHandler.playSpeed = speed;
+}
+
+function propertiesCascading(node, properties) {
+    properties.forEach(property => {
+        node[property[0].name] = property.value;
+    });
+    for(let i = 0; i < node.child.length; i++) {
+        propertiesCascading(node.child[i]);
+    }
 }
 
 function allLayerTypeList() {
