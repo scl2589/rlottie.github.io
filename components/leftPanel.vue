@@ -67,7 +67,7 @@
               <template v-slot:prepend="{ item }" >
                 <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3">
                   <!-- <img class="img-thumbnail layer-thumbnail ml-1" src="../static/logo.png" :alt="item.keypath"> -->
-                  <canvas :id="'thumbnail-'+item.name" width="60" height="60"></canvas>
+                  <canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas>
                 </div>
               </template>
               <template v-slot:label="{ item }">
