@@ -79,6 +79,7 @@
 
         <!-- Player  -->
         <div class="col-6 bg-white">
+          <div>{{layers}}</div>
           <div id="player" class="player d-flex flex-column justify-content-between">
             <div class="screen my-auto mx-auto d-flex justify-content-center align-items-center">
               <div class="my-auto mx-auto d-flex justify-content-center align-items-center row" id="content">
@@ -275,7 +276,8 @@
             // multiview
             isMultiView: false,
             selectedCanvasId: 0,
-            selectedCanvas: document.getElementById("myCanvas1")
+            selectedCanvas: document.getElementById("myCanvas1"),
+            currentCanvas: null
           }
         },
         computed: {
@@ -324,10 +326,10 @@
           },
 
           changeFile() {
-            this.layers = null;
-            setTimeout(() => {
-              this.layers = getLayerList(rlottieHandler.rlotties[0]);
-            }, 500);
+            // this.layerTree = null;
+            // setTimeout(() => {
+            //   this.layerTree = getLayerList(rlottieHandler.rlotties[0]);
+            // }, 500);
           },
 
           changePlay() {
@@ -370,7 +372,7 @@
             this.isMultiView = state
             if (!state) {
               this.selectedCanvasId = 0
-              this.layers = rlottieHandler.rlotties[0].layers
+              this.layerTree = rlottieHandler.rlotties[0].layerTree
               this.selectedLayer = null
             }
           },
@@ -379,7 +381,7 @@
             if (this.isMultiView) {
               this.selectedCanvasId = id
               this.selectedCanvas = rlottieHandler.rlotties[id].canvas
-              this.layers = rlottieHandler.rlotties[id].layers
+              this.layerTree = rlottieHandler.rlotties[id].layerTree
               this.selectedLayer = null
             };
           }

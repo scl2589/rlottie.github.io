@@ -19,20 +19,55 @@ function setup() {
 
 setup();
 
-class RLottieModule {
-    layers = [];
-    canvas = {};
-    context = {};
-    lottieHandle = 0;
-    frameCount = 0;
-    curFrame = 0;
+class LayerNode {
+    constructor(keypath, name, type) {
+        this.keypath = keypath;
+        this.name = name;
+        this.type = type;
+        this.visible = true;
+        this.selected = false;
+        this.opacity = 100;
+        this.xPos = 0;
+        this.yPos = 0;
+        this.scaleWidth = 100;
+        this.scaleHeight = 100;
+        this.rotation = 0;
+        this.color = {
+            alpha: Number(),
+            hex: String(),
+            hexa: String(),
+            hsla: {
+                h: Number(),
+                s: Number(),
+                l: Number(),
+                a: Number(),
+            },
+            hsva: {
+                h: Number(),
+                s: Number(),
+                v: Number(),
+                a: Number(),
+            },
+            hue: Number(),
+            rgba: {
+                r: Number(),
+                g: Number(),
+                b: Number(),
+                a: Number()
+            }
+        }
+        this.child = []
+    }
+}
 
+class RLottieModule {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.context = this.canvas.getContext("2d");
         this.lottieHandle = new Module.RlottieWasm();
         this.frameCount = this.lottieHandle.frames();
-        this.makeLayerList();
+        this.makeLayerTree();
+        this.curFrame = 0;
     }
 
     render(speed) {
@@ -44,50 +79,36 @@ class RLottieModule {
         this.context.putImageData(imageData, 0, 0);
     }
 
-    makeLayerList() {
-        this.layers = [];
-        var layers_vector = this.lottieHandle.layers();
-        for (let i = 0; i < layers_vector.size(); i++) {
-            var layer = layers_vector.get(i).split("/");
-            this.layers.push({
-                name: layer[0],
-                inFrame: layer[1],
-                outFrame: layer[2],
-                visible: true,
-                selected: false,
-                opacity: 100,
-                xPos: 0,
-                yPos: 0,
-                scaleWidth: 100,
-                scaleHeight: 100,
-                rotation: 0,
-                color: {
-                    alpha: Number(),
-                    hex: String(),
-                    hexa: String(),
-                    hsla: {
-                        h: Number(),
-                        s: Number(),
-                        l: Number(),
-                        a: Number()
-                    },
-                    hsva: {
-                        h: Number(),
-                        s: Number(),
-                        v: Number(),
-                        a: Number()
-                    },
-                    hue: Number(),
-                    rgba: {
-                        r: Number(),
-                        g: Number(),
-                        b: Number(),
-                        a: Number()
-                    }
-                }
-            });
+    makeLayerTree() {
+        this.layerTree = new LayerNode("", "root", "");
+        var fullLayers = [];
+        var layer_vector = this.lottieHandle.allLayerTypeList();
+        for(let i = 0; i < layer_vector.size(); i++) {
+            fullLayers.push(layer_vector.get(i));
         }
-        app.$root.layers = this.layers;
+        fullLayers.sort();
+        fullLayers.forEach(element => {
+            var layer = element.split(".");
+            var type = "Stroke";
+            if(layer[0] == "Fill Object:") type = "Fill";
+            var curr = this.layerTree;
+            var keypath = "";
+            for(let i = 1; i < layer.length; i++) {
+                if(i != 1) keypath += "."; 
+                keypath += layer[i];
+                let flag = false;
+                for(let j = 0; j < curr.child.length; j++) {
+                    if(curr.child[j].name != layer[i]) continue;
+                    if(curr.child[j].type != type) continue;
+                    curr = curr.child[j];
+                    flag = true;
+                }
+                if(flag) continue;
+                let node = new LayerNode(keypath, layer[i], type);
+                curr.child.push(node);
+                curr = node;
+            }
+        })
     }
 }
 
@@ -107,6 +128,7 @@ class RLottieHandler {
     jsString = "";
     curFrame = 0;
     isHover = false;
+    searchList = [];
 
     constructor(size) {
         for (let i = 1; i <= size; i++) {
@@ -120,7 +142,9 @@ class RLottieHandler {
 
         frameCount.innerText = String(this.rlotties[0].frameCount);
         this.slider.max = this.rlotties[0].frameCount;
-        app.$root.layers = this.rlotties[0].layers;
+        console.log(this.rlotties[0].layerTree);
+        app.$root.layers = this.rlotties[0].layerTree.child;
+        app.$root.currentCanvas = this.rlotties[0].canvas;
     }
 
     render() {
@@ -158,7 +182,7 @@ class RLottieHandler {
             rm.lottieHandle.load(jsString);
             rm.frameCount = rm.lottieHandle.frames();
             rm.curFrame = 0;
-            rm.makeLayerList();
+            rm.makeLayerTree();
         });
 
         this.jsString = jsString;
@@ -210,6 +234,19 @@ class RLottieHandler {
             rm.canvas.style.width = size + "px";
             rm.canvas.style.height = size + "px";
         });
+    }
+}
+
+function getSearchItem() {
+    dfs(rlottieHandler.rlotties[0].layerTree);
+    rlottieHandler.searchList.shift();
+    return rlottieHandler.searchList;
+}
+
+function dfs(node, items) {
+    rlottieHandler.searchList.push(node.keypath);
+    for(let i = 0; i < node.child.length; i++) {
+        dfs(node.child[i]);
     }
 }
 
@@ -301,33 +338,34 @@ function handleFileSelect(event) {
 }
 
 function getLayerList(lottieModule) {
-    return rlottieHandler.rlotties[0].layers;
+    return lottieModule.layerTree;
 }
 
-function setLayerColor(keypath, r, g, b, canvasid, type) {
-    if(type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillColor(keypath, r, g, b);
-    else if(type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeColor(keypath, r, g, b);
+function setLayerColor(node, r, g, b, canvasid) {
+    if(node.type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillColor(node.keypath, r, g, b);
+    else if(node.type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeColor(node.keypath, r, g, b);
+    propertiesCascading(node, [{ name: "color",  value: node.color }]);
 }
 
-function setLayerOpacity(keypath, opacity, canvasid, type) {
-    if(type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillOpacity(keypath, opacity);
-    else if(type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(keypath, opacity);
+function setLayerOpacity(node, opacity, canvasid) {
+    if(node.type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillOpacity(node.keypath, opacity);
+    else if(node.type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(node.keypath, opacity);
+    propertiesCascading(node, [{ name: "opacity", value: opacity }]);
 }
 
-function setStrokeWidth(keypath, width, canvasid) {
-    rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeWidth(keypath, width);
+function setPosition(node, x, y, canvasid) {
+    rlottieHandler.rlotties[canvasid].lottieHandle.setPosition(node.keypath, x, y);
+    propertiesCascading(node, [{ name: "xPos", value: x }, { name: "yPos", valye: y }]);
 }
 
-function setPosition(keypath, x, y, canvasid) {
-    rlottieHandler.rlotties[canvasid].lottieHandle.setPosition(keypath, x, y);
+function setScale(node, width, height, canvasid) {
+    rlottieHandler.rlotties[canvasid].lottieHandle.setScale(node.keypath, width, height);
+    propertiesCascading(node, [{ name: "scaleWidth", value: width }, { name: "scaleHeight", valye: height }]);
 }
 
-function setScale(keypath, width, height, canvasid) {
-    rlottieHandler.rlotties[canvasid].lottieHandle.setScale(keypath, width, height);
-}
-
-function setRotation(keypath, degree, canvasid) {
-    rlottieHandler.rlotties[canvasid].lottieHandle.setRotation(keypath, degree);
+function setRotation(node, degree, canvasid) {
+    rlottieHandler.rlotties[canvasid].lottieHandle.setRotation(node.keypath, degree);
+    propertiesCascading(node, [{ name: "rotation", value: degree }]);
 }
 
 function moveFrame(frame) {
@@ -341,6 +379,15 @@ function setPlaySpeed(speed) {
     if(speed < 0) rlottieHandler.playDir = false;
     else rlottieHandler.playDir = true;
     rlottieHandler.playSpeed = speed;
+}
+
+function propertiesCascading(node, properties) {
+    properties.forEach(property => {
+        node[property[0].name] = property.value;
+    });
+    for(let i = 0; i < node.child.length; i++) {
+        propertiesCascading(node.child[i]);
+    }
 }
 
 function allLayerTypeList() {
