@@ -30,7 +30,7 @@ class LayerNode {
         this.xPos = 0;
         this.yPos = 0;
         this.scaleWidth = 100;
-        this.sacleHeight = 100;
+        this.scaleHeight = 100;
         this.rotation = 0;
         this.color = {
             alpha: Number(),
