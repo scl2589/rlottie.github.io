@@ -67,8 +67,6 @@ class RLottieModule {
         this.lottieHandle = new Module.RlottieWasm();
         this.frameCount = this.lottieHandle.frames();
         this.curFrame = 0;
-        this.layerTree = {};
-        // this.makeLayerList();
     }
 
     render(speed) {
@@ -79,52 +77,6 @@ class RLottieModule {
         var imageData = new ImageData(result, this.canvas.width, this.canvas.height);
         this.context.putImageData(imageData, 0, 0);
     }
-
-    // makeLayerList() {
-    //     this.layers = [];
-    //     var layers_vector = this.lottieHandle.layers();
-    //     for (let i = 0; i < layers_vector.size(); i++) {
-    //         var layer = layers_vector.get(i).split("/");
-    //         this.layers.push({
-    //             name: layer[0],
-    //             inFrame: layer[1],
-    //             outFrame: layer[2],
-    //             visible: true,
-    //             selected: false,
-    //             opacity: 100,
-    //             xPos: 0,
-    //             yPos: 0,
-    //             scaleWidth: 100,
-    //             scaleHeight: 100,
-    //             rotation: 0,
-    //             color: {
-    //                 alpha: Number(),
-    //                 hex: String(),
-    //                 hexa: String(),
-    //                 hsla: {
-    //                     h: Number(),
-    //                     s: Number(),
-    //                     l: Number(),
-    //                     a: Number()
-    //                 },
-    //                 hsva: {
-    //                     h: Number(),
-    //                     s: Number(),
-    //                     v: Number(),
-    //                     a: Number()
-    //                 },
-    //                 hue: Number(),
-    //                 rgba: {
-    //                     r: Number(),
-    //                     g: Number(),
-    //                     b: Number(),
-    //                     a: Number()
-    //                 }
-    //             }
-    //         });
-    //     }
-    //     app.$root.layers = this.layers;
-    // }
 }
 
 class RLottieHandler {
@@ -143,6 +95,8 @@ class RLottieHandler {
     jsString = "";
     curFrame = 0;
     isHover = false;
+    layerTree = {};
+    searchList = [];
 
     constructor(size) {
         for (let i = 1; i <= size; i++) {
@@ -156,11 +110,11 @@ class RLottieHandler {
 
         frameCount.innerText = String(this.rlotties[0].frameCount);
         this.slider.max = this.rlotties[0].frameCount;
-        var layerTree = makeLayerTree(this.rlotties[0]);
+        this.makeLayerTree();
         this.rlotties.forEach(rm => {
-            rm.layerTree = layerTree;
+            rm.layerTree = this.layerTree;
         })
-        app.$root.layerTree = layerTree;
+        app.$root.layerTree = this.layerTree;
     }
 
     render() {
@@ -198,7 +152,7 @@ class RLottieHandler {
             rm.lottieHandle.load(jsString);
             rm.frameCount = rm.lottieHandle.frames();
             rm.curFrame = 0;
-            rm.makeLayerList();
+            this.makeLayerTree();
         });
 
         this.jsString = jsString;
@@ -251,43 +205,48 @@ class RLottieHandler {
             rm.canvas.style.height = size + "px";
         });
     }
-}
 
-function makeLayerTree(module) {
-    var root = new LayerNode("", "root", "");
-    var fullLayers = [];
-    var layer_vector = module.lottieHandle.allLayerTypeList();
-    for(let i = 0; i < layer_vector.size(); i++) {
-        fullLayers.push(layer_vector.get(i));
-    }
-    fullLayers.sort();
-    fullLayers.forEach(element => {
-        var layer = element.split(".");
-        var type = "Stroke";
-        if(layer[0] == "Fill Object:") type = "Fill";
-        var curr = root;
-        var keypath = "";
-        for(let i = 1; i < layer.length; i++) {
-            if(i != 1) keypath += "."; 
-            keypath += layer[i];
-            let flag = false;
-            for(let j = 0; j < curr.child.length; j++) {
-                if(curr.child[j].name != layer[i]) continue;
-                if(curr.child[j].type != type) continue;
-                curr = curr.child[j];
-                flag = true;
-            }
-            if(flag) continue;
-            let node = new LayerNode(keypath, layer[i], type);
-            curr.child.push(node);
-            curr = node;
+    makeLayerTree() {
+        this.layerTree = new LayerNode("", "root", "");
+        var fullLayers = [];
+        var layer_vector = this.rlotties[0].lottieHandle.allLayerTypeList();
+        for(let i = 0; i < layer_vector.size(); i++) {
+            fullLayers.push(layer_vector.get(i));
         }
-    })
-    return root;
+        fullLayers.sort();
+        fullLayers.forEach(element => {
+            var layer = element.split(".");
+            var type = "Stroke";
+            if(layer[0] == "Fill Object:") type = "Fill";
+            var curr = this.layerTree;
+            var keypath = "";
+            for(let i = 1; i < layer.length; i++) {
+                if(i != 1) keypath += "."; 
+                keypath += layer[i];
+                let flag = false;
+                for(let j = 0; j < curr.child.length; j++) {
+                    if(curr.child[j].name != layer[i]) continue;
+                    if(curr.child[j].type != type) continue;
+                    curr = curr.child[j];
+                    flag = true;
+                }
+                if(flag) continue;
+                let node = new LayerNode(keypath, layer[i], type);
+                curr.child.push(node);
+                curr = node;
+            }
+        })
+    }
 }
 
-function dfs(node) {
-    console.log(node.keypath);
+function getSearchItem() {
+    dfs(rlottieHandler.rlotties[0].layerTree);
+    rlottieHandler.searchList.shift();
+    return rlottieHandler.searchList;
+}
+
+function dfs(node, items) {
+    rlottieHandler.searchList.push(node.keypath);
     for(let i = 0; i < node.child.length; i++) {
         dfs(node.child[i]);
     }
