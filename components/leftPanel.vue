@@ -61,7 +61,7 @@
               :active.sync="selectedLayer"
               @update:active="clickLayer(selectedLayer)"
               item-children="child"
-              item-key="keypath"
+              item-key="id"
               item-text="keypath"
             >
               <template v-slot:prepend="{ item }" >
