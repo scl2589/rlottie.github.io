@@ -19,20 +19,56 @@ function setup() {
 
 setup();
 
-class RLottieModule {
-    layers = [];
-    canvas = {};
-    context = {};
-    lottieHandle = 0;
-    frameCount = 0;
-    curFrame = 0;
+class LayerNode {
+    constructor(keypath, name, type) {
+        this.keypath = keypath;
+        this.name = name;
+        this.type = type;
+        this.visible = true;
+        this.selected = false;
+        this.opacity = 100;
+        this.xPos = 0;
+        this.yPos = 0;
+        this.scaleWidth = 100;
+        this.sacleHeight = 100;
+        this.rotation = 0;
+        this.color = {
+            alpha: Number(),
+            hex: String(),
+            hexa: String(),
+            hsla: {
+                h: Number(),
+                s: Number(),
+                l: Number(),
+                a: Number(),
+            },
+            hsva: {
+                h: Number(),
+                s: Number(),
+                v: Number(),
+                a: Number(),
+            },
+            hue: Number(),
+            rgba: {
+                r: Number(),
+                g: Number(),
+                b: Number(),
+                a: Number()
+            }
+        }
+        this.child = []
+    }
+}
 
+class RLottieModule {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
         this.context = this.canvas.getContext("2d");
         this.lottieHandle = new Module.RlottieWasm();
         this.frameCount = this.lottieHandle.frames();
-        this.makeLayerList();
+        this.curFrame = 0;
+        this.layerTree = {};
+        // this.makeLayerList();
     }
 
     render(speed) {
@@ -44,51 +80,51 @@ class RLottieModule {
         this.context.putImageData(imageData, 0, 0);
     }
 
-    makeLayerList() {
-        this.layers = [];
-        var layers_vector = this.lottieHandle.layers();
-        for (let i = 0; i < layers_vector.size(); i++) {
-            var layer = layers_vector.get(i).split("/");
-            this.layers.push({
-                name: layer[0],
-                inFrame: layer[1],
-                outFrame: layer[2],
-                visible: true,
-                selected: false,
-                opacity: 100,
-                xPos: 0,
-                yPos: 0,
-                scaleWidth: 100,
-                scaleHeight: 100,
-                rotation: 0,
-                color: {
-                    alpha: Number(),
-                    hex: String(),
-                    hexa: String(),
-                    hsla: {
-                        h: Number(),
-                        s: Number(),
-                        l: Number(),
-                        a: Number()
-                    },
-                    hsva: {
-                        h: Number(),
-                        s: Number(),
-                        v: Number(),
-                        a: Number()
-                    },
-                    hue: Number(),
-                    rgba: {
-                        r: Number(),
-                        g: Number(),
-                        b: Number(),
-                        a: Number()
-                    }
-                }
-            });
-        }
-        app.$root.layers = this.layers;
-    }
+    // makeLayerList() {
+    //     this.layers = [];
+    //     var layers_vector = this.lottieHandle.layers();
+    //     for (let i = 0; i < layers_vector.size(); i++) {
+    //         var layer = layers_vector.get(i).split("/");
+    //         this.layers.push({
+    //             name: layer[0],
+    //             inFrame: layer[1],
+    //             outFrame: layer[2],
+    //             visible: true,
+    //             selected: false,
+    //             opacity: 100,
+    //             xPos: 0,
+    //             yPos: 0,
+    //             scaleWidth: 100,
+    //             scaleHeight: 100,
+    //             rotation: 0,
+    //             color: {
+    //                 alpha: Number(),
+    //                 hex: String(),
+    //                 hexa: String(),
+    //                 hsla: {
+    //                     h: Number(),
+    //                     s: Number(),
+    //                     l: Number(),
+    //                     a: Number()
+    //                 },
+    //                 hsva: {
+    //                     h: Number(),
+    //                     s: Number(),
+    //                     v: Number(),
+    //                     a: Number()
+    //                 },
+    //                 hue: Number(),
+    //                 rgba: {
+    //                     r: Number(),
+    //                     g: Number(),
+    //                     b: Number(),
+    //                     a: Number()
+    //                 }
+    //             }
+    //         });
+    //     }
+    //     app.$root.layers = this.layers;
+    // }
 }
 
 class RLottieHandler {
@@ -120,7 +156,11 @@ class RLottieHandler {
 
         frameCount.innerText = String(this.rlotties[0].frameCount);
         this.slider.max = this.rlotties[0].frameCount;
-        app.$root.layers = this.rlotties[0].layers;
+        var layerTree = makeLayerTree(this.rlotties[0]);
+        this.rlotties.forEach(rm => {
+            rm.layerTree = layerTree;
+        })
+        app.$root.layerTree = layerTree;
     }
 
     render() {
@@ -210,6 +250,46 @@ class RLottieHandler {
             rm.canvas.style.width = size + "px";
             rm.canvas.style.height = size + "px";
         });
+    }
+}
+
+function makeLayerTree(module) {
+    var root = new LayerNode("", "root", "");
+    var fullLayers = [];
+    var layer_vector = module.lottieHandle.allLayerTypeList();
+    for(let i = 0; i < layer_vector.size(); i++) {
+        fullLayers.push(layer_vector.get(i));
+    }
+    fullLayers.sort();
+    fullLayers.forEach(element => {
+        var layer = element.split(".");
+        var type = "Stroke";
+        if(layer[0] == "Fill Object:") type = "Fill";
+        var curr = root;
+        var keypath = "";
+        for(let i = 1; i < layer.length; i++) {
+            if(i != 1) keypath += "."; 
+            keypath += layer[i];
+            let flag = false;
+            for(let j = 0; j < curr.child.length; j++) {
+                if(curr.child[j].name != layer[i]) continue;
+                if(curr.child[j].type != type) continue;
+                curr = curr.child[j];
+                flag = true;
+            }
+            if(flag) continue;
+            let node = new LayerNode(keypath, layer[i], type);
+            curr.child.push(node);
+            curr = node;
+        }
+    })
+    return root;
+}
+
+function dfs(node) {
+    console.log(node.keypath);
+    for(let i = 0; i < node.child.length; i++) {
+        dfs(node.child[i]);
     }
 }
 

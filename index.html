@@ -75,7 +75,7 @@
       <div class="row no-gutters">
         <navbar @file-changed="changeFile" @viewcount-changed="changeIsMultiView" class="col-12"></navbar>
 
-        <leftpanel @layer-selected="layerSelected" :layers="layers" :key="componentKey" :canvasid="selectedCanvasId" class="col-3"></leftpanel>
+        <leftpanel @layer-selected="layerSelected" :layertree="layerTree" :key="componentKey" :canvasid="selectedCanvasId" class="col-3"></leftpanel>
 
         <!-- Player  -->
         <div class="col-6 bg-white">
@@ -256,7 +256,7 @@
         data() {
           return {
             selection: '',
-            layers: null,
+            layerTree: null,
             isLayer: false,
             selectedLayer: null,
             backgroundColor: null,
@@ -324,9 +324,9 @@
           },
 
           changeFile() {
-            this.layers = null;
+            this.layerTree = null;
             setTimeout(() => {
-              this.layers = getLayerList(rlottieHandler.rlotties[0]);
+              this.layerTree = getLayerList(rlottieHandler.rlotties[0]);
             }, 500);
           },
 
@@ -370,7 +370,7 @@
             this.isMultiView = state
             if (!state) {
               this.selectedCanvasId = 0
-              this.layers = rlottieHandler.rlotties[0].layers
+              this.layerTree = rlottieHandler.rlotties[0].layerTree
               this.selectedLayer = null
             }
           },
@@ -379,7 +379,7 @@
             if (this.isMultiView) {
               this.selectedCanvasId = id
               this.selectedCanvas = rlottieHandler.rlotties[id].canvas
-              this.layers = rlottieHandler.rlotties[id].layers
+              this.layerTree = rlottieHandler.rlotties[id].layerTree
               this.selectedLayer = null
             };
           }
