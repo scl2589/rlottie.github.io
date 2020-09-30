@@ -3,7 +3,7 @@
     <p class="title">Preference</p>
     
     <!-- Background color controller -->
-    <div class="preference">
+    <div class="preference" v-if="canvasstyle">
       <p class="preference-title mb-2">Background color</p>
       <div class="text-left">
         <v-menu 
@@ -38,7 +38,7 @@
     </div> -->
 
     <!-- Border Options -->
-    <div class="preference">
+    <div class="preference" v-if="canvasstyle">
       <p class="preference-title mb-0">Border</p>
       <div class="row d-flex align-items-center no-gutters">
         <div class="text-left col-6 pr-0">
@@ -80,7 +80,7 @@
 
 
     <!-- Dimension controller -->
-    <div class="preference">
+    <div class="preference" v-if="canvasstyle">
       <p class="preference-title mb-2">Canvas Resize</p>
       <div class="position d-flex">
         <v-text-field
@@ -107,7 +107,7 @@
     </div>
 
     <!-- canvas shape -->
-    <div class="preference">
+    <div class="preference" v-if="canvasstyle">
       <p class="preference-title mb-2">Canvas Shape</p>
       <v-btn-toggle light v-model="canvasstyle.borderShape" mandatory @change="changeBorderShape">
         <v-btn>
