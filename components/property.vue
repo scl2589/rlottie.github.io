@@ -187,8 +187,8 @@ module.exports = {
           r = currentLayerColor.rgba.r / 255;
           g = currentLayerColor.rgba.g / 255;
           b = currentLayerColor.rgba.b / 255;
-          setLayerColor(this.selectedLayer.keypath + ".**", r, g, b, this.canvasid, "Fill");
-          setLayerColor(this.selectedLayer.keypath + ".**", r, g, b, this.canvasid, "Stroke");
+          setLayerColor(this.selectedLayer, r, g, b, this.canvasid);
+          // setLayerColor(this.selectedLayer, r, g, b, this.canvasid);
           // setStrokeColor(this.selectedLayer.name + ".**", r, g, b, this.canvasid);
         }
       }
