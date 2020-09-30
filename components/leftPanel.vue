@@ -169,9 +169,6 @@ module.exports = {
   },
 
   computed: {
-    length() {
-      return this.layers.length
-    },
 
     topNodes() {
       var nodes = []

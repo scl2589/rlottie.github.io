@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar scroll-sect" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
     <p class="title">Property</p>
-    <!-- <p>{{selectedLayer}}</p> -->
+    <p>{{selectedLayer}}</p>
     <!-- color controller -->
     <div class="property">
       <p class="property-title mb-2">Color</p>
@@ -187,8 +187,8 @@ module.exports = {
           r = currentLayerColor.rgba.r / 255;
           g = currentLayerColor.rgba.g / 255;
           b = currentLayerColor.rgba.b / 255;
-          setLayerColor(this.selectedLayer.keypath + ".**", r, g, b, this.canvasid, "Fill");
-          setLayerColor(this.selectedLayer.keypath + ".**", r, g, b, this.canvasid, "Stroke");
+          setLayerColor(this.selectedLayer, r, g, b, this.canvasid);
+          // setLayerColor(this.selectedLayer, r, g, b, this.canvasid);
           // setStrokeColor(this.selectedLayer.name + ".**", r, g, b, this.canvasid);
         }
       }
