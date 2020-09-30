@@ -7,7 +7,7 @@
           <img class="img-thumbnail preview-thumbnail" src="../static/logo.png" alt="preview">
         </div>
         <div class="col-9 d-flex align-items-center">
-          <h5 class="ml-4 name mb-0 text-white" id="contentName">FileName</h5>
+          <h5 class="ml-4 name mb-0 text-white" id="contentName" title="FileName">FileName</h5>
         </div>
       </div>
     </div>
@@ -34,7 +34,7 @@
           <!-- layers -->
           <div class="d-flex justify-content-between align-items-center container">
             <p class="title layers-title ">Layers</p>
-            <div v-if="layers" class="d-flex justify-content-start align-items-center">
+            <!-- <div v-if="layers" class="d-flex justify-content-start align-items-center">
               <v-tooltip bottom nudge-top="10">
                 <template v-slot:activator="{ on, attrs }">
                   <button @click="changeAllVisibility" class="eye-btn btn" v-bind="attrs" v-on="on">
@@ -45,7 +45,7 @@
                 <span v-if="allLayersVisible">Make all layers invisible</span>
                 <span v-else>Make all layers visible</span>
               </v-tooltip>
-            </div>
+            </div> -->
           </div>
 
 
@@ -72,7 +72,7 @@
               </template>
               <template v-slot:label="{ item }">
                 <div class="d-flex align-items-center">
-                    <p class="ml-3 mb-0 layer-name">
+                    <p class="ml-3 mb-0 layer-name" :title="item.keypath">
                       {{ item.keypath }}
                     </p>
                 </div>
@@ -120,18 +120,16 @@ module.exports = {
   name: 'leftPanel',
   props: {
     layers: Object,
-    canvasid: Number
+    canvasid: Number,
+    trigger: Boolean
   },
 
   data: function () {
     return {
       tab: 0,
       searchKeyword: null,
-      clickedLayer: null,
-      windowReadyState: false,
       allLayersVisible: true,
       selectedLayer: [],
-
     }
   },
 
@@ -144,6 +142,12 @@ module.exports = {
       }
       return nodes
     },
+  },
+
+  watch: {
+    trigger() {
+      this.selectedLayer = []
+    }
   },
 
   methods: {
@@ -159,51 +163,34 @@ module.exports = {
     },
     
     clickMain() {
-      this.clickedLayer = null
-      for (var layer of this.layers) {
-        layer.selected = false
-      }
+      this.selectedLayer = []
       this.$emit('layer-selected', null)
     },
     
     changeVisibility(layer) {
       layer.visible = !layer.visible
       if (layer.visible) {
-        // if (!this.allLayersVisible) {
-        //   this.allLayersVisible = !this.allLayersVisible;
-        // };
-        setLayerOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid, "Fill")
-        setLayerOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid, "Stroke")
-        // setFillOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid);
-        // setStrokeOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid);
+        setLayerOpacity(layer, Number(layer.opacity), this.canvasid)
       } else {
-        setLayerOpacity( layer.name + ".**", 0, this.canvasid, "Fill")
-        setLayerOpacity( layer.name + ".**", 0, this.canvasid, "Stroke")
-        // setFillOpacity( layer.name + ".**", 0, this.canvasid);
-        // setStrokeOpacity( layer.name + ".**", 0, this.canvasid);
+        setLayerOpacity(layer, 0, this.canvasid)
       }
+
     },
     
-    changeAllVisibility() {
-      this.allLayersVisible = !this.allLayersVisible
-      if (this.allLayersVisible) {
-        this.layers.forEach(layer => {
-          layer.visible = true
-          setLayerOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid, "Fill")
-          setLayerOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid, "Stroke")
-          // setFillOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid);
-          // setStrokeOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid);
-        });
-      } else {
-        this.layers.forEach(layer => {
-          layer.visible = false
-          setLayerOpacity( layer.name + ".**", 0, this.canvasid, "Fill")
-          setLayerOpacity( layer.name + ".**", 0, this.canvasid, "Stroke")
-          // setFillOpacity( layer.name + ".**", 0, this.canvasid);
-          // setStrokeOpacity( layer.name + ".**", 0, this.canvasid);
-        });
-      }
-    },
+    // changeAllVisibility() {
+    //   this.allLayersVisible = !this.allLayersVisible
+    //   if (this.allLayersVisible) {
+    //     this.layers.forEach(layer => {
+    //       layer.visible = true
+    //       setLayerOpacity(this.selectedLayer, Number(layer.opacity), this.canvasid)
+    //     });
+    //   } else {
+    //     this.layers.forEach(layer => {
+    //       layer.visible = false
+    //       setLayerOpacity(this.selectedLayer, 0, this.canvasid)
+    //     });
+    //   }
+    // },
     
     addNewLayer() {
       if (this.newLayerName !== null) {

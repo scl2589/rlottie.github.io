@@ -191,6 +191,7 @@ class RLottieHandler {
     curFrame = 0;
     isHover = false;
     searchList = [];
+    mainCanvasId = 0;
 
     constructor(size) {
         layerNodeSize = 0;
@@ -217,6 +218,7 @@ class RLottieHandler {
         var isMultiView = app.$root.isMultiView;
         for(let i = 0; i < this.rlotties.length; i++) {
             var rm = this.rlotties[i];
+            if(!isMultiView && i != this.mainCanvasId) continue;
             rm.render(this.playSpeed);
             if(this.playDir && rm.curFrame > rm.frameCount) {
                 if(this.isBounce) {
@@ -232,13 +234,12 @@ class RLottieHandler {
                 }
                 else rm.curFrame = rm.frameCount;
             }
-            if(!isMultiView) break;
         }
         this.playSpeed = nextSpeed;
         this.playDir = nextDir;
-        this.curFrame = this.rlotties[0].curFrame;
-        currentFrame.innerText = String(Math.round(this.rlotties[0].curFrame - 1));
-        slider.value = this.rlotties[0].curFrame;
+        this.curFrame = this.rlotties[this.mainCanvasId].curFrame;
+        currentFrame.innerText = String(Math.round(this.rlotties[this.mainCanvasId].curFrame - 1));
+        slider.value = this.rlotties[this.mainCanvasId].curFrame;
     }
 
     reload(jsString) {
@@ -254,8 +255,12 @@ class RLottieHandler {
         this.slider.max = this.rlotties[0].frameCount;
         this.slider.value = 0;
         this.frameCount = String(this.rlotties[0].frameCount);
-        thumbnailHandler.reload(this.rlotties[0].layerTree.child, this.jsString);
+
         app.$root.layers = this.rlotties[0].layerTree.child;
+        app.$root.selectedCanvas = this.rlotties[0].canvas;
+        app.$root.selectedCanvasStyle = this.rlotties[0].canvasStyle;
+        thumbnailHandler.reload(this.rlotties[0].layerTree.child, this.jsString);
+
         if (!this.playing) this.play();
     }
 
@@ -273,7 +278,7 @@ class RLottieHandler {
 
     play() {
         this.playing = true;
-        var curFrame = this.rlotties[0].curFrame;
+        var curFrame = this.rlotties[this.mainCanvasId].curFrame;
         this.rlotties.forEach(rm => {
             rm.curFrame = curFrame;
         })
@@ -307,7 +312,7 @@ class RLottieHandler {
 }
 
 function getSearchItem() {
-    dfs(rlottieHandler.rlotties[0].layerTree);
+    dfs(rlottieHandler.rlotties[rlottieHandler.mainCanvasId].layerTree);
     rlottieHandler.searchList.shift();
     return rlottieHandler.searchList;
 }
@@ -457,10 +462,10 @@ function setPlaySpeed(speed) {
 }
 
 function propertiesCascading(node, properties) {
-    properties.forEach(property => {
-        node[property.name] = property.value;
-    });
     for(let i = 0; i < node.child.length; i++) {
+        properties.forEach(property => {
+            node.child[i][property.name] = property.value;
+        });
         propertiesCascading(node.child[i], properties);
     }
 }

@@ -73,9 +73,9 @@
   <body>
     <v-app class="window" id="app">
       <div class="row no-gutters">
-        <navbar @file-changed="changeFile" @viewcount-changed="changeIsMultiView" class="col-12"></navbar>
+        <navbar @viewcount-changed="changeIsMultiView" class="col-12"></navbar>
 
-        <leftpanel @layer-selected="layerSelected" :layers="layers" :key="componentKey" :canvasid="selectedCanvasId" class="col-3"></leftpanel>
+        <leftpanel @layer-selected="layerSelected" :layers="layers" :canvasid="selectedCanvasId" :trigger="selectedLayerTrigger" class="col-3"></leftpanel>
 
         <!-- Player  -->
         <div class="col-6 bg-white">
@@ -89,6 +89,7 @@
                   <canvas
                     class="common-canvas"
                     :class="{ 'multiview-resizing': isMultiView, 'selected-canvas': isCanvas1Selected&&isMultiView }"
+                    v-show="isMultiView | (!isMultiView&&isCanvas1Selected)"
                     id="myCanvas1"
                     @click="selectCanvas(0)">
                   </canvas>
@@ -100,8 +101,8 @@
                 >
                   <canvas
                     class="multiview-resizing"
-                    :class="{ 'selected-canvas': isCanvas2Selected }"
-                    v-show="isMultiView"
+                    :class="{ 'selected-canvas': isCanvas2Selected&&isMultiView }"
+                    v-show="isMultiView | (!isMultiView&&isCanvas2Selected)"
                     id="myCanvas2"
                     @click="selectCanvas(1)">
                   </canvas>
@@ -113,8 +114,8 @@
                 >
                   <canvas
                     class="multiview-resizing"
-                    :class="{ 'selected-canvas': isCanvas3Selected }"
-                    v-show="isMultiView"
+                    :class="{ 'selected-canvas': isCanvas3Selected&&isMultiView }"
+                    v-show="isMultiView | (!isMultiView&&isCanvas3Selected)"
                     id="myCanvas3"
                     @click="selectCanvas(2)">
                   </canvas>
@@ -126,8 +127,8 @@
                 >
                   <canvas
                     class="multiview-resizing"
-                    :class="{ 'selected-canvas': isCanvas4Selected }"
-                    v-show="isMultiView"
+                    :class="{ 'selected-canvas': isCanvas4Selected&&isMultiView }"
+                    v-show="isMultiView | (!isMultiView&&isCanvas4Selected)"
                     id="myCanvas4"
                     @click="selectCanvas(3)">
                   </canvas>
@@ -200,7 +201,7 @@
           </div>
         </div>
         
-        <property v-if="isLayer" :selected-layer="selectedLayer" :canvasid="selectedCanvasId" class="col-3"></property>
+        <property v-if="selectedLayer" :selected-layer="selectedLayer" :canvasid="selectedCanvasId" class="col-3"></property>
 
         <preference v-else :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" class="col-3"></preference>
 
@@ -256,12 +257,9 @@
 
         data() {
           return {
-            selection: '',
             layers: [],
-            isLayer: false,
             selectedLayer: null,
-            backgroundColor: null,
-            componentKey: 0,
+            selectedLayerTrigger: false,
             
             // player settings
             content: true,
@@ -281,13 +279,6 @@
           }
         },
         computed: {
-          isContent() {
-            if (true) {
-              return true
-            } else {
-              return false
-            }
-          },
           isCanvas1Selected() {
             if (this.selectedCanvasId === 0) {
               return true
@@ -319,17 +310,7 @@
         },
         methods: {
           layerSelected(layer) {
-            this.isLayer = !!layer
-            if (layer) {
-              this.selectedLayer = layer
-            }
-          },
-
-          changeFile() {
-            // this.layerTree = null;
-            // setTimeout(() => {
-            //   this.layerTree = getLayerList(rlottieHandler.rlotties[0]);
-            // }, 500);
+            this.selectedLayer = layer
           },
 
           changePlay() {
@@ -370,25 +351,17 @@
 
           changeIsMultiView(state) {
             this.isMultiView = state
-            this.isLayer = null
-            if (!state) {
-              this.selectedCanvasId = 0
-              this.selectedCanvas = rlottieHandler.rlotties[0].canvas
-              this.selectedCanvasStyle = rlottieHandler.rlotties[0].canvasStyle
-              this.layerTree = rlottieHandler.rlotties[0].layerTree
-              this.selectedLayer = null
-              this.isLayer = null
-            }
+            this.selectedLayerTrigger = !this.selectedLayerTrigger
           },
 
           selectCanvas(id) {
             if (this.isMultiView) {
               this.selectedCanvasId = id
+              rlottieHandler.mainCanvasId = id;
               this.selectedCanvas = rlottieHandler.rlotties[id].canvas
               this.selectedCanvasStyle = rlottieHandler.rlotties[id].canvasStyle
-              this.layerTree = rlottieHandler.rlotties[id].layerTree
-              this.selectedLayer = null
-              this.isLayer = null
+              this.layers = rlottieHandler.rlotties[id].layerTree.child
+              this.selectedLayerTrigger = !this.selectedLayerTrigger
             };
           }
         },
