@@ -3,7 +3,7 @@
     <p class="title">Property</p>
     <!-- <p>{{selectedLayer}}</p> -->
     <!-- color controller -->
-    <div class="property">
+    <div class="property" v-if="selectedLayer.child.length === 0">
       <p class="property-title mb-2">Color</p>
       <div class="text-left">
         <v-menu

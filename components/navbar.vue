@@ -24,7 +24,7 @@
       <!-- import/export -->
       <div class="filebox mx-2">
         <label for="fileSelector"><span class="d-inline-block pt-1">New Lottie</span></label>
-        <input class="upload-hidden" @change="changeFile" type="file" id="fileSelector" accept=".json" placeholder="New Lottie">
+        <input class="upload-hidden" type="file" id="fileSelector" accept=".json" placeholder="New Lottie">
       </div>
       <button class="btn accent mx-2" :class="{ 'text-white': $vuetify.theme.dark }" data-toggle="modal" data-target="#exportModal">Export <i class="fas fa-download ml-2"></i></button>
 
@@ -65,9 +65,6 @@ module.exports = {
     }
   },
   methods: {
-    changeFile() {
-      this.$emit('file-changed')
-    },
     changeMode() {
       if (this.mode == 'Light Mode') {
         this.mode = 'Dark Mode'
