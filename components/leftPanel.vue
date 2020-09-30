@@ -55,9 +55,11 @@
               </v-tooltip>
             </div>
           </div>
+
+
           <!-- layer list -->
           <div class="layer-list container py-3 px-0"  :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
-            <div v-for="(layer, idx) in layers" :key="idx">
+            <!-- <div v-for="(layer, idx) in layers" :key="idx">
               <div class="row no-gutters py-3 px-3 rounded" :class="{ 'accent': layer.selected }">
                 <div @click="clickLayer(layer)" class="layer-info row no-gutters col-10">
                   <div class="col-4 d-flex justify-content-center align-items-center">
@@ -74,8 +76,44 @@
                   <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
                 </button>
               </div>
-            </div>
+            </div> -->
+
+            <v-treeview 
+              :items="treeData"
+              activatable
+              color="accent"
+              hoverable
+              return-object
+              expand-icon="mdi-chevron-down"
+              :active.sync="selectedLayer"
+              @update:active="clickLayer(selectedLayer)"
+            >
+              <template v-slot:prepend="{ item }" >
+                <div v-if="topNodes.includes(item.id)" class="d-flex justify-content-center align-items-center my-3">
+                  <img class="img-thumbnail layer-thumbnail ml-1" src="../static/logo.png" :alt="item.id">
+                </div>
+              </template>
+              <template v-slot:label="{ item }">
+                <div class="d-flex align-items-center">
+                    <p class="ml-3 mb-0 layer-name">
+                      {{ item.name }}
+                    </p>
+                </div>
+              </template>
+              <template v-slot:append="{ item }">
+                <div v-if="topNodes.includes(item.id)" class="d-flex align-items-center">
+                  <button @click="changeVisibility(item)" class="eye-btn btn">
+                    <i v-if="item.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+                    <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+                  </button>
+                </div>
+              </template>
+            </v-treeview>
+
+
           </div>
+
+
         </v-card>
       </v-tab-item>
       
@@ -142,10 +180,86 @@ module.exports = {
       allLayersVisible: true,
       newLayerName: null,
       newLayers: [],
+      
+
+      selectedLayer: [],
+      treeData: [
+        { 
+          id: 1,
+          name: 'layer1',
+          type: 'Fill',
+          visible: true,
+          children: [
+            {
+              id: 2,
+              name: 'layer11',
+              type: 'Stroke',
+              children: [
+                {
+                  id: 3,
+                  name: 'layer111',
+                  type: 'Fill',
+                }
+              ]
+            },
+            { 
+              id: 4,
+              name: 'layer12',
+              type: 'Fill',
+              children: [
+                {
+                  id: 5,
+                  name: 'layer121',
+                  type: 'Stroke',
+                }
+              ]
+            },
+            {
+              id: 6,
+              name: 'layer13',
+              type: 'Stroke'
+            }
+          ]
+        },
+        {
+          id: 7,
+          name: 'layer2',
+          type: 'Fill',
+          visible: true,
+          children: [
+            {
+              id: 8,
+              name: 'layer21',
+              type: 'Stroke'
+            },
+            {
+              id: 9,
+              name: 'layer22',
+              type: 'Fill'
+            }
+          ]
+        }
+      ]
+
     }
   },
 
+  computed: {
+    length() {
+      return this.treeData.length
+    },
+
+    topNodes() {
+      var nodes = []
+      for (node of this.treeData) {
+        nodes.push(node.id)
+      }
+      return nodes
+    },
+  },
+
   methods: {
+
     getSearchResult() {
       if (this.searchKeyword !== null) {
         this.searchKeyword = null
@@ -153,19 +267,21 @@ module.exports = {
     },
     
     clickLayer(layer) {
-      if (this.clickedLayer) {
-        this.clickedLayer.selected = !this.clickedLayer.selected
-        if (this.clickedLayer === layer) {
-          this.clickedLayer = null
-          this.$emit('layer-selected', null)
-          return false
-        }
-      }
-      this.clickedLayer = layer
-      layer.selected = !layer.selected
-      if (layer.selected === true) {
-        this.$emit('layer-selected', layer)
-      } 
+
+      this.$emit('layer-selected', layer)
+      // if (this.clickedLayer) {
+      //   this.clickedLayer.selected = !this.clickedLayer.selected
+      //   if (this.clickedLayer === layer) {
+      //     this.clickedLayer = null
+      //     this.$emit('layer-selected', null)
+      //     return false
+      //   }
+      // }
+      // this.clickedLayer = layer
+      // layer.selected = !layer.selected
+      // if (layer.selected === true) {
+      //   this.$emit('layer-selected', layer)
+      // } 
     },
     
     clickMain() {
@@ -266,6 +382,7 @@ module.exports = {
 </script>
 
 <style scoped>
+
   .title {
     font-size: 1.5rem;
   }
@@ -277,6 +394,11 @@ module.exports = {
   .searchInput:focus {
     outline: none;
   }
+
+  /* .selected-layer {
+    color: white;
+    background-color: #A8DADC;
+  } */
 
   .layer-info:hover {
     cursor: pointer;

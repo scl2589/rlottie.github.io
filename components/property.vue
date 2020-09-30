@@ -1,6 +1,7 @@
 <template>
   <div class="sidebar scroll-sect" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
     <p class="title">Property</p>
+    <!-- <p>{{selectedLayer}}</p> -->
     <!-- color controller -->
     <div class="property">
       <p class="property-title mb-2">Color</p>
