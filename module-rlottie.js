@@ -142,7 +142,6 @@ class RLottieHandler {
 
         frameCount.innerText = String(this.rlotties[0].frameCount);
         this.slider.max = this.rlotties[0].frameCount;
-        console.log(this.rlotties[0].layerTree);
         app.$root.layers = this.rlotties[0].layerTree.child;
         app.$root.currentCanvas = this.rlotties[0].canvas;
     }
@@ -192,7 +191,6 @@ class RLottieHandler {
         if (!this.playing) this.play();
     }
 
-    // rlottieHandler.reset(this.canvasid);
     reset(idx) {
         var rm = this.rlotties[idx];
         rm.lottieHandle.load(this.jsString);
@@ -342,29 +340,34 @@ function getLayerList(lottieModule) {
 }
 
 function setLayerColor(node, r, g, b, canvasid) {
-    if(node.type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillColor(node.keypath, r, g, b);
-    else if(node.type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeColor(node.keypath, r, g, b);
+    var keypath = node.keypath + ".**";
+    if(node.type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillColor(keypath, r, g, b);
+    else if(node.type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeColor(keypath, r, g, b);
     propertiesCascading(node, [{ name: "color",  value: node.color }]);
 }
 
 function setLayerOpacity(node, opacity, canvasid) {
-    if(node.type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillOpacity(node.keypath, opacity);
-    else if(node.type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(node.keypath, opacity);
+    var keypath = node.keypath + ".**";
+    if(node.type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillOpacity(keypath, opacity);
+    else if(node.type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(keypath, opacity);
     propertiesCascading(node, [{ name: "opacity", value: opacity }]);
 }
 
 function setPosition(node, x, y, canvasid) {
-    rlottieHandler.rlotties[canvasid].lottieHandle.setPosition(node.keypath, x, y);
+    var keypath = node.keypath + ".**";
+    rlottieHandler.rlotties[canvasid].lottieHandle.setPosition(keypath, x, y);
     propertiesCascading(node, [{ name: "xPos", value: x }, { name: "yPos", valye: y }]);
 }
 
 function setScale(node, width, height, canvasid) {
-    rlottieHandler.rlotties[canvasid].lottieHandle.setScale(node.keypath, width, height);
+    var keypath = node.keypath + ".**";
+    rlottieHandler.rlotties[canvasid].lottieHandle.setScale(keypath, width, height);
     propertiesCascading(node, [{ name: "scaleWidth", value: width }, { name: "scaleHeight", valye: height }]);
 }
 
 function setRotation(node, degree, canvasid) {
-    rlottieHandler.rlotties[canvasid].lottieHandle.setRotation(node.keypath, degree);
+    var keypath = node.keypath + ".**";
+    rlottieHandler.rlotties[canvasid].lottieHandle.setRotation(keypath, degree);
     propertiesCascading(node, [{ name: "rotation", value: degree }]);
 }
 
@@ -383,10 +386,10 @@ function setPlaySpeed(speed) {
 
 function propertiesCascading(node, properties) {
     properties.forEach(property => {
-        node[property[0].name] = property.value;
+        node[property.name] = property.value;
     });
     for(let i = 0; i < node.child.length; i++) {
-        propertiesCascading(node.child[i]);
+        propertiesCascading(node.child[i], properties);
     }
 }
 
