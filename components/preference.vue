@@ -12,18 +12,18 @@
           >
         <template v-slot:activator="{ on }">
           <v-btn
-            :color="color"
+            :color="backgroundColor"
             dark
             v-on="on"
             class="mr-2"
           >
           </v-btn>
-          <span>{{color.slice(0, 7)}}</span>
+          <span>{{backgroundColor.slice(0, 7)}}</span>
         </template>
         <v-color-picker
           light
           value="#7417BE"
-          v-model="color"
+          v-model="backgroundColor"
           show-swatches
           class="mx-auto"
         ></v-color-picker>
@@ -70,7 +70,7 @@
           <v-text-field
             light
             solo
-            prefix="px"
+            suffix="px"
             v-model="borderWidth"
             @change="changeBorderWidth"
             class="bg-white"
@@ -105,52 +105,86 @@
         ></v-text-field>
       </div>
     </div>
+
+    <!-- canvas shape -->
+    <div class="preference">
+      <p class="preference-title mb-2">Canvas Shape</p>
+      <v-btn-toggle light v-model="borderShape" mandatory>
+        <v-btn>
+          <v-icon class="fas fa-square-full text-dark"></v-icon>
+        </v-btn>
+        <v-btn>
+          <v-icon class="fas fa-circle text-dark"></v-icon>
+        </v-btn>
+      </v-btn-toggle>
+    </div>
+
   </div>
 </template>
 
 <script>
 module.exports = {
   name: 'preference',
+  props: {
+    canvasid: Number,
+    canvas: Object
+  },
   data: function () {
     return {
-      color: '#FFFFFF',
+      backgroundColor: '#FFFFFF',
       width: null,
       height: null,
       borderColor: '#000000',
       borderWidth: 1,
+      borderShape: 0
+    }
+  },
+  computed: {
+    selectedCanvas() {
+      if (rlottieHandler) {
+        return rlottieHandler.rlotties[this.canvasid].canvas
+      } else {
+        return false
+      }
     }
   },
   watch: {
-    color() {
-      this.$emit('bg-color-changed', this.color)
+    // canvasid() {
+    //   this.backgroundColor = this.selectedCanvas.style.backgroundColor
+    //   this.borderColor = this.selectedCanvas.style.borderColor
+    //   this.borderShape = this.selectedCanvas.style.borderRadius
+    // },
+    backgroundColor() {
+      this.selectedCanvas.style.backgroundColor = this.backgroundColor
     },
     borderColor() {
-      var canvas = document.getElementById("myCanvas1")
-      canvas.style.borderColor = this.borderColor
+      this.selectedCanvas.style.borderColor = this.borderColor
+    },
+    borderShape() {
+      if (this.borderShape) {
+        this.selectedCanvas.style.borderRadius = "50%"
+      } else {
+        this.selectedCanvas.style.borderRadius = 0
+      }
     }
   },
   methods: {
     changeXDimension() {
-      var canvas = document.getElementById("myCanvas1")
-      canvas.width = this.width;
-      canvas.style.width = this.width + "px"
+      this.selectedCanvas.width = this.width;
+      this.selectedCanvas.style.width = this.width + "px"
     },
     changeYDimension() {
-      var canvas = document.getElementById("myCanvas1")
-      canvas.height = this.height;
-      canvas.style.height = this.height + "px"
+      this.selectedCanvas.height = this.height;
+      this.selectedCanvas.style.height = this.height + "px"
     },
     changeBorderWidth() {
-      var canvas = document.getElementById("myCanvas1")
-      console.log(canvas.style)
-      canvas.style.borderWidth = this.borderWidth + "px"
+      this.selectedCanvas.style.borderWidth = this.borderWidth + "px"
     }
   },
-  mounted() {
-    var canvas = document.getElementById("myCanvas1")
-    this.width = canvas.style.width.slice(0, -2)
-    this.height = canvas.style.height.slice(0, -2)
-  }
+  // mounted() {
+  //   this.width = this.selectedCanvas.style.width.slice(0, -2)
+  //   this.height = this.selectedCanvas.style.height.slice(0, -2)
+  // }
 }
 </script>
 

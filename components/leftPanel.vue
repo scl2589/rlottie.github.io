@@ -23,7 +23,7 @@
         Layers
       </v-tab>
       <v-tab>
-        Add Layers
+        History
       </v-tab>
     </v-tabs>
 
@@ -79,43 +79,23 @@
         </v-card>
       </v-tab-item>
       
-      <!-- add layers tab -->
+      <!-- history tab -->
       <v-tab-item>
         <v-card color="sidebar" flat>
-          <!-- new layer input -->
-          <div class="search-bar container py-3">
-            <p class="title">Add layer</p>
-            <div class="row no-gutters">
-              <button @click="addNewLayer" class="btn col-2"><i class="fas fa-plus fa-lg" :class="{ 'text-white': $vuetify.theme.dark }"></i></button>
-              <input v-model="newLayerName" @keypress.enter="addNewLayer" type="text" class="searchInput rounded-pill col-10 px-3 bg-white">
-            </div>
+          <div class="container py-3" @click="clickReset(canvasid)">
+            <button class="btn title"  :class="{ 'text-white': $vuetify.theme.dark }"><i class="fas fa-power-off mr-3"></i>Reset</button>
           </div>
           <!-- new layers -->
-          <div class="d-flex justify-content-between align-items-center px-3">
-            <p class="title layers-title ">Added Layers</p>
-          </div>
-          <!-- new layer list -->
-          <div class="layer-list container py-3 px-0"  :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
-            <div v-for="(layer, idx) in newLayers" :key="idx">
+          <div class="container py-3 px-0"  :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
+            <div v-for="(layer, idx) in layers" :key="idx">
               <div class="row no-gutters py-3 px-3 rounded" :class="{ 'accent': layer.selected }">
-                <div @click="clickLayer(layer)" class="layer-info row no-gutters col-9">
-                  <div class="col-4 d-flex justify-content-center align-items-center">
-                    <img class="img-thumbnail layer-thumbnail" src="../static/logo.png" :alt="idx">
-                  </div>
-                  <div class="col-8 d-flex align-items-center">
+                <div @click="clickLayer(layer)" class="layer-info row no-gutters">
+                  <div class=" d-flex align-items-center">
                     <p class="ml-3 mb-0 layer-name" :title="layer.name">
-                      {{ layer.name }}
+                      {{idx}}. {{ layer.name }}
+                      <!-- historyName -->
                     </p>
                   </div>
-                </div>
-                <div class="d-flex col-3">
-                  <button @click="changeVisibility(layer)" class="eye-btn btn ml-auto">
-                    <i v-if="layer.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
-                    <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
-                  </button>
-                  <button @click="deleteLayer(layer)" class="eye-btn btn ml-auto col-2">
-                    <i class="fas fa-times" :class="{ 'text-white': $vuetify.theme.dark }"></i>
-                  </button>
                 </div>
               </div>
             </div>
@@ -130,7 +110,8 @@
 module.exports = {
   name: 'leftPanel',
   props: {
-    layers: Object
+    layers: Object,
+    canvasid: Number
   },
 
   data: function () {
@@ -185,11 +166,15 @@ module.exports = {
         // if (!this.allLayersVisible) {
         //   this.allLayersVisible = !this.allLayersVisible;
         // };
-        setFillOpacity( layer.name + ".**", Number(layer.opacity));
-        setStrokeOpacity( layer.name + ".**", Number(layer.opacity));
+        setLayerOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid, "Fill")
+        setLayerOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid, "Stroke")
+        // setFillOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid);
+        // setStrokeOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid);
       } else {
-        setFillOpacity( layer.name + ".**", 0);
-        setStrokeOpacity( layer.name + ".**", 0);
+        setLayerOpacity( layer.name + ".**", 0, this.canvasid, "Fill")
+        setLayerOpacity( layer.name + ".**", 0, this.canvasid, "Stroke")
+        // setFillOpacity( layer.name + ".**", 0, this.canvasid);
+        // setStrokeOpacity( layer.name + ".**", 0, this.canvasid);
       }
     },
     
@@ -198,14 +183,18 @@ module.exports = {
       if (this.allLayersVisible) {
         this.layers.forEach(layer => {
           layer.visible = true
-          setFillOpacity( layer.name + ".**", Number(layer.opacity));
-          setStrokeOpacity( layer.name + ".**", Number(layer.opacity));
+          setLayerOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid, "Fill")
+          setLayerOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid, "Stroke")
+          // setFillOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid);
+          // setStrokeOpacity( layer.name + ".**", Number(layer.opacity), this.canvasid);
         });
       } else {
         this.layers.forEach(layer => {
           layer.visible = false
-          setFillOpacity( layer.name + ".**", 0);
-          setStrokeOpacity( layer.name + ".**", 0);
+          setLayerOpacity( layer.name + ".**", 0, this.canvasid, "Fill")
+          setLayerOpacity( layer.name + ".**", 0, this.canvasid, "Stroke")
+          // setFillOpacity( layer.name + ".**", 0, this.canvasid);
+          // setStrokeOpacity( layer.name + ".**", 0, this.canvasid);
         });
       }
     },
@@ -261,6 +250,9 @@ module.exports = {
         }
       }
     },
+    clickReset(index) {
+      rlottieHandler.reset(index)
+    }
   }
 }
 </script>

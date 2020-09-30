@@ -32,9 +32,7 @@ class RLottieModule {
         this.context = this.canvas.getContext("2d");
         this.lottieHandle = new Module.RlottieWasm();
         this.frameCount = this.lottieHandle.frames();
-
         this.makeLayerList();
-        // this.relayoutCanvas();
     }
 
     render(speed) {
@@ -106,6 +104,9 @@ class RLottieHandler {
     slider = {};
     frameCount = {};
     currentFrame = {};
+    jsString = "";
+    curFrame = 0;
+    isHover = false;
 
     constructor(size) {
         for (let i = 1; i <= size; i++) {
@@ -115,6 +116,7 @@ class RLottieHandler {
         this.slider = document.getElementById("slider");
         this.frameCount = document.getElementById("frameCount");
         this.currentFrame = document.getElementById("currentFrame");
+        this.jsString = this.rlotties[0].lottieHandle.getDefaultLottie();
 
         frameCount.innerText = String(this.rlotties[0].frameCount);
         this.slider.max = this.rlotties[0].frameCount;
@@ -146,6 +148,7 @@ class RLottieHandler {
         }
         this.playSpeed = nextSpeed;
         this.playDir = nextDir;
+        this.curFrame = this.rlotties[0].curFrame;
         currentFrame.innerText = String(Math.round(this.rlotties[0].curFrame - 1));
         slider.value = this.rlotties[0].curFrame;
     }
@@ -157,10 +160,20 @@ class RLottieHandler {
             rm.curFrame = 0;
             rm.makeLayerList();
         });
+
+        this.jsString = jsString;
         this.slider.max = this.rlotties[0].frameCount;
         this.slider.value = 0;
         this.frameCount = String(this.rlotties[0].frameCount);
         if (!this.playing) this.play();
+    }
+
+    // rlottieHandler.reset(this.canvasid);
+    reset(idx) {
+        var rm = this.rlotties[idx];
+        rm.lottieHandle.load(this.jsString);
+        rm.curFrame = this.curFrame;
+        if(!this.playing) this.play();
     }
 
     pause() {
@@ -206,10 +219,12 @@ function updater() {
 }
 
 function play() {
+    document.getElementById("playButton").innerHTML = "<i class='fas fa-pause' style='color:#979797'></i>";
     rlottieHandler.play();
 }
 
 function pause() {
+    document.getElementById("playButton").innerHTML = "<i class='fas fa-play' style='color:#979797'></i>";
     rlottieHandler.pause();
 }
 
@@ -229,6 +244,7 @@ function windowResize() {
 }
 
 function buttonClicked() {
+    if(rlottieHandler.isHover) return;
     if (rlottieHandler.playing) {
         document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
         rlottieHandler.pause();
@@ -285,45 +301,39 @@ function handleFileSelect(event) {
 }
 
 function getLayerList(lottieModule) {
-    return lottieModule.layers;
+    return rlottieHandler.rlotties[0].layers;
 }
 
-function setFillColor(keypath, r, g, b, lottieModule) {
-    lottieModule.lottieHandle.setFillColor(keypath, r, g, b);
+function setLayerColor(keypath, r, g, b, canvasid, type) {
+    if(type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillColor(keypath, r, g, b);
+    else if(type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeColor(keypath, r, g, b);
 }
 
-function setStrokeColor(keypath, r, g, b, lottieModule) {
-    lottieModule.lottieHandle.setStrokeColor(keypath, r, g, b);
+function setLayerOpacity(keypath, opacity, canvasid, type) {
+    if(type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillOpacity(keypath, opacity);
+    else if(type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(keypath, opacity);
 }
 
-function setFillOpacity(keypath, opacity, lottieModule) {
-    lottieModule.lottieHandle.setFillOpacity(keypath, opacity);
+function setStrokeWidth(keypath, width, canvasid) {
+    rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeWidth(keypath, width);
 }
 
-function setStrokeOpacity(keypath, opacity, lottieModule) {
-    lottieModule.lottieHandle.setStrokeOpacity(keypath, opacity);
+function setPosition(keypath, x, y, canvasid) {
+    rlottieHandler.rlotties[canvasid].lottieHandle.setPosition(keypath, x, y);
 }
 
-function setStrokeWidth(keypath, width, lottieModule) {
-    lottieModule.lottieHandle.setStrokeWidth(keypath, width);
+function setScale(keypath, width, height, canvasid) {
+    rlottieHandler.rlotties[canvasid].lottieHandle.setScale(keypath, width, height);
 }
 
-function setPosition(keypath, x, y, lottieModule) {
-    lottieModule.lottieHandle.setPosition(keypath, x, y);
-}
-
-function setScale(keypath, width, height, lottieModule) {
-    lottieModule.lottieHandle.setScale(keypath, width, height);
-}
-
-function setRotation(keypath, degree, lottieModule) {
-    lottieModule.lottieHandle.setRotation(keypath, degree);
+function setRotation(keypath, degree, canvasid) {
+    rlottieHandler.rlotties[canvasid].lottieHandle.setRotation(keypath, degree);
 }
 
 function moveFrame(frame) {
     rlottieHandler.rlotties.forEach(rm => {
         rm.curFrame = frame;
-    })
+    });
 }
 
 function setPlaySpeed(speed) {
@@ -333,8 +343,8 @@ function setPlaySpeed(speed) {
     rlottieHandler.playSpeed = speed;
 }
 
-function test() {
-    var allLayers = [];
+function allLayerTypeList() {
+    var layers = [];
     var alv = rlottieHandler.rlotties[0].lottieHandle.allLayerTypeList();
     for(let i=0;i<alv.size();i++) {
         console.log(alv.get(i));
