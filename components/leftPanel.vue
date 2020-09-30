@@ -192,7 +192,8 @@ module.exports = {
     
     clickLayer(layer) {
 
-      this.$emit('layer-selected', layer)
+      this.$emit('layer-selected', layer[0])
+
     },
     
     clickMain() {
