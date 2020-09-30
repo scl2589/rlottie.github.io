@@ -187,8 +187,8 @@ module.exports = {
           r = currentLayerColor.rgba.r / 255;
           g = currentLayerColor.rgba.g / 255;
           b = currentLayerColor.rgba.b / 255;
-          setLayerColor(this.selectedLayer.name + ".**", r, g, b, this.canvasid, "Fill");
-          setLayerColor(this.selectedLayer.name + ".**", r, g, b, this.canvasid, "Stroke");
+          setLayerColor(this.selectedLayer, r, g, b, this.canvasid);
+          // setLayerColor(this.selectedLayer, r, g, b, this.canvasid);
           // setStrokeColor(this.selectedLayer.name + ".**", r, g, b, this.canvasid);
         }
       }
@@ -198,8 +198,8 @@ module.exports = {
     changeOpacity(opacity) {
       if (opacity && opacity <= 100 && opacity >= 0) {
         if (this.selectedLayer.visible) {
-          setLayerOpacity( this.selectedLayer.name + ".**", Number(opacity), this.canvasid, 'Fill');
-          setLayerOpacity( this.selectedLayer.name + ".**", Number(opacity), this.canvasid, 'Stroke');
+          setLayerOpacity( this.selectedLayer.keypath + ".**", Number(opacity), this.canvasid, 'Fill');
+          setLayerOpacity( this.selectedLayer.keypath + ".**", Number(opacity), this.canvasid, 'Stroke');
         }
       }
     },
@@ -207,10 +207,10 @@ module.exports = {
       if (scaleWidth >= 0) {
         if (this.selectedLayer.scaleHeight) {
           if (this.selectedLayer.scaleHeight >= 0) {
-            setScale(this.selectedLayer.name + ".**", Number(scaleWidth), Number(this.selectedLayer.scaleHeight), this.canvasid)
+            setScale(this.selectedLayer.keypath + ".**", Number(scaleWidth), Number(this.selectedLayer.scaleHeight), this.canvasid)
           }
         } else {
-          setScale(this.selectedLayer.name + ".**", Number(scaleWidth), 100, this.canvasid)
+          setScale(this.selectedLayer.keypath + ".**", Number(scaleWidth), 100, this.canvasid)
         }
       }
     },
@@ -218,30 +218,30 @@ module.exports = {
       if (scaleHeight >= 0) {
          if (this.selectedLayer.scaleWidth) {
            if (this.selectedLayer.scaleWidth >= 0) {
-             setScale(this.selectedLayer.name + ".**", Number(this.selectedLayer.scaleWidth), Number(scaleHeight), this.canvasid)
+             setScale(this.selectedLayer.keypath + ".**", Number(this.selectedLayer.scaleWidth), Number(scaleHeight), this.canvasid)
            }
         } else {
-          setScale(this.selectedLayer.name + ".**", 100, Number(scaleHeight), this.canvasid)
+          setScale(this.selectedLayer.keypath + ".**", 100, Number(scaleHeight), this.canvasid)
         }
       }
     },
     changeXPos(xPos) {
       if (this.selectedLayer.yPos) {
-        setPosition(this.selectedLayer.name + ".**", Number(xPos), Number(this.selectedLayer.yPos), this.canvasid)
+        setPosition(this.selectedLayer.keypath + ".**", Number(xPos), Number(this.selectedLayer.yPos), this.canvasid)
       } else {
-        setPosition(this.selectedLayer.name + ".**", Number(xPos), 0, this.canvasid)
+        setPosition(this.selectedLayer.keypath + ".**", Number(xPos), 0, this.canvasid)
       }
     },
     changeYPos(yPos) {
       if (this.selectedLayer.xPos) {
-         setPosition(this.selectedLayer.name + ".**", Number(this.selectedLayer.xPos), Number(yPos), this.canvasid)
+         setPosition(this.selectedLayer.keypath + ".**", Number(this.selectedLayer.xPos), Number(yPos), this.canvasid)
       } else {
-        setPosition(this.selectedLayer.name + ".**", 0, Number(yPos), this.canvasid)
+        setPosition(this.selectedLayer.keypath + ".**", 0, Number(yPos), this.canvasid)
       }
     },
     changeRotation(rotationDegree) {
       if (rotationDegree >= 0 && rotationDegree <= 360) {
-        setRotation(this.selectedLayer.name + ".**", Number(rotationDegree), this.canvasid)
+        setRotation(this.selectedLayer.keypath + ".**", Number(rotationDegree), this.canvasid)
       }
     },
   }
