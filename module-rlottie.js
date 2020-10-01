@@ -18,7 +18,7 @@ function setup() {
             }, 500);
             addListener();
             window.requestAnimationFrame(updater);
-            
+
         };
     };
 }
@@ -26,8 +26,9 @@ function setup() {
 setup();
 
 class LayerNode {
-    constructor(keypath, name, type, id) {
+    constructor(keypath, name, type, id, commonId) {
         this.id = id;
+        this.commonId = commonId;
         this.keypath = keypath;
         this.name = name;
         this.type = type;
@@ -143,13 +144,14 @@ class RLottieModule {
     }
 
     makeLayerTree() {
-        this.layerTree = new LayerNode("**", "root", "", layerNodeSize++);
+        this.layerTree = new LayerNode("**", "root", "", layerNodeSize++, 0);
         var fullLayers = [];
         var layer_vector = this.lottieHandle.allLayerTypeList();
         for(let i = 0; i < layer_vector.size(); i++) {
             fullLayers.push(layer_vector.get(i));
         }
         fullLayers.sort();
+        var commonId = 1;
         fullLayers.forEach(element => {
             var layer = element.split(".");
             var type = "Stroke";
@@ -167,7 +169,7 @@ class RLottieModule {
                     flag = true;
                 }
                 if(flag) continue;
-                let node = new LayerNode(keypath, layer[i], type, layerNodeSize++);
+                let node = new LayerNode(keypath, layer[i], type, layerNodeSize++, commonId++);
                 curr.child.push(node);
                 curr = node;
             }
@@ -251,16 +253,79 @@ class RLottieHandler {
             rm.frameCount = rm.lottieHandle.frames();
             rm.curFrame = 0;
             rm.makeLayerTree();
+            rm.canvasStyle = {
+                backgroundColor: {
+                    alpha: 1,
+                    hex: "#FFFFFF",
+                    hexa: "#FFFFFF00",
+                    hsla: {
+                        h: 1,
+                        s: 0,
+                        l: 0.7450980392156863,
+                        a: 0,
+                    },
+                    hsva: {
+                        h: 1,
+                        s: 0,
+                        v: 0,
+                        a: 0.7450980392156863,
+                    },
+                    hue: 0,
+                    rgba: {
+                        r: 190,
+                        g: 190,
+                        b: 190,
+                        a: 1
+                    }
+                },
+                borderColor: {
+                    alpha: 0,
+                    hex: "#BEBEBE",
+                    hexa: "#BEBEBEFF",
+                    hsla: {
+                        h: 0,
+                        s: 0,
+                        l: 0,
+                        a: 0,
+                    },
+                    hsva: {
+                        h: 0,
+                        s: 0,
+                        v: 0,
+                        a: 0,
+                    },
+                    hue: 0,
+                    rgba: {
+                        r: 0,
+                        g: 0,
+                        b: 0,
+                        a: 0
+                    }
+                },
+                borderWidth: '1',
+                width: "",
+                height: "",
+                borderShape: 0
+            };
+            rm.canvas.style.backgroundColor = rm.canvasStyle.backgroundColor.hex
+            rm.canvas.style.borderColor = rm.canvasStyle.borderColor.hex
+            rm.canvas.style.borderWidth = rm.canvasStyle.borderWidth + "px"
+            rm.canvas.style.borderRadius = 0
+            this.relayoutCanvas()
         });
 
         this.jsString = jsString;
         this.slider.max = this.rlotties[0].frameCount;
         this.slider.value = 0;
         this.frameCount = String(this.rlotties[0].frameCount);
-
+        
         app.$root.layers = this.rlotties[0].layerTree.child;
         app.$root.selectedCanvas = this.rlotties[0].canvas;
         app.$root.selectedCanvasStyle = this.rlotties[0].canvasStyle;
+        app.$root.selectedCanvasId = 0;
+        rlottieHandler.mainCanvasId = 0;
+        app.$root.selectedLayerTrigger = !app.$root.selectedLayerTrigger;
+        app.$root.selectedLayer = null;
         thumbnailHandler.reload(this.rlotties[0].layerTree.child, this.jsString);
 
         if (!this.playing) this.play();
@@ -270,6 +335,72 @@ class RLottieHandler {
         var rm = this.rlotties[idx];
         rm.lottieHandle.load(this.jsString);
         rm.curFrame = this.curFrame;
+        rm.canvasStyle = {
+            backgroundColor: {
+                alpha: 1,
+                hex: "#FFFFFF",
+                hexa: "#FFFFFF00",
+                hsla: {
+                    h: 1,
+                    s: 0,
+                    l: 0.7450980392156863,
+                    a: 0,
+                },
+                hsva: {
+                    h: 1,
+                    s: 0,
+                    v: 0,
+                    a: 0.7450980392156863,
+                },
+                hue: 0,
+                rgba: {
+                    r: 190,
+                    g: 190,
+                    b: 190,
+                    a: 1
+                }
+            },
+            borderColor: {
+                alpha: 0,
+                hex: "#BEBEBE",
+                hexa: "#BEBEBEFF",
+                hsla: {
+                    h: 0,
+                    s: 0,
+                    l: 0,
+                    a: 0,
+                },
+                hsva: {
+                    h: 0,
+                    s: 0,
+                    v: 0,
+                    a: 0,
+                },
+                hue: 0,
+                rgba: {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    a: 0
+                }
+            },
+            borderWidth: '1',
+            width: "",
+            height: "",
+            borderShape: 0
+        };
+        rm.canvas.style.backgroundColor = rm.canvasStyle.backgroundColor.hex
+        rm.canvas.style.borderColor = rm.canvasStyle.borderColor.hex
+        rm.canvas.style.borderWidth = rm.canvasStyle.borderWidth + "px"
+        rm.canvas.style.borderRadius = 0
+        this.relayoutCanvas()
+        app.$root.selectedCanvasStyle = rm.canvasStyle
+
+        rm.makeLayerTree();
+        app.$root.layers = rm.layerTree.child;
+        setTimeout(() => {
+        thumbnailHandler.setModuleCanvas(rm.layerTree.child);
+        }, 100);
         if(!this.playing) this.play();
     }
 
@@ -296,14 +427,31 @@ class RLottieHandler {
     relayoutCanvas() {
         var width = document.getElementById("player").clientWidth;
         var height = document.getElementById("player").clientHeight;
-        var maxSize = 300;
+        var playbarHeight = document.getElementById("playbar").clientHeight;
+        var extrtoolbarHeight = document.getElementById("collapseExtraTools").clientHeight
+        
+        height = height - playbarHeight - extrtoolbarHeight;
+        width = width / 4 * 3;
+        height = height / 4 * 3;
+
+        var maxSize = width < height ? width : height;
         var size = width < height ? width : height;
         if(typeof (app.$root.isMultiView) !== "undefined") {
-            maxSize = app.$root.isMultiView ? 300 : 500;
+            maxSize = app.$root.isMultiView ?  width : height;
+
             if(app.$root.isMultiView) size /= 2;
         }
-        size = size < maxSize ? size - 100 : maxSize - 100;
+        size = size < maxSize ? size : maxSize;
+        // console.log(size);
 
+        // if(!app.$root.isMultiView) {
+        //     this.rlotties[this.mainCanvasId].canvas.width = size;
+        //     this.rlotties[this.mainCanvasId].canvas.height = size;
+        //     this.rlotties[this.mainCanvasId].canvas.style.width = size + "px";
+        //     this.rlotties[this.mainCanvasId].canvas.style.height = size + "px";
+        // }
+        // else {
+        // }
         this.rlotties.forEach(rm => {
             rm.canvas.width = size;
             rm.canvas.height = size;
@@ -384,8 +532,8 @@ function addListener() {
 function fileSelectionChanged() {
     var input = document.getElementById("fileSelector");
     var contentName = document.getElementById('contentName')
-    contentName.innerText = input.files[0].name.slice(0, -5)
-    contentName.title = input.files[0].name.slice(0, -5)
+    contentName.innerText = input.files[0].name
+    contentName.title = input.files[0].name
     handleFiles(input.files);
 }
 
@@ -436,13 +584,13 @@ function setLayerOpacity(node, opacity, canvasid) {
 function setPosition(node, x, y, canvasid) {
     var keypath = node.keypath + ".**";
     rlottieHandler.rlotties[canvasid].lottieHandle.setPosition(keypath, x, y);
-    propertiesCascading(node, [{ name: "xPos", value: x }, { name: "yPos", valye: y }]);
+    propertiesCascading(node, [{ name: "xPos", value: x }, { name: "yPos", value: y }]);
 }
 
 function setScale(node, width, height, canvasid) {
     var keypath = node.keypath + ".**";
     rlottieHandler.rlotties[canvasid].lottieHandle.setScale(keypath, width, height);
-    propertiesCascading(node, [{ name: "scaleWidth", value: width }, { name: "scaleHeight", valye: height }]);
+    propertiesCascading(node, [{ name: "scaleWidth", value: width }, { name: "scaleHeight", value: height }]);
 }
 
 function setRotation(node, degree, canvasid) {

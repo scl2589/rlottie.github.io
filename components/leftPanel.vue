@@ -104,9 +104,10 @@
               item-key="id"
               transition
             >
+
               <template v-slot:prepend="{ item }">
                 <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3 ml-3">
-                  <div class="thumbnailbox"><canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas></div>
+                  <div class="thumbnailbox"><canvas :id="item.id" width="60" height="60"></canvas></div>
                 </div>
               </template>
               <template v-slot:label="{ item }">

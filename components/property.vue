@@ -22,11 +22,38 @@
     </div>
 
     <!-- color controller -->
-    <div class="property" v-if="selectedLayer.child.length === 0">
+    <div class="property">
       <p class="property-title mb-2">Color</p>
-      <div class="text-left">
+      <div class="text-left d-flex align-items-center" v-if="selectedLayer.child.length !== 0" @click="clickColorError">
         <v-menu
-          offset-y 
+          disabled
+          offset-y
+          :close-on-content-click="false"
+          >
+          <template v-slot:activator="{ on }">
+            <v-btn
+              :color="selectedLayer.color.hex"
+              dark
+              v-on="on"
+              class="mr-2"
+            >
+            </v-btn>
+            <span>{{ selectedLayer.color.hex }}</span>
+          </template>
+          <v-color-picker
+            light
+            v-model="selectedLayer.color"
+            show-swatches
+            class="mx-auto"
+        ></v-color-picker>
+        </v-menu>
+        <small v-if="isColorError" class="error-text">Access deeper layer to change color property.</small>
+        <small v-else class="">This layer does not have color property.</small>
+      </div>
+
+      <div class="text-left" v-else>
+        <v-menu
+          offset-y
           :close-on-content-click="false"
         >
           <template v-slot:activator="{ on }">
@@ -179,6 +206,7 @@ module.exports = {
   data: function () {
     return {
       keypathTrigger: true,
+      isColorError: false
     }
   },
   props: {
@@ -211,6 +239,7 @@ module.exports = {
           b = currentLayerColor.rgba.b / 255;
           setLayerColor(this.selectedLayer, r, g, b, this.canvasid);
         }
+        this.isColorError = false
       }
     },
     trigger() {
@@ -227,7 +256,6 @@ module.exports = {
       if (opacity && opacity <= 100 && opacity >= 0) {
         if (this.selectedLayer.visible) {
           setLayerOpacity(this.selectedLayer, Number(opacity), this.canvasid);
-          // setLayerOpacity( this.selectedLayer.keypath + ".**", Number(opacity), this.canvasid, 'Stroke');
         }
       }
     },
@@ -272,6 +300,9 @@ module.exports = {
         setRotation(this.selectedLayer, Number(rotationDegree), this.canvasid)
       }
     },
+    clickColorError() {
+      this.isColorError = true
+    }
   }
 }
 </script>
@@ -318,5 +349,9 @@ p {
 .scroll-sect {
   overflow-y: scroll; 
   height: 92vh;
+}
+
+.error-text {
+  color: rgb(255, 94, 94);
 }
 </style>
