@@ -2,7 +2,7 @@
   <div class="sidebar scroll-sect" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
     <p class="title">Property</p>
 
-    <div class="mt-5" v-if="keypathTrigger">
+    <div class="mt-5">
       <p class="font-weight-bold">
         Keypath
         <!-- <v-chip
@@ -205,15 +205,13 @@ module.exports = {
   name: 'property',
   data: function () {
     return {
-      keypathTrigger: true,
       isColorError: false
     }
   },
   props: {
     selectedLayer: Object,
     canvasid: Number,
-    multiview: Boolean,
-    trigger: Boolean,
+    multiview: Boolean
   },
   computed: {
     swatchStyle() {
@@ -241,15 +239,7 @@ module.exports = {
         }
         this.isColorError = false
       }
-    },
-    trigger() {
-      if (this.multiview) {
-        this.keypathTrigger = false
-      }
-    },
-    selectedLayer() {
-      this.keypathTrigger = true
-    },
+    }
   },
   methods: {
     changeOpacity(opacity) {
