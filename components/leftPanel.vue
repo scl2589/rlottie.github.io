@@ -67,6 +67,9 @@
               </v-card>
             </v-dialog>
 
+            <i v-if="layers.allVisibility" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+            <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+            
             <div v-if="layers" class="d-flex justify-content-start align-items-center">
               <v-tooltip bottom nudge-top="10">
                 <template v-slot:activator="{ on, attrs }">
@@ -114,7 +117,7 @@
               </template>
               <template v-slot:append="{ item }">
                 <div v-if="topNodes.includes(item.keypath)" class="d-flex align-items-center">
-                  <button @click="changeVisibility(item)" class="eye-btn btn">
+                  <button @click.stop="changeVisibility(item)" class="eye-btn btn">
                     <i v-if="item.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
                     <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
                   </button>
