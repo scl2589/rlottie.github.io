@@ -3,7 +3,7 @@ class ThumbnailHandler {
     constructor(layers) {
         this.rlotties = [];
         layers.forEach(l => {
-            var rm = new RLottieModule("thumbnail-" + l.id);
+            var rm = new RLottieModule(l.id);
             this.makeThumbnail(rm, l.keypath, l.type);
             this.rlotties.push(rm);
         });
@@ -20,14 +20,21 @@ class ThumbnailHandler {
         setTimeout(() => {
             this.rlotties = [];
             layers.forEach(l => {
-                console.log(l.id + " " + l.name);
-                var rm = new RLottieModule("thumbnail-" + l.id);
+                var rm = new RLottieModule(l.id);
                 rm.lottieHandle.load(jsString);
                 console.log(l.keypath + " " + l.type);
                 this.makeThumbnail(rm, l.keypath, l.type);
                 this.rlotties.push(rm);
             });
         }, 500)
+    }
+
+    setModuleCanvas(layers) {
+        for(let i = 0; i < layers.length; i++) {
+            this.rlotties[i].canvasId = layers[i].id;
+            this.rlotties[i].canvas = document.getElementById(layers[i].id);
+            this.rlotties[i].context = this.rlotties[i].canvas.getContext("2d");
+        }
     }
 
     makeThumbnail(module, keypath, type) {

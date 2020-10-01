@@ -26,8 +26,9 @@ function setup() {
 setup();
 
 class LayerNode {
-    constructor(keypath, name, type, id) {
+    constructor(keypath, name, type, id, commonId) {
         this.id = id;
+        this.commonId = commonId;
         this.keypath = keypath;
         this.name = name;
         this.type = type;
@@ -143,13 +144,14 @@ class RLottieModule {
     }
 
     makeLayerTree() {
-        this.layerTree = new LayerNode("**", "root", "", layerNodeSize++);
+        this.layerTree = new LayerNode("**", "root", "", layerNodeSize++, 0);
         var fullLayers = [];
         var layer_vector = this.lottieHandle.allLayerTypeList();
         for(let i = 0; i < layer_vector.size(); i++) {
             fullLayers.push(layer_vector.get(i));
         }
         fullLayers.sort();
+        var commonId = 1;
         fullLayers.forEach(element => {
             var layer = element.split(".");
             var type = "Stroke";
@@ -167,7 +169,7 @@ class RLottieModule {
                     flag = true;
                 }
                 if(flag) continue;
-                let node = new LayerNode(keypath, layer[i], type, layerNodeSize++);
+                let node = new LayerNode(keypath, layer[i], type, layerNodeSize++, commonId++);
                 curr.child.push(node);
                 curr = node;
             }
@@ -270,6 +272,11 @@ class RLottieHandler {
         var rm = this.rlotties[idx];
         rm.lottieHandle.load(this.jsString);
         rm.curFrame = this.curFrame;
+        rm.makeLayerTree();
+        app.$root.layers = rm.layerTree.child;
+        setTimeout(() => {
+          thumbnailHandler.setModuleCanvas(rm.layerTree.child);
+        }, 100);
         if(!this.playing) this.play();
     }
 
