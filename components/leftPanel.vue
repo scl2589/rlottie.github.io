@@ -112,10 +112,10 @@
               <template v-slot:label="{ item }">
                 <div class="d-flex align-items-center">
                     <p v-if="topNodes.includes(item.keypath)" class="ml-3 mb-0 layer-name" :title="item.keypath">
-                      {{ item.keypath }}
+                      {{ item.name }}
                     </p>
                     <p v-else class="mb-0 layer-name child-layer-name" :title="item.keypath">
-                      {{ item.keypath }}
+                      {{ item.name }}
                     </p>
                 </div>
               </template>
@@ -188,7 +188,7 @@
               <template v-slot:label="{ item }">
                 <div class="d-flex align-items-center ml-3">
                     <p class="mb-0 layer-name" :title="item.keypath">
-                      {{ item.keypath }}
+                      {{ item.name }}
                     </p>
                 </div>
               </template>

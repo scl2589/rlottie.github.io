@@ -39,12 +39,10 @@
             <div class="modal-footer border-top-0">
               <button type="button" class="btn btn-secondary text-white" data-dismiss="modal">Close</button>
               <button type="button" class="btn accent text-white" :class="{ 'text-white': $vuetify.theme.dark }">Export</button>
-
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>

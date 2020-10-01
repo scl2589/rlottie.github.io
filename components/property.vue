@@ -1,8 +1,25 @@
 <template>
   <div class="sidebar scroll-sect" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
-    <p class="title">Property <span class="text-subtitle-1">(<span v-if="multiview">Canvas {{canvasid + 1}} - </span> {{selectedLayer.keypath}})</span></p>
+    <p class="title">Property</p>
 
-    <!-- <p><span v-if="multiview">Canvas {{canvasid + 1}} </span> {{selectedLayer.keypath}}</p> -->
+    <div class="mt-5" v-if="keypathTrigger">
+      <p class="font-weight-bold">
+        Keypath
+        <!-- <v-chip
+          v-if="multiview"
+          class="ml-2 font-weight-regular"
+          color="preview"
+          small
+        >
+          canvas {{canvasid + 1}}
+        </v-chip> -->
+      </p>
+      <p class=" mt-1">
+        {{selectedLayer.keypath}} 
+      </p>
+      <hr v-if="$vuetify.theme.dark" color="white">
+      <hr v-else color="gray">
+    </div>
 
     <!-- color controller -->
     <div class="property" v-if="selectedLayer.child.length === 0">
@@ -161,12 +178,14 @@ module.exports = {
   name: 'property',
   data: function () {
     return {
+      keypathTrigger: true,
     }
   },
   props: {
     selectedLayer: Object,
     canvasid: Number,
     multiview: Boolean,
+    trigger: Boolean,
   },
   computed: {
     swatchStyle() {
@@ -193,6 +212,14 @@ module.exports = {
           setLayerColor(this.selectedLayer, r, g, b, this.canvasid);
         }
       }
+    },
+    trigger() {
+      if (this.multiview) {
+        this.keypathTrigger = false
+      }
+    },
+    selectedLayer() {
+      this.keypathTrigger = true
     },
   },
   methods: {
