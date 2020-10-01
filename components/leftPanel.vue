@@ -31,8 +31,8 @@
       <!-- layers tab -->
       <v-tab-item>
         <v-card color="sidebar" flat>
-          <div class="d-flex justify-content-between align-items-center container">
-            <p class="title layers-title ">Layers</p>
+          <div class="d-flex justify-content-between align-items-center container pb-2">
+            <v-btn class="btn" color="accent" depressed rounded @click="clickReset(canvasid)">Reset</v-btn>
             <!-- <div v-if="layers" class="d-flex justify-content-start align-items-center">
               <v-tooltip bottom nudge-top="10">
                 <template v-slot:activator="{ on, attrs }">
@@ -63,14 +63,16 @@
               transition
             >
               <template v-slot:prepend="{ item }" >
-                <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3">
-                  <!-- <img class="img-thumbnail layer-thumbnail ml-1" src="../static/logo.png" :alt="item.keypath"> -->
+                <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3 ml-1">
                   <div class="thumbnailbox"><canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas></div>
                 </div>
               </template>
               <template v-slot:label="{ item }">
                 <div class="d-flex align-items-center">
-                    <p class="ml-3 mb-0 layer-name" :title="item.keypath">
+                    <p v-if="topNodes.includes(item.keypath)" class="ml-3 mb-0 layer-name" :title="item.keypath">
+                      {{ item.keypath }}
+                    </p>
+                    <p v-else class="mb-0 layer-name child-node-names" :title="item.keypath">
                       {{ item.keypath }}
                     </p>
                 </div>
@@ -123,16 +125,11 @@
               @update:active="clickLayer(selectedLayer)"
               item-children="child"
               item-key="id"
+              item-text="keypath"
               :search="searchKeyword"
               v-show="searchKeyword"
               transition
             >
-              <template v-slot:prepend="{ item }" >
-                <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3">
-                  <!-- <img class="img-thumbnail layer-thumbnail ml-1" src="../static/logo.png" :alt="item.keypath"> -->
-                  <canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas>
-                </div>
-              </template>
               <template v-slot:label="{ item }">
                 <div class="d-flex align-items-center">
                     <p class="ml-3 mb-0 layer-name" :title="item.keypath">
@@ -322,4 +319,5 @@ module.exports = {
     height: 56vh;
     overflow-y: scroll; 
   }
+
 </style>
