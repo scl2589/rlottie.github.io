@@ -253,16 +253,79 @@ class RLottieHandler {
             rm.frameCount = rm.lottieHandle.frames();
             rm.curFrame = 0;
             rm.makeLayerTree();
+            rm.canvasStyle = {
+                backgroundColor: {
+                    alpha: 1,
+                    hex: "#FFFFFF",
+                    hexa: "#FFFFFF00",
+                    hsla: {
+                        h: 1,
+                        s: 0,
+                        l: 0.7450980392156863,
+                        a: 0,
+                    },
+                    hsva: {
+                        h: 1,
+                        s: 0,
+                        v: 0,
+                        a: 0.7450980392156863,
+                    },
+                    hue: 0,
+                    rgba: {
+                        r: 190,
+                        g: 190,
+                        b: 190,
+                        a: 1
+                    }
+                },
+                borderColor: {
+                    alpha: 0,
+                    hex: "#BEBEBE",
+                    hexa: "#BEBEBEFF",
+                    hsla: {
+                        h: 0,
+                        s: 0,
+                        l: 0,
+                        a: 0,
+                    },
+                    hsva: {
+                        h: 0,
+                        s: 0,
+                        v: 0,
+                        a: 0,
+                    },
+                    hue: 0,
+                    rgba: {
+                        r: 0,
+                        g: 0,
+                        b: 0,
+                        a: 0
+                    }
+                },
+                borderWidth: '1',
+                width: "",
+                height: "",
+                borderShape: 0
+            };
+            rm.canvas.style.backgroundColor = rm.canvasStyle.backgroundColor.hex
+            rm.canvas.style.borderColor = rm.canvasStyle.borderColor.hex
+            rm.canvas.style.borderWidth = rm.canvasStyle.borderWidth + "px"
+            rm.canvas.style.borderRadius = 0
+            this.relayoutCanvas()
         });
 
         this.jsString = jsString;
         this.slider.max = this.rlotties[0].frameCount;
         this.slider.value = 0;
         this.frameCount = String(this.rlotties[0].frameCount);
-
+        
         app.$root.layers = this.rlotties[0].layerTree.child;
         app.$root.selectedCanvas = this.rlotties[0].canvas;
         app.$root.selectedCanvasStyle = this.rlotties[0].canvasStyle;
+        app.$root.selectedCanvasId = 0;
+        rlottieHandler.mainCanvasId = 0;
+        app.$root.selectedLayerTrigger = !app.$root.selectedLayerTrigger;
+        app.$root.selectedLayer = null;
         thumbnailHandler.reload(this.rlotties[0].layerTree.child, this.jsString);
 
         if (!this.playing) this.play();
@@ -272,8 +335,6 @@ class RLottieHandler {
         var rm = this.rlotties[idx];
         rm.lottieHandle.load(this.jsString);
         rm.curFrame = this.curFrame;
-        var beforeWidth = rm.canvasStyle.width
-        var beforeHeight = rm.canvasStyle.height
         rm.canvasStyle = {
             backgroundColor: {
                 alpha: 1,
@@ -454,8 +515,8 @@ function addListener() {
 function fileSelectionChanged() {
     var input = document.getElementById("fileSelector");
     var contentName = document.getElementById('contentName')
-    contentName.innerText = input.files[0].name.slice(0, -5)
-    contentName.title = input.files[0].name.slice(0, -5)
+    contentName.innerText = input.files[0].name
+    contentName.title = input.files[0].name
     handleFiles(input.files);
 }
 
