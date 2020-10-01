@@ -3,7 +3,7 @@
     <p class="title">Property</p>
 
     <div class="mt-5">
-      <p class="font-weight-bold">
+      <p class="font-weight-medium">
         Keypath
         <!-- <v-chip
           v-if="multiview"
@@ -14,7 +14,7 @@
           canvas {{canvasid + 1}}
         </v-chip> -->
       </p>
-      <p class=" mt-1">
+      <p class="ml-1 mt-2">
         {{selectedLayer.keypath}} 
       </p>
       <hr v-if="$vuetify.theme.dark" color="white">
