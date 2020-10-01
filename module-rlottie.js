@@ -438,6 +438,7 @@ class RLottieHandler {
         var size = width < height ? width : height;
         if(typeof (app.$root.isMultiView) !== "undefined") {
             maxSize = app.$root.isMultiView ?  width : height;
+
             if(app.$root.isMultiView) size /= 2;
         }
         size = size < maxSize ? size : maxSize;
