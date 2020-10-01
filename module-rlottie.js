@@ -74,33 +74,33 @@ class RLottieModule {
         this.canvas = document.getElementById(canvasId);
         this.canvasStyle = {
             backgroundColor: {
-                alpha: 0,
+                alpha: 1,
                 hex: "#FFFFFF",
                 hexa: "#FFFFFF00",
                 hsla: {
-                    h: 0,
+                    h: 1,
                     s: 0,
-                    l: 1,
+                    l: 0.7450980392156863,
                     a: 0,
                 },
                 hsva: {
-                    h: 0,
+                    h: 1,
                     s: 0,
                     v: 0,
-                    a: 1,
+                    a: 0.7450980392156863,
                 },
                 hue: 0,
                 rgba: {
-                    r: 255,
-                    g: 255,
-                    b: 255,
-                    a: 0
+                    r: 190,
+                    g: 190,
+                    b: 190,
+                    a: 1
                 }
             },
             borderColor: {
                 alpha: 0,
-                hex: "#000000",
-                hexa: "#00000000",
+                hex: "#BEBEBE",
+                hexa: "#BEBEBEFF",
                 hsla: {
                     h: 0,
                     s: 0,
@@ -174,6 +174,7 @@ class RLottieModule {
                 curr = node;
             }
         })
+        this.layerTree.child.allVisibility = true
     }
 }
 

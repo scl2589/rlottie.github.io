@@ -31,20 +31,20 @@
       <!-- layers tab -->
       <v-tab-item>
         <v-card color="sidebar" flat>
-          <div class="d-flex justify-content-between align-items-center container">
-            <p class="title layers-title ">Layers</p>
-            <!-- <div v-if="layers" class="d-flex justify-content-start align-items-center">
+          <div class="d-flex justify-content-between align-items-center container pb-2">
+            <v-btn class="btn" color="accent" depressed rounded @click="clickReset(canvasid)">Reset</v-btn>
+            <div v-if="layers" class="d-flex justify-content-start align-items-center">
               <v-tooltip bottom nudge-top="10">
                 <template v-slot:activator="{ on, attrs }">
                   <button @click="changeAllVisibility" class="eye-btn btn" v-bind="attrs" v-on="on">
-                    <i v-if="allLayersVisible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+                    <i v-if="layers.allVisibility" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
                     <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
                   </button>
                 </template>
-                <span v-if="allLayersVisible">Make all layers invisible</span>
+                <span v-if="layers.allVisibility">Make all layers invisible</span>
                 <span v-else>Make all layers visible</span>
               </v-tooltip>
-            </div> -->
+            </div>
           </div>
           <!-- layer list -->
           <div class="layer-list container py-3 px-0" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
@@ -69,7 +69,10 @@
               </template>
               <template v-slot:label="{ item }">
                 <div class="d-flex align-items-center">
-                    <p class="ml-3 mb-0 layer-name" :title="item.keypath">
+                    <p v-if="topNodes.includes(item.keypath)" class="ml-3 mb-0 layer-name" :title="item.keypath">
+                      {{ item.keypath }}
+                    </p>
+                    <p v-else class="mb-0 layer-name child-node-names" :title="item.keypath">
                       {{ item.keypath }}
                     </p>
                 </div>
@@ -122,16 +125,11 @@
               @update:active="clickLayer(selectedLayer)"
               item-children="child"
               item-key="id"
+              item-text="keypath"
               :search="searchKeyword"
               v-show="searchKeyword"
               transition
             >
-              <template v-slot:prepend="{ item }" >
-                <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3">
-                  <!-- <img class="img-thumbnail layer-thumbnail ml-1" src="../static/logo.png" :alt="item.keypath"> -->
-                  <canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas>
-                </div>
-              </template>
               <template v-slot:label="{ item }">
                 <div class="d-flex align-items-center">
                     <p class="ml-3 mb-0 layer-name" :title="item.keypath">
@@ -209,27 +207,29 @@ module.exports = {
     changeVisibility(layer) {
       layer.visible = !layer.visible
       if (layer.visible) {
-        setLayerOpacity(layer, Number(layer.opacity), this.canvasid)
+        setLayerOpacity(layer, Number(layer.beforeOpacity), this.canvasid)
       } else {
         setLayerOpacity(layer, 0, this.canvasid)
       }
-
     },
     
-    // changeAllVisibility() {
-    //   this.allLayersVisible = !this.allLayersVisible
-    //   if (this.allLayersVisible) {
-    //     this.layers.forEach(layer => {
-    //       layer.visible = true
-    //       setLayerOpacity(this.selectedLayer, Number(layer.opacity), this.canvasid)
-    //     });
-    //   } else {
-    //     this.layers.forEach(layer => {
-    //       layer.visible = false
-    //       setLayerOpacity(this.selectedLayer, 0, this.canvasid)
-    //     });
-    //   }
-    // },
+    changeAllVisibility() {
+      this.layers.allVisibility = !this.layers.allVisibility
+      if (this.layers.allVisibility) {
+        this.layers.forEach(layer => {
+          layer.visible = true
+          setLayerOpacity(layer, Number(layer.beforeOpacity), this.canvasid)
+        });
+      } else {
+        this.layers.forEach(layer => {
+          if (!layer.visible) {
+            layer.opacity = layer.beforeOpacity
+          }
+          layer.visible = false
+          setLayerOpacity(layer, 0, this.canvasid)
+        });
+      }
+    },
     
     clickReset(index) {
       rlottieHandler.reset(index)
@@ -321,4 +321,5 @@ module.exports = {
     height: 56vh;
     overflow-y: scroll; 
   }
+
 </style>
