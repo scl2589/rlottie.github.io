@@ -67,7 +67,7 @@
               <template v-slot:prepend="{ item }" >
                 <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3">
                   <!-- <img class="img-thumbnail layer-thumbnail ml-1" src="../static/logo.png" :alt="item.keypath"> -->
-                  <canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas>
+                  <div class="thumbnailbox"><canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas></div>
                 </div>
               </template>
               <template v-slot:label="{ item }">
@@ -308,5 +308,12 @@ module.exports = {
     display: -webkit-box;
     -webkit-line-clamp: 2; /* number of lines to show */
     -webkit-box-orient: vertical;
+  }
+
+  .thumbnailbox {
+    width: 60px;
+    height: 60px;
+    background-color: white;
+    border-radius: 10px;
   }
 </style>

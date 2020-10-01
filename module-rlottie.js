@@ -462,10 +462,10 @@ function setPlaySpeed(speed) {
 }
 
 function propertiesCascading(node, properties) {
+    properties.forEach(property => {
+        node[property.name] = property.value;
+    });
     for(let i = 0; i < node.child.length; i++) {
-        properties.forEach(property => {
-            node.child[i][property.name] = property.value;
-        });
         propertiesCascading(node.child[i], properties);
     }
 }
