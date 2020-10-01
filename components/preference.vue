@@ -37,47 +37,6 @@
         oninput="onResizeSliderDrag(this.value)">
     </div> -->
 
-    <!-- Border Options -->
-    <div class="preference" v-if="canvasstyle">
-      <p class="preference-title mb-0">Border</p>
-      <div class="row d-flex align-items-center no-gutters">
-        <div class="text-left col-6 pr-0">
-          <v-menu 
-            offset-y 
-            :close-on-content-click="false"
-            >
-          <template v-slot:activator="{ on }">
-            <v-btn
-              :color="canvasstyle.borderColor.hex"
-              dark
-              v-on="on"
-              class="mr-2"
-            >
-            </v-btn>
-            <span>{{ canvasstyle.borderColor.hex }}</span>
-          </template>
-          <v-color-picker
-            light
-            v-model="canvasstyle.borderColor"
-            show-swatches
-            class="mx-auto"
-          ></v-color-picker>
-          </v-menu>
-        </div>
-        <div class="col-6 pl-1">
-          <v-text-field
-            light
-            solo
-            suffix="px"
-            v-model="canvasstyle.borderWidth"
-            class="bg-white"
-            hide-details
-            @change="changeBorderWidth"
-          ></v-text-field>
-        </div>
-      </div>
-    </div>
-
 
     <!-- Dimension controller -->
     <div class="preference" v-if="canvasstyle">
@@ -117,6 +76,48 @@
           <v-icon class="fas fa-circle text-dark"></v-icon>
         </v-btn>
       </v-btn-toggle>
+    </div>
+
+
+    <!-- Border Options -->
+    <div class="preference" v-if="canvasstyle">
+      <p class="preference-title mb-0">Border</p>
+      <div class="row d-flex align-items-center no-gutters">
+        <div class="text-left col-6 pr-0">
+          <v-menu 
+            offset-y 
+            :close-on-content-click="false"
+            >
+          <template v-slot:activator="{ on }">
+            <v-btn
+              :color="canvasstyle.borderColor.hex"
+              dark
+              v-on="on"
+              class="mr-2"
+            >
+            </v-btn>
+            <span>{{ canvasstyle.borderColor.hex }}</span>
+          </template>
+          <v-color-picker
+            light
+            v-model="canvasstyle.borderColor"
+            show-swatches
+            class="mx-auto"
+          ></v-color-picker>
+          </v-menu>
+        </div>
+        <div class="col-6 pl-1">
+          <v-text-field
+            light
+            solo
+            suffix="px"
+            v-model="canvasstyle.borderWidth"
+            class="bg-white"
+            hide-details
+            @change="changeBorderWidth"
+          ></v-text-field>
+        </div>
+      </div>
     </div>
 
   </div>
