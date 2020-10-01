@@ -34,6 +34,7 @@ class LayerNode {
         this.visible = true;
         this.selected = false;
         this.opacity = 100;
+        this.beforeOpacity = 100;
         this.xPos = 0;
         this.yPos = 0;
         this.scaleWidth = 100;
@@ -425,6 +426,7 @@ function setLayerColor(node, r, g, b, canvasid) {
 
 function setLayerOpacity(node, opacity, canvasid) {
     var keypath = node.keypath + ".**";
+    node.beforeOpacity = node.opacity;
     if(node.type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillOpacity(keypath, opacity);
     else if(node.type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(keypath, opacity);
     propertiesCascading(node, [{ name: "opacity", value: opacity }]);
