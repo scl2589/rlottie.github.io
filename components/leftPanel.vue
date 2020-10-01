@@ -65,7 +65,7 @@
               <template v-slot:prepend="{ item }" >
                 <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3">
                   <!-- <img class="img-thumbnail layer-thumbnail ml-1" src="../static/logo.png" :alt="item.keypath"> -->
-                  <canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas>
+                  <div class="thumbnailbox"><canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas></div>
                 </div>
               </template>
               <template v-slot:label="{ item }">
@@ -306,6 +306,13 @@ module.exports = {
     -webkit-box-orient: vertical;
   }
 
+  .thumbnailbox {
+    width: 60px;
+    height: 60px;
+    background-color: white;
+    border-radius: 10px;
+  }
+  
   .layer-list {
     height: 64vh;
     overflow-y: scroll; 
@@ -315,6 +322,4 @@ module.exports = {
     height: 56vh;
     overflow-y: scroll; 
   }
-
-
 </style>
