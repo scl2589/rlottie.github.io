@@ -2,14 +2,7 @@
   <div class="sidebar left-sidebar">
     <!-- preview -->
     <div class="preview container py-3 d-flex align-items-center" @click="clickMain">
-      <div class="row no-gutters">
-        <div class="col-3 d-flex justify-content-center align-items-center">
-          <img class="img-thumbnail preview-thumbnail" src="../static/logo.png" alt="preview">
-        </div>
-        <div class="col-9 d-flex align-items-center">
-          <h5 class="ml-4 name mb-0 text-white" id="contentName" title="FileName">FileName</h5>
-        </div>
-      </div>
+      <h5 class="ml-2 name mb-0 text-white" id="contentName" title="FileName">FileName</h5>
     </div>
 
     <v-tabs
@@ -19,10 +12,10 @@
       v-model="tab"
     >
       <v-tabs-slider color="preview"></v-tabs-slider>
-      <v-tab>
+      <v-tab @click="changeTab">
         Layers
       </v-tab>
-      <v-tab>
+      <v-tab @click="changeTab">
         Search
       </v-tab>
     </v-tabs>
@@ -32,7 +25,7 @@
       <v-tab-item>
         <v-card color="sidebar" flat>
           <div class="d-flex justify-content-between align-items-center container pb-2">
-
+            <!-- reset button -->
             <v-dialog
               v-model="resetDialog"
               max-width="400"
@@ -73,7 +66,6 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
-
 
             <div v-if="layers" class="d-flex justify-content-start align-items-center">
               <v-tooltip bottom nudge-top="10">
@@ -291,7 +283,11 @@ module.exports = {
     clickReset(index) {
       rlottieHandler.reset(index)
       this.resetDialog = false
-    }
+    },
+
+    changeTab() {
+      this.selectedLayer = []
+    },
   },
 }
 </script>

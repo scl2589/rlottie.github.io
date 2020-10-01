@@ -21,28 +21,49 @@
         <label for="fileSelector"><span class="d-inline-block pt-1">New Lottie</span></label>
         <input class="upload-hidden" type="file" id="fileSelector" accept=".json" placeholder="New Lottie">
       </div>
-      <button class="btn accent mx-2" :class="{ 'text-white': $vuetify.theme.dark }" data-toggle="modal" data-target="#exportModal">Export <i class="fas fa-download ml-2"></i></button>
 
-      <!-- Modal -->
-      <div class="modal fade text-dark" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header border-bottom-0">
-              <h5 class="modal-title" id="exportModalLabel">Modal title</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+      <v-dialog
+        v-model="exportDialog"
+        max-width="500"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <button
+            class="btn accent mx-2" 
+            :class="{ 'text-white': $vuetify.theme.dark }" 
+            depressed 
+            v-bind="attrs"
+            v-on="on"
+          >
+            Export <i class="fas fa-download ml-2"></i>
+          </button>
+        </template>
+        <v-card>
+          <v-card-title class="headline">
+            Export file to GIF
+          </v-card-title>
+          <v-card-text>
+            <div class="d-flex align-items-center">
+              <v-text-field
+                solo-reverse
+                color="text"
+                placeholder="File name"
+              ></v-text-field>
+              <v-btn class="ml-4" color="accent">Download</v-btn>
             </div>
-            <div class="modal-body">
-              modal modal
-            </div>
-            <div class="modal-footer border-top-0">
-              <button type="button" class="btn btn-secondary text-white" data-dismiss="modal">Close</button>
-              <button type="button" class="btn accent text-white" :class="{ 'text-white': $vuetify.theme.dark }">Export</button>
-            </div>
-          </div>
-        </div>
-      </div>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="text"
+              text
+              @click="exportDialog = false"
+            >
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      
     </div>
   </div>
 </template>
@@ -53,7 +74,8 @@ module.exports = {
   data: function () {
     return {
       mode: 'Light Mode',
-      viewCount: 'Multi View'
+      viewCount: 'Multi View',
+      exportDialog: false,
     }
   },
   methods: {
