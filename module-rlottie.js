@@ -296,10 +296,10 @@ class RLottieHandler {
     relayoutCanvas() {
         var width = document.getElementById("player").clientWidth;
         var height = document.getElementById("player").clientHeight;
-        var maxSize = 350;
+        var maxSize = 300;
         var size = width < height ? width : height;
         if(typeof (app.$root.isMultiView) !== "undefined") {
-            maxSize = app.$root.isMultiView ? 350 : 600;
+            maxSize = app.$root.isMultiView ? 300 : 500;
             if(app.$root.isMultiView) size /= 2;
         }
         size = size < maxSize ? size - 100 : maxSize - 100;

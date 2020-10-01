@@ -1,7 +1,9 @@
 <template>
   <div class="sidebar scroll-sect" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
-    <p class="title">Property</p>
-    <!-- <p>{{selectedLayer}}</p> -->
+    <p class="title">Property <span class="text-subtitle-1">(<span v-if="multiview">Canvas {{canvasid + 1}} - </span> {{selectedLayer.keypath}})</span></p>
+
+    <!-- <p><span v-if="multiview">Canvas {{canvasid + 1}} </span> {{selectedLayer.keypath}}</p> -->
+
     <!-- color controller -->
     <div class="property" v-if="selectedLayer.child.length === 0">
       <p class="property-title mb-2">Color</p>
@@ -9,7 +11,7 @@
         <v-menu
           offset-y 
           :close-on-content-click="false"
-          >
+        >
           <template v-slot:activator="{ on }">
             <v-btn
               :color="selectedLayer.color.hex"
@@ -163,7 +165,8 @@ module.exports = {
   },
   props: {
     selectedLayer: Object,
-    canvasid: Number
+    canvasid: Number,
+    multiview: Boolean,
   },
   computed: {
     swatchStyle() {

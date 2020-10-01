@@ -32,7 +32,49 @@
       <v-tab-item>
         <v-card color="sidebar" flat>
           <div class="d-flex justify-content-between align-items-center container pb-2">
-            <v-btn class="btn" color="accent" depressed rounded @click="clickReset(canvasid)">Reset</v-btn>
+
+            <v-dialog
+              v-model="resetDialog"
+              max-width="400"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  class="btn" 
+                  color="preview" 
+                  depressed 
+                  rounded 
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                Reset
+                </v-btn>
+              </template>
+              <v-card>
+                <v-card-title class="headline">
+                  Reset changes?
+                </v-card-title>
+                <v-card-text>This will reset all the changes that you made to this file.</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="text"
+                    text
+                    @click="resetDialog = false"
+                  >
+                    Cancel
+                  </v-btn>
+                  <v-btn
+                    color="preview"
+                    text
+                    @click="clickReset(canvasid)"
+                  >
+                    Reset
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+
+
             <div v-if="layers" class="d-flex justify-content-start align-items-center">
               <v-tooltip bottom nudge-top="10">
                 <template v-slot:activator="{ on, attrs }">
@@ -62,8 +104,8 @@
               item-key="id"
               transition
             >
-              <template v-slot:prepend="{ item }" >
-                <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3 ml-1">
+              <template v-slot:prepend="{ item }">
+                <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3 ml-3">
                   <div class="thumbnailbox"><canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas></div>
                 </div>
               </template>
@@ -72,7 +114,7 @@
                     <p v-if="topNodes.includes(item.keypath)" class="ml-3 mb-0 layer-name" :title="item.keypath">
                       {{ item.keypath }}
                     </p>
-                    <p v-else class="mb-0 layer-name child-node-names" :title="item.keypath">
+                    <p v-else class="mb-0 layer-name child-layer-name" :title="item.keypath">
                       {{ item.keypath }}
                     </p>
                 </div>
@@ -94,12 +136,25 @@
       <v-tab-item>
         <v-card color="sidebar" flat>
           <div class="search-bar container">
-            <p class="title">Search layer</p>
+            <div class="d-flex align-items-center mb-3">
+              <p class="title m-0">Search layer</p>
+              <v-tooltip right>
+                <template v-slot:activator="{ on, attrs }">
+                  <i
+                    class="far fa-question-circle fa-sm ml-2"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                  </i>
+                </template>
+                <span>Keypath should be linked with periods</span>
+              </v-tooltip>
+            </div>
             <div class="row no-gutters">
               <!-- search bar -->
               <v-text-field
                 v-model="searchKeyword"
-                label="Enter keypath"
+                placeholder="ex) parentLayer.childLayer"
                 prepend-icon="mdi-magnify"
                 solo
                 rounded
@@ -131,8 +186,8 @@
               transition
             >
               <template v-slot:label="{ item }">
-                <div class="d-flex align-items-center">
-                    <p class="ml-3 mb-0 layer-name" :title="item.keypath">
+                <div class="d-flex align-items-center ml-3">
+                    <p class="mb-0 layer-name" :title="item.keypath">
                       {{ item.keypath }}
                     </p>
                 </div>
@@ -168,6 +223,7 @@ module.exports = {
       allLayersVisible: true,
       selectedLayer: [],
       searchKeyword: null,
+      resetDialog: false,
     }
   },
 
@@ -233,6 +289,7 @@ module.exports = {
     
     clickReset(index) {
       rlottieHandler.reset(index)
+      this.resetDialog = false
     }
   },
 }
@@ -320,6 +377,10 @@ module.exports = {
   .search-layer-list {
     height: 56vh;
     overflow-y: scroll; 
+  }
+
+  .v-treeview-node__content {
+    margin: 0;
   }
 
 </style>
