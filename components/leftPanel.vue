@@ -31,7 +31,6 @@
       <!-- layers tab -->
       <v-tab-item>
         <v-card color="sidebar" flat>
-          <!-- layers -->
           <div class="d-flex justify-content-between align-items-center container">
             <p class="title layers-title ">Layers</p>
             <!-- <div v-if="layers" class="d-flex justify-content-start align-items-center">
@@ -47,22 +46,21 @@
               </v-tooltip>
             </div> -->
           </div>
-
-
           <!-- layer list -->
           <div class="layer-list container py-3 px-0" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
             <v-treeview 
               :items="layers"
               activatable
-              color="accent"
+              color="text"
               hoverable
               return-object
               expand-icon="mdi-chevron-down"
               :active.sync="selectedLayer"
+              :active-class="$vuetify.theme.dark ? 'selected-layer-dark' : 'selected-layer-light'"
               @update:active="clickLayer(selectedLayer)"
               item-children="child"
               item-key="id"
-              item-text="keypath"
+              transition
             >
               <template v-slot:prepend="{ item }" >
                 <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3">
@@ -86,23 +84,17 @@
                 </div>
               </template>
             </v-treeview>
-
-
           </div>
-
-
         </v-card>
       </v-tab-item>
       
       <!-- search tab -->
       <v-tab-item>
         <v-card color="sidebar" flat>
-          <!-- search bar -->
           <div class="search-bar container">
             <p class="title">Search layer</p>
             <div class="row no-gutters">
-              <!-- <button @click="getSearchResult" class="btn col-2"><i class="fas fa-search fa-lg" :class="{ 'text-white': $vuetify.theme.dark }"></i></button>
-              <input v-model="searchKeyword" @keypress.enter="getSearchResult" type="text" class="searchInput rounded-pill col-10 px-3 bg-white"> -->
+              <!-- search bar -->
               <v-text-field
                 v-model="searchKeyword"
                 label="Enter keypath"
@@ -116,46 +108,47 @@
               ></v-text-field>
             </div>
           </div>
-          <div class="search-layer-list container py-3 px-0" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
+          <!-- search result -->
+          <div class="search-layer-list container mt-4 px-0" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
             <v-treeview 
               :items="layers"
               activatable
-              color="accent"
               hoverable
               return-object
               open-all
+              color="text"
               expand-icon="mdi-chevron-down"
               :active.sync="selectedLayer"
+              :active-class="$vuetify.theme.dark ? 'selected-layer-dark' : 'selected-layer-light'"
               @update:active="clickLayer(selectedLayer)"
               item-children="child"
               item-key="id"
-              item-text="keypath"
               :search="searchKeyword"
               v-show="searchKeyword"
+              transition
             >
               <template v-slot:prepend="{ item }" >
-                  <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3">
-                    <!-- <img class="img-thumbnail layer-thumbnail ml-1" src="../static/logo.png" :alt="item.keypath"> -->
-                    <canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas>
-                  </div>
-                </template>
-                <template v-slot:label="{ item }">
-                  <div class="d-flex align-items-center">
-                      <p class="ml-3 mb-0 layer-name" :title="item.keypath">
-                        {{ item.keypath }}
-                      </p>
-                  </div>
-                </template>
-                <template v-slot:append="{ item }">
-                  <div v-if="topNodes.includes(item.keypath)" class="d-flex align-items-center">
-                    <button @click="changeVisibility(item)" class="eye-btn btn">
-                      <i v-if="item.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
-                      <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
-                    </button>
-                  </div>
-                </template>
-              </v-treeview>
-
+                <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3">
+                  <!-- <img class="img-thumbnail layer-thumbnail ml-1" src="../static/logo.png" :alt="item.keypath"> -->
+                  <canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas>
+                </div>
+              </template>
+              <template v-slot:label="{ item }">
+                <div class="d-flex align-items-center">
+                    <p class="ml-3 mb-0 layer-name" :title="item.keypath">
+                      {{ item.keypath }}
+                    </p>
+                </div>
+              </template>
+              <template v-slot:append="{ item }">
+                <div v-if="topNodes.includes(item.keypath)" class="d-flex align-items-center">
+                  <button @click="changeVisibility(item)" class="eye-btn btn">
+                    <i v-if="item.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+                    <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+                  </button>
+                </div>
+              </template>
+            </v-treeview>
           </div>
         </v-card>
       </v-tab-item>
@@ -260,10 +253,13 @@ module.exports = {
     outline: none;
   }
 
-  /* .selected-layer {
-    color: white;
-    background-color: #A8DADC;
-  } */
+  .selected-layer-light {
+    background-color: rgba(168, 218, 220, 0.9);
+  }
+
+  .selected-layer-dark {
+    background-color: rgba(9, 142, 143, 0.7);
+  }
 
   .layer-info:hover {
     cursor: pointer;
@@ -302,16 +298,6 @@ module.exports = {
     margin-bottom: 1vh;
   }
 
-  .layer-list {
-    height: 64vh;
-    overflow-y: scroll; 
-  }
-
-  .search-layer-list {
-    height: 58vh;
-    overflow-y: scroll; 
-  }
-
   .name, .layer-name {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -319,4 +305,16 @@ module.exports = {
     -webkit-line-clamp: 2; /* number of lines to show */
     -webkit-box-orient: vertical;
   }
+
+  .layer-list {
+    height: 64vh;
+    overflow-y: scroll; 
+  }
+
+  .search-layer-list {
+    height: 56vh;
+    overflow-y: scroll; 
+  }
+
+
 </style>
