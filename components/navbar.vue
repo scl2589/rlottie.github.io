@@ -10,7 +10,7 @@
     <div class="d-flex">
 
       <!-- single/multi view -->
-      <button class="btn mx-2 view-count" @click="changeViewCount">{{ viewCount }}</button>
+      <button class="btn mx-2 view-count preview text-white"  @click="changeViewCount">{{ viewCount }}</button>
 
       <!-- light/dark mode -->
       <button v-if="$vuetify.theme.dark" class="btn mx-2 mode" @click="changeMode"><v-icon class="text-dark">mdi-white-balance-sunny</v-icon></button>
@@ -116,10 +116,10 @@ module.exports = {
     font-size: inherit;
     line-height: normal;
     vertical-align: middle;
-    background-color: #fdfdfd;
+    background-color: #ECEFF1;
     cursor: pointer;
-    border: 1px solid #fdfdfd;
-    border-bottom-color: #fdfdfd;
+    border: 1px solid #ECEFF1;
+    border-bottom-color: #ECEFF1;
     border-radius: .25em;
     margin-bottom: 0;
     height: 48px;
