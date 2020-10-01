@@ -363,6 +363,9 @@
               this.selectedCanvasStyle = rlottieHandler.rlotties[id].canvasStyle
               this.layers = rlottieHandler.rlotties[id].layerTree.child
               this.selectedLayerTrigger = !this.selectedLayerTrigger
+              setTimeout(() => {
+                thumbnailHandler.setModuleCanvas(rlottieHandler.rlotties[id].layerTree.child);
+              }, 100);
             };
           }
         },
