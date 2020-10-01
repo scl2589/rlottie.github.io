@@ -2,14 +2,7 @@
   <div class="sidebar left-sidebar">
     <!-- preview -->
     <div class="preview container py-3 d-flex align-items-center" @click="clickMain">
-      <div class="row no-gutters">
-        <div class="col-3 d-flex justify-content-center align-items-center">
-          <img class="img-thumbnail preview-thumbnail" src="../static/logo.png" alt="preview">
-        </div>
-        <div class="col-9 d-flex align-items-center">
-          <h5 class="ml-4 name mb-0 text-white" id="contentName" title="FileName">FileName</h5>
-        </div>
-      </div>
+      <h5 class="ml-2 name mb-0 text-white" id="contentName" title="FileName">FileName</h5>
     </div>
 
     <v-tabs

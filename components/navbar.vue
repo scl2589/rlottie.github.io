@@ -48,7 +48,7 @@
                 color="text"
                 placeholder="File name"
               ></v-text-field>
-              <v-btn class="ml-2" color="accent">Download</v-btn>
+              <v-btn class="ml-4" color="accent">Download</v-btn>
             </div>
           </v-card-text>
           <v-card-actions>
