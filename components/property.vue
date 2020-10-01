@@ -226,7 +226,6 @@ module.exports = {
       if (opacity && opacity <= 100 && opacity >= 0) {
         if (this.selectedLayer.visible) {
           setLayerOpacity(this.selectedLayer, Number(opacity), this.canvasid);
-          // setLayerOpacity( this.selectedLayer.keypath + ".**", Number(opacity), this.canvasid, 'Stroke');
         }
       }
     },

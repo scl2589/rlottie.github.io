@@ -506,13 +506,13 @@ function setLayerOpacity(node, opacity, canvasid) {
 function setPosition(node, x, y, canvasid) {
     var keypath = node.keypath + ".**";
     rlottieHandler.rlotties[canvasid].lottieHandle.setPosition(keypath, x, y);
-    propertiesCascading(node, [{ name: "xPos", value: x }, { name: "yPos", valye: y }]);
+    propertiesCascading(node, [{ name: "xPos", value: x }, { name: "yPos", value: y }]);
 }
 
 function setScale(node, width, height, canvasid) {
     var keypath = node.keypath + ".**";
     rlottieHandler.rlotties[canvasid].lottieHandle.setScale(keypath, width, height);
-    propertiesCascading(node, [{ name: "scaleWidth", value: width }, { name: "scaleHeight", valye: height }]);
+    propertiesCascading(node, [{ name: "scaleWidth", value: width }, { name: "scaleHeight", value: height }]);
 }
 
 function setRotation(node, degree, canvasid) {
