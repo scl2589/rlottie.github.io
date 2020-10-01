@@ -56,22 +56,26 @@
           width: 100px;
           height: 100px;
           border: 1px solid #BEBEBE;
-          transition: width 0.5s, height 0.5s;
-          /* transition: all 1s; */
+          transition: width 0.7s, height 0.7s, border-width 0.7s, border-radius 0.7s; 
+          z-index: 1;
         }
 
         .multiview-resizing {
           width: 100px;
           height: 100px;
           border: 1px solid #BEBEBE;
-          transition: width 0.5s, height 0.5s;
-          /* transition: all 1s; */
+          transition: width 0.7s, height 0.7s, border-width 0.7s, border-radius 0.7s; 
+          z-index: 1;
         }
 
         .selected-canvas {
-          outline: 1px solid #0fccce;
-          transition: width 0.5s, height 0.5s;
-          /* transition: all 1s; */
+          outline: 5px solid #0fccce;
+          transition: width 0.7s, height 0.7s, border-width 0.7s, border-radius 0.7s; 
+          z-index: 1;
+        }
+
+        .zindex2 {
+          z-index: 2;
         }
 
     </style>
@@ -80,9 +84,9 @@
   <body>
     <v-app class="window" id="app">
       <div class="row no-gutters">
-        <navbar @viewcount-changed="changeIsMultiView" class="col-12"></navbar>
+        <navbar @viewcount-changed="changeIsMultiView" class="col-12 zindex2"></navbar>
 
-        <leftpanel @layer-selected="layerSelected" :layers="layers" :canvasid="selectedCanvasId" :trigger="selectedLayerTrigger" class="col-3"></leftpanel>
+        <leftpanel @layer-selected="layerSelected" :layers="layers" :canvasid="selectedCanvasId" :trigger="selectedLayerTrigger" class="col-3 zindex2"></leftpanel>
 
         <!-- Player  -->
         <div class="col-6 bg-white">
@@ -140,7 +144,7 @@
               </div>
             </div>
         
-            <div class="toolbox">
+            <div class="toolbox zindex2">
               <div class="collapse" id="collapseExtraTools">
                 <div class="extra-tools d-flex justify-content-around align-items-center">
                   <div class="d-flex flex-column justify-content-center align-items-center mx-3">
@@ -206,9 +210,9 @@
           </div>
         </div>
         
-        <property v-if="selectedLayer" :selected-layer="selectedLayer" :canvasid="selectedCanvasId" class="col-3"></property>
+        <property v-if="selectedLayer" :selected-layer="selectedLayer" :canvasid="selectedCanvasId" class="col-3 zindex2"></property>
 
-        <preference v-else :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" class="col-3"></preference>
+        <preference v-else :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" class="col-3 zindex2"></preference>
 
       </div>
     </v-app>
@@ -358,8 +362,8 @@
             this.isMultiView = state
             this.selectedLayerTrigger = !this.selectedLayerTrigger
             rlottieHandler.rlotties.forEach(rm => {
-              rm.canvas.style.width = "100px";
-              rm.canvas.style.height = "100px";
+              rm.canvas.style.width = "200px";
+              rm.canvas.style.height = "200px";
             });
           },
 
