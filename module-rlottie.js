@@ -251,6 +251,8 @@ class RLottieHandler {
         this.rlotties.forEach(rm => {
             rm.lottieHandle.load(jsString);
             rm.frameCount = rm.lottieHandle.frames();
+            var newFrameCount = document.getElementById("frameCount");
+            newFrameCount.innerText = String(rm.frameCount);
             rm.curFrame = 0;
             rm.makeLayerTree();
             rm.canvasStyle = {
