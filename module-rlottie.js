@@ -559,7 +559,11 @@ function handleDragOver(event) {
 function handleFileSelect(event) {
     event.stopPropagation();
     event.preventDefault();
+    var contentName = document.getElementById('contentName')
+    contentName.innerText = event.dataTransfer.files[0].name
+    contentName.title = event.dataTransfer.files[0].name
     handleFiles(event.dataTransfer.files);
+
 }
 
 function getLayerList(lottieModule) {
