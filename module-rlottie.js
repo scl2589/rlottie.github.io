@@ -272,6 +272,69 @@ class RLottieHandler {
         var rm = this.rlotties[idx];
         rm.lottieHandle.load(this.jsString);
         rm.curFrame = this.curFrame;
+        var beforeWidth = rm.canvasStyle.width
+        var beforeHeight = rm.canvasStyle.height
+        rm.canvasStyle = {
+            backgroundColor: {
+                alpha: 1,
+                hex: "#FFFFFF",
+                hexa: "#FFFFFF00",
+                hsla: {
+                    h: 1,
+                    s: 0,
+                    l: 0.7450980392156863,
+                    a: 0,
+                },
+                hsva: {
+                    h: 1,
+                    s: 0,
+                    v: 0,
+                    a: 0.7450980392156863,
+                },
+                hue: 0,
+                rgba: {
+                    r: 190,
+                    g: 190,
+                    b: 190,
+                    a: 1
+                }
+            },
+            borderColor: {
+                alpha: 0,
+                hex: "#BEBEBE",
+                hexa: "#BEBEBEFF",
+                hsla: {
+                    h: 0,
+                    s: 0,
+                    l: 0,
+                    a: 0,
+                },
+                hsva: {
+                    h: 0,
+                    s: 0,
+                    v: 0,
+                    a: 0,
+                },
+                hue: 0,
+                rgba: {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    a: 0
+                }
+            },
+            borderWidth: '1',
+            width: "",
+            height: "",
+            borderShape: 0
+        };
+        rm.canvas.style.backgroundColor = rm.canvasStyle.backgroundColor.hex
+        rm.canvas.style.borderColor = rm.canvasStyle.borderColor.hex
+        rm.canvas.style.borderWidth = rm.canvasStyle.borderWidth + "px"
+        rm.canvas.style.borderRadius = 0
+        this.relayoutCanvas()
+        app.$root.selectedCanvasStyle = rm.canvasStyle
+
         rm.makeLayerTree();
         app.$root.layers = rm.layerTree.child;
         setTimeout(() => {
