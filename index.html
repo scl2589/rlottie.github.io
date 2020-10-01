@@ -357,12 +357,13 @@
 
           selectCanvas(id) {
             if (this.isMultiView) {
-              this.selectedCanvasId = id
+              this.selectedCanvasId = id;
               rlottieHandler.mainCanvasId = id;
-              this.selectedCanvas = rlottieHandler.rlotties[id].canvas
-              this.selectedCanvasStyle = rlottieHandler.rlotties[id].canvasStyle
-              this.layers = rlottieHandler.rlotties[id].layerTree.child
-              this.selectedLayerTrigger = !this.selectedLayerTrigger
+              this.selectedCanvas = rlottieHandler.rlotties[id].canvas;
+              this.selectedCanvasStyle = rlottieHandler.rlotties[id].canvasStyle;
+              this.layers = rlottieHandler.rlotties[id].layerTree.child;
+              this.selectedLayerTrigger = !this.selectedLayerTrigger;
+              this.selectedLayer = null;
               setTimeout(() => {
                 thumbnailHandler.setModuleCanvas(rlottieHandler.rlotties[id].layerTree.child);
               }, 100);
