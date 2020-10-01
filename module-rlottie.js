@@ -272,6 +272,11 @@ class RLottieHandler {
         var rm = this.rlotties[idx];
         rm.lottieHandle.load(this.jsString);
         rm.curFrame = this.curFrame;
+        rm.makeLayerTree();
+        app.$root.layers = rm.layerTree.child;
+        setTimeout(() => {
+          thumbnailHandler.setModuleCanvas(rm.layerTree.child);
+        }, 100);
         if(!this.playing) this.play();
     }
 
