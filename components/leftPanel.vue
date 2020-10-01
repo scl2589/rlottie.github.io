@@ -50,7 +50,7 @@
 
 
           <!-- layer list -->
-          <div class="layer-list container py-3 px-0"  :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
+          <div class="layer-list container py-3 px-0" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
             <v-treeview 
               :items="layers"
               activatable
@@ -101,12 +101,60 @@
           <div class="search-bar container">
             <p class="title">Search layer</p>
             <div class="row no-gutters">
-              <button @click="getSearchResult" class="btn col-2"><i class="fas fa-search fa-lg" :class="{ 'text-white': $vuetify.theme.dark }"></i></button>
-              <input v-model="searchKeyword" @keypress.enter="getSearchResult" type="text" class="searchInput rounded-pill col-10 px-3 bg-white">
+              <!-- <button @click="getSearchResult" class="btn col-2"><i class="fas fa-search fa-lg" :class="{ 'text-white': $vuetify.theme.dark }"></i></button>
+              <input v-model="searchKeyword" @keypress.enter="getSearchResult" type="text" class="searchInput rounded-pill col-10 px-3 bg-white"> -->
+              <v-text-field
+                v-model="searchKeyword"
+                label="Enter keypath"
+                prepend-icon="mdi-magnify"
+                solo
+                rounded
+                hide-details
+                clearable
+                color="text"
+                clear-icon="mdi-close-circle-outline"
+              ></v-text-field>
             </div>
           </div>
-          <div>
-            
+          <div class="search-layer-list container py-3 px-0" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
+            <v-treeview 
+              :items="layers"
+              activatable
+              color="accent"
+              hoverable
+              return-object
+              open-all
+              expand-icon="mdi-chevron-down"
+              :active.sync="selectedLayer"
+              @update:active="clickLayer(selectedLayer)"
+              item-children="child"
+              item-key="id"
+              item-text="keypath"
+              :search="searchKeyword"
+              v-show="searchKeyword"
+            >
+              <template v-slot:prepend="{ item }" >
+                  <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3">
+                    <!-- <img class="img-thumbnail layer-thumbnail ml-1" src="../static/logo.png" :alt="item.keypath"> -->
+                    <canvas :id="'thumbnail-'+item.id" width="60" height="60"></canvas>
+                  </div>
+                </template>
+                <template v-slot:label="{ item }">
+                  <div class="d-flex align-items-center">
+                      <p class="ml-3 mb-0 layer-name" :title="item.keypath">
+                        {{ item.keypath }}
+                      </p>
+                  </div>
+                </template>
+                <template v-slot:append="{ item }">
+                  <div v-if="topNodes.includes(item.keypath)" class="d-flex align-items-center">
+                    <button @click="changeVisibility(item)" class="eye-btn btn">
+                      <i v-if="item.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+                      <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+                    </button>
+                  </div>
+                </template>
+              </v-treeview>
 
           </div>
         </v-card>
@@ -127,9 +175,9 @@ module.exports = {
   data: function () {
     return {
       tab: 0,
-      searchKeyword: null,
       allLayersVisible: true,
       selectedLayer: [],
+      searchKeyword: null,
     }
   },
 
@@ -151,7 +199,6 @@ module.exports = {
   },
 
   methods: {
-
     getSearchResult() {
       if (this.searchKeyword !== null) {
         this.searchKeyword = null
@@ -192,52 +239,10 @@ module.exports = {
     //   }
     // },
     
-    addNewLayer() {
-      if (this.newLayerName !== null) {
-        this.newLayers.push({
-          name: this.newLayerName,
-          // inFrame: layer[1],
-          // outFrame: layer[2],
-          visible: true,
-          selected: false,
-          opacity: 100,
-          xPos: 0,
-          yPos: 0,
-          scaleWidth: 100,
-          scaleHeight: 100,
-          rotation: 0,
-          color: {
-            alpha: Number(),
-            hex: String(),
-            hexa: String(),
-            hsla: {
-              h: Number(),
-              s: Number(),
-              l: Number(),
-              a: Number()
-            },
-            hsva: {
-              h: Number(),
-              s: Number(),
-              v: Number(),
-              a: Number()
-            },
-            hue: Number(),
-            rgba: {
-              r: Number(),
-              g: Number(),
-              b: Number(),
-              a: Number()
-            }
-          }
-        })
-        this.newLayerName = null
-      }
-    },
     clickReset(index) {
       rlottieHandler.reset(index)
     }
-  }
+  },
 }
 </script>
 
@@ -298,7 +303,12 @@ module.exports = {
   }
 
   .layer-list {
-    height: 63vh;
+    height: 64vh;
+    overflow-y: scroll; 
+  }
+
+  .search-layer-list {
+    height: 58vh;
     overflow-y: scroll; 
   }
 

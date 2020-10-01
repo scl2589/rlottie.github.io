@@ -163,12 +163,12 @@ html, body {
 }
 
 .scroll-sect-light::-webkit-scrollbar-track {
-  background: #ECEFF1;
+  background: #CFD8DC;
   /* border-radius: 15px; */
 }
 
 .scroll-sect-light::-webkit-scrollbar-corner {
-  background: #ECEFF1; 
+  background: #CFD8DC; 
 }
 
 .scroll-sect-light::-webkit-scrollbar-thumb {
