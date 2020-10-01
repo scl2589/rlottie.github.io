@@ -53,19 +53,25 @@
         }
 
         .common-canvas {
-          width: 500px;
-          height: 500px;
+          width: 100px;
+          height: 100px;
           border: 1px solid #BEBEBE;
+          transition: width 0.5s, height 0.5s;
+          /* transition: all 1s; */
         }
 
         .multiview-resizing {
-          width: 250px;
-          height: 250px;
+          width: 100px;
+          height: 100px;
           border: 1px solid #BEBEBE;
+          transition: width 0.5s, height 0.5s;
+          /* transition: all 1s; */
         }
 
         .selected-canvas {
-          outline: 5px solid #0fccce;
+          outline: 1px solid #0fccce;
+          transition: width 0.5s, height 0.5s;
+          /* transition: all 1s; */
         }
 
     </style>
@@ -95,7 +101,6 @@
                     @click="selectCanvas(0)">
                   </canvas>
                 </div>
-                
                 <div
                   class="d-flex justify-content-center align-items-center"
                   :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }"
@@ -108,7 +113,6 @@
                     @click="selectCanvas(1)">
                   </canvas>
                 </div>
-
                 <div
                   class="d-flex justify-content-center align-items-center"
                   :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }"
@@ -121,7 +125,6 @@
                     @click="selectCanvas(2)">
                   </canvas>
                 </div>
-                
                 <div
                   class="d-flex justify-content-center align-items-center"
                   :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }"
@@ -184,7 +187,7 @@
                   </div>
                 </div>
               </div>
-              <div class="d-flex justify-content-around align-items-center toolbox-basic">
+              <div class="d-flex justify-content-around align-items-center toolbox-basic" id="playbar">
                 <span class="play-button" type="button" id="playButton" onclick="buttonClicked()"><i class="fas fa-pause"></i></span>
                 <div class="d-flex flex-column align-items-between">
                   <input class="player-slider mb-1" type="range" id="slider" min="0" max="100" value="0" oninput="onSliderDrag(this.value)">
@@ -193,7 +196,8 @@
                     <span class="badge badge-light" id="frameCount"></span>
                   </div>
                 </div>
-                <span class="" data-toggle="collapse" href="#collapseExtraTools" role="button" aria-expanded="false" aria-controls="collapseExtraTools">
+                <span class="" data-toggle="collapse" href="#collapseExtraTools" role="button" 
+                  aria-expanded="false" aria-controls="collapseExtraTools" @click="extraButtonClick()">
                   <i class="fas fa-bars"></i>
                 </span>
               </div>
@@ -353,6 +357,10 @@
           changeIsMultiView(state) {
             this.isMultiView = state
             this.selectedLayerTrigger = !this.selectedLayerTrigger
+            rlottieHandler.rlotties.forEach(rm => {
+              rm.canvas.style.width = "100px";
+              rm.canvas.style.height = "100px";
+            });
           },
 
           selectCanvas(id) {
@@ -367,6 +375,12 @@
                 thumbnailHandler.setModuleCanvas(rlottieHandler.rlotties[id].layerTree.child);
               }, 100);
             };
+          },
+
+          extraButtonClick() {
+            setTimeout(() => {
+              rlottieHandler.relayoutCanvas();
+            }, 350)
           }
         },
 

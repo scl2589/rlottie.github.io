@@ -18,7 +18,7 @@ function setup() {
             }, 500);
             addListener();
             window.requestAnimationFrame(updater);
-            
+
         };
     };
 }
@@ -275,7 +275,7 @@ class RLottieHandler {
         rm.makeLayerTree();
         app.$root.layers = rm.layerTree.child;
         setTimeout(() => {
-          thumbnailHandler.setModuleCanvas(rm.layerTree.child);
+        thumbnailHandler.setModuleCanvas(rm.layerTree.child);
         }, 100);
         if(!this.playing) this.play();
     }
@@ -303,14 +303,30 @@ class RLottieHandler {
     relayoutCanvas() {
         var width = document.getElementById("player").clientWidth;
         var height = document.getElementById("player").clientHeight;
-        var maxSize = 350;
+        var playbarHeight = document.getElementById("playbar").clientHeight;
+        var extrtoolbarHeight = document.getElementById("collapseExtraTools").clientHeight
+        
+        height = height - playbarHeight - extrtoolbarHeight;
+        width = width / 4 * 3;
+        height = height / 4 * 3;
+
+        var maxSize = width < height ? width : height;
         var size = width < height ? width : height;
         if(typeof (app.$root.isMultiView) !== "undefined") {
-            maxSize = app.$root.isMultiView ? 350 : 600;
+            maxSize = app.$root.isMultiView ?  width : height;
             if(app.$root.isMultiView) size /= 2;
         }
-        size = size < maxSize ? size - 100 : maxSize - 100;
+        size = size < maxSize ? size : maxSize;
+        // console.log(size);
 
+        // if(!app.$root.isMultiView) {
+        //     this.rlotties[this.mainCanvasId].canvas.width = size;
+        //     this.rlotties[this.mainCanvasId].canvas.height = size;
+        //     this.rlotties[this.mainCanvasId].canvas.style.width = size + "px";
+        //     this.rlotties[this.mainCanvasId].canvas.style.height = size + "px";
+        // }
+        // else {
+        // }
         this.rlotties.forEach(rm => {
             rm.canvas.width = size;
             rm.canvas.height = size;
