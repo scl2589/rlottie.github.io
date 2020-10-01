@@ -10,16 +10,11 @@
     <div class="d-flex">
 
       <!-- single/multi view -->
-      <button class="btn mx-2 view-count" @click="changeViewCount">{{ viewCount }}</button>
+      <button class="btn mx-2 view-count preview text-white"  @click="changeViewCount">{{ viewCount }}</button>
 
       <!-- light/dark mode -->
-      <button class="btn mx-2 mode" @click="changeMode" :class="{ 'text-white': !$vuetify.theme.dark }">{{ mode }}</button>
-      <!-- <v-select
-        dark
-        color="white"
-        :items="modes"
-        outlined
-      ></v-select> -->
+      <button v-if="$vuetify.theme.dark" class="btn mx-2 mode" @click="changeMode"><v-icon class="text-dark">mdi-white-balance-sunny</v-icon></button>
+      <button v-else class="btn mx-2 mode" @click="changeMode"><i class="fas fa-moon text-white"></i></button>
 
       <!-- import/export -->
       <div class="filebox mx-2">
@@ -27,7 +22,6 @@
         <input class="upload-hidden" type="file" id="fileSelector" accept=".json" placeholder="New Lottie">
       </div>
       <button class="btn accent mx-2" :class="{ 'text-white': $vuetify.theme.dark }" data-toggle="modal" data-target="#exportModal">Export <i class="fas fa-download ml-2"></i></button>
-
 
       <!-- Modal -->
       <div class="modal fade text-dark" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
@@ -94,13 +88,16 @@ module.exports = {
     padding-left: 1vw;
     padding-right: 1vw;
   }
+
   .logo {
     height: 5vh; 
   }
+
   .lottie-input {
     background-color: #fdfdfd;
     color: #1D3557;
   }
+
   .filebox input[type="file"] {
     position: absolute;
     width: 1px;
@@ -111,6 +108,7 @@ module.exports = {
     clip:rect(0,0,0,0);
     border: 0;
   }
+
   .filebox label {
     display: inline-block;
     padding: .5em .75em;
@@ -118,17 +116,19 @@ module.exports = {
     font-size: inherit;
     line-height: normal;
     vertical-align: middle;
-    background-color: #fdfdfd;
+    background-color: #ECEFF1;
     cursor: pointer;
-    border: 1px solid #fdfdfd;
-    border-bottom-color: #fdfdfd;
+    border: 1px solid #ECEFF1;
+    border-bottom-color: #ECEFF1;
     border-radius: .25em;
     margin-bottom: 0;
     height: 48px;
   }
-  .bg-green {
-    background-color: rgba(10, 142, 144, 0.74);
+
+  .mode {
+    width: 50px;
   }
+
   .view-count {
     background-color: #fdfdfd;
     color: #1D3557
