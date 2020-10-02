@@ -2,9 +2,9 @@
     // load the script depending on web worker support
     var src;
     if (typeof(Worker) !== "undefined") {
-        srcs = ['module-rlottie.js', './gifjs/dist/gif.js', './gifjs/dist/gif.worker.js'];
+        srcs = ['module-rlottie.js', './gifjs/dist/gif.js', './gifjs/dist/gif.worker.js', 'thumbnail.js'];
     } else {
-        srcs = ['module-rlottie.js', './gifjs/dist/gif.js', './gifjs/dist/gif.worker.js'];
+        srcs = ['module-rlottie.js', './gifjs/dist/gif.js', './gifjs/dist/gif.worker.js', 'thumbnail.js'];
     }
     var head = document.head;
 
