@@ -66,7 +66,8 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
-            
+
+            <div class="d-none sidebar--text">{{allLayersVisible}}</div>
             <div v-if="layers" class="d-flex justify-content-start align-items-center">
               <v-tooltip bottom nudge-top="10">
                 <template v-slot:activator="{ on, attrs }">
@@ -229,12 +230,14 @@ module.exports = {
       }
       return nodes
     },
+
   },
 
   watch: {
     trigger() {
       this.selectedLayer = []
-    }
+    },
+
   },
 
   methods: {
@@ -261,9 +264,10 @@ module.exports = {
         setLayerOpacity(layer, 0, this.canvasid)
       }
     },
-    
+
     changeAllVisibility() {
       this.layers.allVisibility = !this.layers.allVisibility
+      this.allLayersVisible = this.layers.allVisibility
       if (this.layers.allVisibility) {
         this.layers.forEach(layer => {
           layer.visible = true
@@ -288,6 +292,10 @@ module.exports = {
     changeTab() {
       this.selectedLayer = []
     },
+  },
+
+  mounted() {
+    this.allLayersVisible = this.layers.allVisibility
   },
 }
 </script>
