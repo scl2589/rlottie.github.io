@@ -97,7 +97,7 @@
   <body>
     <v-app class="window" id="app">
       <div class="row no-gutters">
-        <navbar @viewcount-changed="changeIsMultiView" class="col-12 zindex2"></navbar>
+        <navbar @viewcount-changed="changeIsMultiView" @exportdialog-changed="exportdialog = false" :exportdialog="exportdialog" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-12 zindex2"></navbar>
 
         <leftpanel @layer-selected="layerSelected" :layers="layers" :canvasid="selectedCanvasId" :trigger="selectedLayerTrigger" class="col-3 zindex2"></leftpanel>
 
@@ -190,7 +190,7 @@
             </div>
             <div class="zindex3 d-flex justify-content-end mr-3 mb-3">
               <v-dialog
-                v-model="exportDialog"
+                v-model="snapshotDialog"
                 max-width="500"
               >
                 <template v-slot:activator="{ on, attrs }">
@@ -385,9 +385,12 @@
             selectedCanvas: null,
             selectedCanvasStyle: null,
 
-            exportDialog: false,
+            snapshotDialog: false,
             snapshotName: '',
-            snapshotURL: null
+            snapshotURL: null,
+
+            exportdialog: false,
+            shortcutdialog: false
           }
         },
         computed: {
@@ -422,8 +425,8 @@
         },
 
         watch: {
-          exportDialog() {
-            if (this.exportDialog) {
+          snapshotDialog() {
+            if (this.snapshotDialog) {
               if (rlottieHandler.playing) {
                 document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
                 rlottieHandler.pause();
@@ -518,7 +521,7 @@
           },
 
           clickSnapshotClose() {
-            this.exportDialog = false
+            this.snapshotDialog = false
           }
         },
 
