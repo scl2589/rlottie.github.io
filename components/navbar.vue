@@ -17,7 +17,7 @@
         >
           <template v-slot:activator="{ on, attrs }">
             <button
-              class="btn accent mx-2" 
+              class="shortcut-btn btn accent mx-2" 
               :class="{ 'text-white': $vuetify.theme.dark }" 
               depressed 
               v-bind="attrs"
@@ -199,5 +199,9 @@ module.exports = {
   .view-count {
     background-color: #fdfdfd;
     color: #1D3557
+  }
+
+  .shortcut-btn{
+    height: 48px;
   }
 </style>
