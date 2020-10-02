@@ -638,3 +638,59 @@ function allLayerTypeList() {
         console.log(alv.get(i));
     }
 }
+
+var isCtrl, isAlt, isShift;
+document.onkeydown = function(e) {
+    if (e.which == 16) isShift = true;
+    if (e.which == 17) isCtrl = true;
+    if (e.which == 18) isAlt = true;
+
+    // shift + 1, 2, 3, 4: selectCanvas
+    if (e.which == 49 && isShift) app.$root.selectCanvas(0);
+    if (e.which == 50 && isShift) app.$root.selectCanvas(1);
+    if (e.which == 51 && isShift) app.$root.selectCanvas(2);
+    if (e.which == 52 && isShift) app.$root.selectCanvas(3);
+
+    // shift + p: snapshot
+    if (e.which == 80 && isShift) {
+        if (app.$root.exportDialog === false) {
+            app.$root.clickSnapShot();
+            app.$root.exportDialog = true;
+        } else {
+            app.$root.clickSnapshotClose()
+        }
+    }
+
+    // shift + space: play, pause
+    if (e.which == 32 && isShift) {
+        if (rlottieHandler.playing) {
+            rlottieHandler.pause()
+        } else {
+            rlottieHandler.play()
+        }
+    }
+
+    // shift + v: multiview, singleview
+    if (e.which == 86 && isShift) {
+        if (app.$root.isMultiView) {
+            app.$root.changeIsMultiView(false)
+            windowResize();
+        } else {
+            app.$root.changeIsMultiView(true)
+            windowResize();
+        }
+    }
+
+    // shift + m: dark, light mode
+    if (e.which == 77 && isShift) {
+        app.$root.$vuetify.theme.dark = !app.$root.$vuetify.theme.dark
+    }
+}
+
+document.onkeyup = function(e) {
+    
+    if (e.which == 16) isShift = false;
+    if (e.which == 17) isCtrl = false;
+    if (e.which == 18) isAlt = false;
+    console.log(e.which)
+}
