@@ -143,24 +143,24 @@ class RLottieModule {
             backgroundColor: {
                 alpha: 1,
                 hex: "#FFFFFF",
-                hexa: "#FFFFFF00",
+                hexa: "#FFFFFFFF",
                 hsla: {
-                    h: 1,
+                    h: 0,
                     s: 0,
-                    l: 0.7450980392156863,
-                    a: 0,
+                    l: 1,
+                    a: 1,
                 },
                 hsva: {
-                    h: 1,
+                    h: 0,
                     s: 0,
-                    v: 0,
-                    a: 0.7450980392156863,
+                    v: 1,
+                    a: 1,
                 },
                 hue: 0,
                 rgba: {
-                    r: 190,
-                    g: 190,
-                    b: 190,
+                    r: 255,
+                    g: 255,
+                    b: 255,
                     a: 1
                 }
             },
@@ -171,21 +171,21 @@ class RLottieModule {
                 hsla: {
                     h: 0,
                     s: 0,
-                    l: 0,
-                    a: 0,
+                    l: 0.7450980392156863,
+                    a: 1,
                 },
                 hsva: {
                     h: 0,
                     s: 0,
-                    v: 0,
-                    a: 0,
+                    v: 0.7450980392156863,
+                    a: 1,
                 },
                 hue: 0,
                 rgba: {
-                    r: 0,
-                    g: 0,
-                    b: 0,
-                    a: 0
+                    r: 190,
+                    g: 190,
+                    b: 190,
+                    a: 1
                 }
             },
             borderWidth: '1',

@@ -111,7 +111,7 @@
     <div class="property">
       <div class="d-flex align-items-center mb-2">
         <p class="property-title m-0">Position</p>
-        <v-tooltip bottom nudge-right="60" nudge-bottom="60">
+        <v-tooltip bottom nudge-right="100" nudge-bottom="60" max-width="350">
           <template v-slot:activator="{ on, attrs }">
             <i
               class="far fa-question-circle fa-sm ml-2"
