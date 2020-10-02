@@ -426,14 +426,16 @@
           exportDialog() {
             if (this.exportDialog) {
               if (rlottieHandler.playing) {
-                pause();
+                document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
+                rlottieHandler.pause();
                 rlottieHandler.playing = true 
               } else {
-                pause();
+                rlottieHandler.pause();
               }
             } else {
               if (rlottieHandler.playing) {
-                play();
+                document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
+                rlottieHandler.play();
               }
               this.snapshotName = ''
             }
