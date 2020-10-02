@@ -143,6 +143,11 @@ class RLottieModule {
         this.context.putImageData(imageData, 0, 0);
     }
 
+    snapshot() {
+        if (this.canvas.width == 0 || this.canvas.height == 0) return;
+        app.$root.snapshotURL = this.canvas.toDataURL()
+    }
+
     makeLayerTree() {
         this.layerTree = new LayerNode("**", "root", "", layerNodeSize++, 0);
         var fullLayers = [];
@@ -565,7 +570,6 @@ function handleFileSelect(event) {
     contentName.innerText = event.dataTransfer.files[0].name
     contentName.title = event.dataTransfer.files[0].name
     handleFiles(event.dataTransfer.files);
-
 }
 
 function getLayerList(lottieModule) {
