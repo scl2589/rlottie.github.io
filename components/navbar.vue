@@ -9,12 +9,14 @@
     <!-- button group -->
     <div class="d-flex">
 
-      <!-- single/multi view -->
-      <button class="btn mx-2 view-count preview text-white"  @click="changeViewCount">{{ viewCount }}</button>
+      <div class="d-none d-sm-block">
+        <!-- single/multi view -->
+        <button class="multiview-btn btn mx-2 view-count preview text-white"  @click="changeViewCount">{{ viewCount }}</button>
 
-      <!-- light/dark mode -->
-      <button v-if="$vuetify.theme.dark" class="btn mx-2 mode" @click="changeMode"><v-icon class="text-dark">mdi-white-balance-sunny</v-icon></button>
-      <button v-else class="btn mx-2 mode" @click="changeMode"><i class="fas fa-moon text-white"></i></button>
+        <!-- light/dark mode -->
+        <button v-if="$vuetify.theme.dark" class="btn mx-2 mode" @click="changeMode"><v-icon class="text-dark">mdi-white-balance-sunny</v-icon></button>
+        <button v-else class="btn mx-2 mode" @click="changeMode"><i class="fas fa-moon text-white"></i></button>
+      </div>
 
       <!-- import/export -->
       <div class="filebox mx-2">
@@ -147,6 +149,11 @@ module.exports = {
 
   .mode {
     width: 50px;
+    height: 48px;
+  }
+
+  .multiview-btn {
+    height: 48px;
   }
 
   .view-count {

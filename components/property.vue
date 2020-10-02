@@ -1,18 +1,20 @@
 <template>
   <div class="sidebar scroll-sect" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
-    <p class="title">Property</p>
+    <p class="title">
+      Property
+      <v-chip
+        v-if="multiview"
+        class="ml-1 mb-1 text-caption"
+        color="#0fccce"
+        small
+      >
+        {{canvasid + 1}}
+      </v-chip>
+    </p>
 
     <div class="mt-5">
       <p class="font-weight-medium">
         Keypath
-        <!-- <v-chip
-          v-if="multiview"
-          class="ml-2 font-weight-regular"
-          color="preview"
-          small
-        >
-          canvas {{canvasid + 1}}
-        </v-chip> -->
       </p>
       <p class="ml-1 mt-2">
         {{selectedLayer.keypath}} 
