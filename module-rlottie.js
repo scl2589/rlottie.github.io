@@ -134,6 +134,46 @@ class RLottieModule {
         this.curFrame = 0;
     }
 
+    makeGifFile(filename) {
+        var gif = new GIF({
+            workers: 10,
+            quality: 1
+        });
+
+        console.log(this.canvasStyle.backgroundColor.rgba);
+
+        for (let i = 0; i <= this.frameCount; i++) {
+            let buffer = this.lottieHandle.render(i, this.canvas.width, this.canvas.height);
+            let result = Uint8ClampedArray.from(buffer);
+            let imageData = new ImageData(result, this.canvas.width, this.canvas.height);
+
+            for (let k = 0; k < imageData.data.length; k+=4) {
+                if (imageData.data[k+0]+imageData.data[k+1]+imageData.data[k+2] != 0) continue;
+
+                // background color
+                imageData.data[k+0] = this.canvasStyle.backgroundColor.rgba.r;
+                imageData.data[k+1] = this.canvasStyle.backgroundColor.rgba.g;
+                imageData.data[k+2] = this.canvasStyle.backgroundColor.rgba.b;
+                imageData.data[k+3] = this.canvasStyle.backgroundColor.rgba.a;
+            }
+
+            gif.addFrame(imageData, {delay: 1000/60});
+        }
+
+        gif.on('finished', function(blob) {
+            // window.open(URL.createObjectURL(blob));
+
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            // filename
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+        });
+
+        gif.render();
+    }
+
     render(speed) {
         if (this.canvas.width == 0 || this.canvas.height == 0) return;
         this.curFrame = Number(this.curFrame) + speed;
@@ -637,4 +677,9 @@ function allLayerTypeList() {
     for(let i=0;i<alv.size();i++) {
         console.log(alv.get(i));
     }
+}
+
+function ccc(filename) {
+    var a = new RLottieModule("myCanvas1");
+    a.makeGifFile(filename);
 }
