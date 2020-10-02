@@ -28,6 +28,7 @@ setup();
 class LayerNode {
     constructor(keypath, name, type, id, commonId) {
         this.id = id;
+        this.idx = -1;
         this.commonId = commonId;
         this.keypath = keypath;
         this.name = name;
@@ -36,11 +37,11 @@ class LayerNode {
         this.selected = false;
         this.opacity = 100;
         this.beforeOpacity = 100;
-        this.xPos = 0;
-        this.yPos = 0;
-        this.scaleWidth = 100;
-        this.scaleHeight = 100;
-        this.rotation = 0;
+        // this.xPos = 0;
+        // this.yPos = 0;
+        // this.scaleWidth = 100;
+        // this.scaleHeight = 100;
+        // this.rotation = 0;
         this.color = {
             alpha: Number(),
             hex: String(),
@@ -102,21 +103,29 @@ class RLottieModule {
         for(let i = 0; i < layer_vector.size(); i++) {
             fullLayers.push(layer_vector.get(i));
         }
-        fullLayers.sort();
         var commonId = 1;
         fullLayers.forEach(element => {
-            var layer = element.split(".");
+            var layer = element.split("::");
             var type = "Stroke";
-            if(layer[0] == "Fill Object:") type = "Fill";
+            if(layer[0] == "Fill") type = "Fill";
             var curr = this.layerTree;
-            var keypath = "";
-            for(let i = 1; i < layer.length; i++) {
-                if(i != 1) keypath += "."; 
-                keypath += layer[i];
+            var keypath = layer[2];
+            this.layerTree.child.forEach(l => {
+                if(l.idx == layer[1] && l.name == layer[2]) curr = l;
+            })
+            if(curr.name == "root") {
+                let node = new LayerNode(keypath, keypath, type, layerNodeSize++, commonId++)
+                node.idx = layer[1];
+                curr.child.push(node);
+                curr = node;
+            }
+            
+            for(let i = 3; i < layer.length; i++) {
+                keypath += "." + layer[i];
                 let flag = false;
                 for(let j = 0; j < curr.child.length; j++) {
                     if(curr.child[j].name != layer[i]) continue;
-                    if(curr.child[j].type != type) continue;
+                    if(curr.child[j].type != type) curr.type = curr.child[j].type = "both";
                     curr = curr.child[j];
                     flag = true;
                 }

@@ -2,9 +2,11 @@
 class ThumbnailHandler {
     constructor(layers) {
         this.rlotties = [];
+        this.fullKeypaths = [];
+        this.makeFullLayers();
         layers.forEach(l => {
             var rm = new RLottieModule(l.id);
-            this.makeThumbnail(rm, l.keypath, l.type);
+            this.makeThumbnail(rm, l.idx);
             this.rlotties.push(rm);
         });
     }
@@ -22,8 +24,8 @@ class ThumbnailHandler {
             layers.forEach(l => {
                 var rm = new RLottieModule(l.id);
                 rm.lottieHandle.load(jsString);
-                console.log(l.keypath + " " + l.type);
-                this.makeThumbnail(rm, l.keypath, l.type);
+                this.makeFullLayers();
+                this.makeThumbnail(rm, l.idx);
                 this.rlotties.push(rm);
             });
         }, 500)
@@ -37,10 +39,25 @@ class ThumbnailHandler {
         }
     }
 
-    makeThumbnail(module, keypath, type) {
+    makeFullLayers() {
+        var layer_vector = rlottieHandler.rlotties[0].lottieHandle.allLayerTypeList();
+        for(let i = 0; i < layer_vector.size(); i++) {
+            var layer = layer_vector.get(i).split("::");
+            var fullKeypath = "";
+            for(let j = 2; j < layer.length; j++) {
+                fullKeypath += layer[j] + ".";
+            }
+            if(typeof (this.fullKeypaths[layer[1]]) == "undefined") this.fullKeypaths[layer[1]] = [];
+            this.fullKeypaths[layer[1]].push(fullKeypath + "**");
+        }
+    }
+
+    makeThumbnail(module, layerIdx) {
         module.lottieHandle.setFillOpacity("**", 0);
         module.lottieHandle.setStrokeOpacity("**", 0);
-        if(type == "Fill") module.lottieHandle.setFillOpacity(keypath + ".**", 100);
-        else module.lottieHandle.setStrokeOpacity(keypath + ".**", 100);
+        this.fullKeypaths[layerIdx].forEach(fullKeypath => {
+            module.lottieHandle.setFillOpacity(fullKeypath, 100);
+            module.lottieHandle.setStrokeOpacity(fullKeypath, 100);
+        })
     }
 }
