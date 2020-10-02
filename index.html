@@ -83,6 +83,14 @@
           bottom: 14vh;
         }
 
+        .zindex3 {
+          z-index: 3;
+        }
+
+        .snapshot-container {
+          background-color: white;
+        }
+
     </style>
   </head>
 
@@ -179,6 +187,58 @@
                   </canvas>
                 </div>
               </div>
+            </div>
+            <div class="zindex3 d-flex justify-content-end mr-3 mb-3">
+              <v-dialog
+                v-model="exportDialog"
+                max-width="500"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <button
+                    class="btn canvas" 
+                    :class="{ 'text-white': $vuetify.theme.dark }" 
+                    depressed 
+                    v-bind="attrs"
+                    v-on="on"
+                    @click="clickSnapShot"
+                  >
+                    <i class="fas fa-camera"></i>
+                  </button>
+                </template>
+                <v-card>
+                  <v-card-title class="headline">
+                    Export file to PNG
+                  </v-card-title>
+                  <div class="d-flex justify-content-center snapshot-container">
+                    <img
+                      id="snapshot-image"
+                      height="250"
+                      :src="snapshotURL"
+                    >
+                  </div>
+                  <v-card-text>
+                    <div class="d-flex align-items-center">
+                      <v-text-field
+                        solo-reverse
+                        color="text"
+                        placeholder="File name"
+                        v-model="snapshotName"
+                      ></v-text-field>
+                      <v-btn class="ml-4" color="canvas" :href="snapshotURL" :download="snapshotName">Download</v-btn>
+                    </div>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="text"
+                      text
+                      @click="clickSnapshotClose"
+                    >
+                      Close
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </div>
         
             <div class="toolbox zindex2">
@@ -280,6 +340,7 @@
                 preview: '#0b6687',
                 icon: '#FFFFFF',
                 mode: '#ECEFF1',
+                canvas: '#0FCCCE'
               },
               light: {
                 navbar: '#90A4AE',
@@ -289,6 +350,7 @@
                 preview: '#56a6c2',
                 icon: '#000000',
                 mode: '#37474F',
+                canvas: '#0FCCCE'
               }
             },
           },
@@ -322,7 +384,11 @@
             isMultiView: false,
             selectedCanvasId: 0,
             selectedCanvas: null,
-            selectedCanvasStyle: null
+            selectedCanvasStyle: null,
+
+            exportDialog: false,
+            snapshotName: '',
+            snapshotURL: null
           }
         },
         computed: {
@@ -355,6 +421,25 @@
             }
           },
         },
+
+        watch: {
+          exportDialog() {
+            if (this.exportDialog) {
+              if (rlottieHandler.playing) {
+                pause();
+                rlottieHandler.playing = true 
+              } else {
+                pause();
+              }
+            } else {
+              if (rlottieHandler.playing) {
+                play();
+              }
+              this.snapshotName = ''
+            }
+          }
+        },
+        
         methods: {
           layerSelected(layer) {
             this.selectedLayer = layer
@@ -400,10 +485,6 @@
           changeIsMultiView(state) {
             this.isMultiView = state
             this.selectedLayerTrigger = !this.selectedLayerTrigger
-            rlottieHandler.rlotties.forEach(rm => {
-              rm.canvas.style.width = "200px";
-              rm.canvas.style.height = "200px";
-            });
           },
 
           selectCanvas(id) {
@@ -425,6 +506,14 @@
             setTimeout(() => {
               rlottieHandler.relayoutCanvas();
             }, 350)
+          },
+
+          clickSnapShot() {
+            rlottieHandler.rlotties[this.selectedCanvasId].snapshot()
+          },
+
+          clickSnapshotClose() {
+            this.exportDialog = false
           }
         },
 
