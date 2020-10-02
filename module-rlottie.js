@@ -604,9 +604,9 @@ document.onkeydown = function(e) {
 
     // shift + p: snapshot
     if (e.which == 80 && isShift) {
-        if (app.$root.exportDialog === false) {
+        if (app.$root.snapshotDialog === false) {
             app.$root.clickSnapShot();
-            app.$root.exportDialog = true;
+            app.$root.snapshotDialog = true;
         } else {
             app.$root.clickSnapshotClose()
         }
@@ -636,13 +636,20 @@ document.onkeydown = function(e) {
     if (e.which == 77 && isShift) {
         app.$root.$vuetify.theme.dark = !app.$root.$vuetify.theme.dark
     }
+
+    // shift + s: save gif
+    if (e.which == 83 && isShift) {
+        app.$root.exportdialog = !app.$root.exportdialog
+    }
+
+    // shift + c: shortcut
+    if (e.which == 67 && isShift) {
+        app.$root.shortcutdialog = !app.$root.shortcutdialog
+    }
 }
 
 document.onkeyup = function(e) {
-    
     if (e.which == 16) isShift = false;
     if (e.which == 17) isCtrl = false;
     if (e.which == 18) isAlt = false;
-    console.log(e.which)
 }
-

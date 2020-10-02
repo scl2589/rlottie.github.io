@@ -12,7 +12,7 @@
       <div class="d-none d-sm-block">
         <!-- Shortcut -->
         <v-dialog
-          v-model="exportDialog2"
+          v-model="shortcutdialog"
           max-width="500"
         >
           <template v-slot:activator="{ on, attrs }">
@@ -38,6 +38,8 @@
                   <li>shift + v : multiview/singleview</li>
                   <li>shift + 1/2/3/4: select canvas</li>
                   <li>shift + p : snapshot</li>
+                  <li>shift + s : export file to gif</li>
+                  <li>shift + c : shortcut</li>
                 </ul>
               </div>
             </v-card-text>
@@ -46,7 +48,7 @@
               <v-btn
                 color="text"
                 text
-                @click="exportDialog2 = false"
+                @click="clickShortcutClose"
               >
                 Close
               </v-btn>
@@ -70,7 +72,7 @@
       </div>
 
       <v-dialog
-        v-model="exportDialog"
+        v-model="exportdialog"
         max-width="500"
       >
         <template v-slot:activator="{ on, attrs }">
@@ -103,7 +105,7 @@
             <v-btn
               color="text"
               text
-              @click="exportDialog = false"
+              @click="clickExportDialogClose"
             >
               Close
             </v-btn>
@@ -118,11 +120,13 @@
 <script>
 module.exports = {
   name: 'navbar',
+  props: {
+    exportdialog: Boolean,
+    shortcutdialog: Boolean
+  },
   data: function () {
     return {
-      viewCount: 'Multi View',
-      exportDialog: false,
-      exportDialog2: false
+      viewCount: 'Multi View'
     }
   },
   methods: {
@@ -139,6 +143,12 @@ module.exports = {
         this.$emit('viewcount-changed', false)
       }
       windowResize();
+    },
+    clickExportDialogClose() {
+      this.$emit('exportdialog-changed')
+    },
+    clickShortcutClose() {
+      this.$emit('shortcutdialog-changed')
     }
   }
 }
