@@ -136,7 +136,6 @@ module.exports = {
         this.$vuetify.theme.dark = !this.$vuetify.theme.dark
     },
     changeViewCount() {
-      console.log(1)
       if (this.viewCount === 'Multi View') {
         this.viewCount = 'Single View'
         this.$emit('viewcount-changed', true)
@@ -147,15 +146,19 @@ module.exports = {
       windowResize();
     },
     clickExportDialogClose() {
+      this.exportdialog = false
       this.$emit('exportdialog-changed')
     },
     clickShortcutClose() {
+      this.shortcutdialog = false
       this.$emit('shortcutdialog-changed')
     },
     downloadGIF() {
       if(this.gifname == "") return;
-      else rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname);
-      // 끝나고 close, this.gifname = "" 하기
+      else {
+        rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname);
+        this.clickExportDialogClose()
+      }// 끝나고 close, this.gifname = "" 하기
     }
   }
 }
