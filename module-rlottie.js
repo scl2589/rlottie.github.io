@@ -91,11 +91,6 @@ class RLottieModule {
         this.context.putImageData(imageData, 0, 0);
     }
 
-    snapshot() {
-        if (this.canvas.width == 0 || this.canvas.height == 0) return;
-        app.$root.snapshotURL = this.canvas.toDataURL()
-    }
-
     makeLayerTree() {
         this.layerTree = new LayerNode("**", "root", "", layerNodeSize++, 0);
         var fullLayers = [];
@@ -386,6 +381,12 @@ class RLottieHandler {
             rm.curFrame = value;
             rm.render(this.playSpeed);
         });
+    }
+
+    snapshot() {
+        var canvas = this.rlotties[this.mainCanvasId].canvas;
+        if (canvas.width == 0 || canvas.height == 0) return;
+        app.$root.snapshotURL = canvas.toDataURL()
     }
 
     relayoutCanvas() {
