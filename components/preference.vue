@@ -1,6 +1,16 @@
 <template>
   <div class="sidebar">
-    <p class="title">Preference</p>
+    <p class="title">
+      Preference
+      <v-chip
+        v-if="multiview"
+        class="ml-1 mb-1 text-caption"
+        color="#0fccce"
+        small
+      >
+        {{canvasid + 1}}
+      </v-chip>
+    </p>
     
     <!-- Background color controller -->
     <div class="preference" v-if="canvasstyle">
@@ -129,7 +139,8 @@ module.exports = {
   props: {
     canvasid: Number,
     canvas: Object,
-    canvasstyle: Object
+    canvasstyle: Object,
+    multiview: Boolean,
   },
   data: function () {
     return {

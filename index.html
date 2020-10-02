@@ -78,6 +78,11 @@
           z-index: 2;
         }    
 
+        .canvas-chip {
+          position: relative;
+          bottom: 14vh;
+        }
+
     </style>
   </head>
 
@@ -97,6 +102,14 @@
                   class="d-flex justify-content-center align-items-center"
                   :class="{ 'col-6': isMultiView, 'col-12': !isMultiView }"
                 >
+                  <v-chip
+                    v-if="isMultiView"
+                    class="mr-2 canvas-chip text-caption"
+                    color="#0fccce"
+                    small
+                  >
+                    1
+                  </v-chip>
                   <canvas
                     class="common-canvas"
                     :class="{ 'multiview-resizing': isMultiView, 'selected-canvas': isCanvas1Selected&&isMultiView }"
@@ -109,6 +122,14 @@
                   class="d-flex justify-content-center align-items-center"
                   :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }"
                 >
+                  <v-chip
+                    v-if="isMultiView"
+                    class="mr-2 canvas-chip text-caption"
+                    color="#0fccce"
+                    small
+                  >
+                    2
+                  </v-chip>
                   <canvas
                     class="multiview-resizing"
                     :class="{ 'selected-canvas': isCanvas2Selected&&isMultiView }"
@@ -121,6 +142,14 @@
                   class="d-flex justify-content-center align-items-center"
                   :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }"
                 >
+                  <v-chip
+                    v-if="isMultiView"
+                    class="mr-2 canvas-chip text-caption"
+                    color="#0fccce"
+                    small
+                  >
+                    3
+                  </v-chip>
                   <canvas
                     class="multiview-resizing"
                     :class="{ 'selected-canvas': isCanvas3Selected&&isMultiView }"
@@ -133,6 +162,14 @@
                   class="d-flex justify-content-center align-items-center"
                   :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }"
                 >
+                  <v-chip
+                    v-if="isMultiView"
+                    class="mr-2 canvas-chip text-caption"
+                    color="#0fccce"
+                    small
+                  >
+                    4
+                  </v-chip>
                   <canvas
                     class="multiview-resizing"
                     :class="{ 'selected-canvas': isCanvas4Selected&&isMultiView }"
@@ -213,7 +250,7 @@
 
         <property v-if="selectedLayer" :selected-layer="selectedLayer" :canvasid="selectedCanvasId" :multiview="isMultiView" class="col-3 zindex2"></property>
 
-        <preference v-else :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" class="col-3 zindex2"></preference>
+        <preference v-else :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" :multiview="isMultiView" class="col-3 zindex2"></preference>
 
       </div>
     </v-app>
