@@ -430,16 +430,15 @@
               if (rlottieHandler.playing) {
                 document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
                 rlottieHandler.pause();
-                rlottieHandler.playing = true 
-              } else {
-                rlottieHandler.pause();
-              }
+                rlottieHandler.wasPlaying = true;
+              } 
             } else {
-              if (rlottieHandler.playing) {
+              if (!rlottieHandler.playing && rlottieHandler.wasPlaying) {
                 document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
+                rlottieHandler.wasPlaying = false;
                 rlottieHandler.play();
               }
-              this.snapshotName = ''
+              this.snapshotName = '';
             }
           }
         },
@@ -517,7 +516,7 @@
           },
 
           clickSnapShot() {
-            rlottieHandler.rlotties[this.selectedCanvasId].snapshot()
+            rlottieHandler.snapshot();
           },
 
           clickSnapshotClose() {
