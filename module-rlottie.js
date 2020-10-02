@@ -72,60 +72,7 @@ class LayerNode {
 class RLottieModule {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
-        this.canvasStyle = {
-            backgroundColor: {
-                alpha: 1,
-                hex: "#FFFFFF",
-                hexa: "#FFFFFF00",
-                hsla: {
-                    h: 1,
-                    s: 0,
-                    l: 0.7450980392156863,
-                    a: 0,
-                },
-                hsva: {
-                    h: 1,
-                    s: 0,
-                    v: 0,
-                    a: 0.7450980392156863,
-                },
-                hue: 0,
-                rgba: {
-                    r: 190,
-                    g: 190,
-                    b: 190,
-                    a: 1
-                }
-            },
-            borderColor: {
-                alpha: 0,
-                hex: "#BEBEBE",
-                hexa: "#BEBEBEFF",
-                hsla: {
-                    h: 0,
-                    s: 0,
-                    l: 0,
-                    a: 0,
-                },
-                hsva: {
-                    h: 0,
-                    s: 0,
-                    v: 0,
-                    a: 0,
-                },
-                hue: 0,
-                rgba: {
-                    r: 0,
-                    g: 0,
-                    b: 0,
-                    a: 0
-                }
-            },
-            borderWidth: '1',
-            width: '',
-            height: '',
-            borderShape: 0
-        }
+        this.makeCanvasStyle();
 
         this.context = this.canvas.getContext("2d");
         this.lottieHandle = new Module.RlottieWasm();
@@ -180,6 +127,63 @@ class RLottieModule {
             }
         })
         this.layerTree.child.allVisibility = true
+    }
+    
+    makeCanvasStyle() {
+        this.canvasStyle = {
+            backgroundColor: {
+                alpha: 1,
+                hex: "#FFFFFF",
+                hexa: "#FFFFFF00",
+                hsla: {
+                    h: 1,
+                    s: 0,
+                    l: 0.7450980392156863,
+                    a: 0,
+                },
+                hsva: {
+                    h: 1,
+                    s: 0,
+                    v: 0,
+                    a: 0.7450980392156863,
+                },
+                hue: 0,
+                rgba: {
+                    r: 190,
+                    g: 190,
+                    b: 190,
+                    a: 1
+                }
+            },
+            borderColor: {
+                alpha: 0,
+                hex: "#BEBEBE",
+                hexa: "#BEBEBEFF",
+                hsla: {
+                    h: 0,
+                    s: 0,
+                    l: 0,
+                    a: 0,
+                },
+                hsva: {
+                    h: 0,
+                    s: 0,
+                    v: 0,
+                    a: 0,
+                },
+                hue: 0,
+                rgba: {
+                    r: 0,
+                    g: 0,
+                    b: 0,
+                    a: 0
+                }
+            },
+            borderWidth: '1',
+            width: '',
+            height: '',
+            borderShape: 0
+        }
     }
 }
 
@@ -260,60 +264,7 @@ class RLottieHandler {
             newFrameCount.innerText = String(rm.frameCount);
             rm.curFrame = 0;
             rm.makeLayerTree();
-            rm.canvasStyle = {
-                backgroundColor: {
-                    alpha: 1,
-                    hex: "#FFFFFF",
-                    hexa: "#FFFFFF00",
-                    hsla: {
-                        h: 1,
-                        s: 0,
-                        l: 0.7450980392156863,
-                        a: 0,
-                    },
-                    hsva: {
-                        h: 1,
-                        s: 0,
-                        v: 0,
-                        a: 0.7450980392156863,
-                    },
-                    hue: 0,
-                    rgba: {
-                        r: 190,
-                        g: 190,
-                        b: 190,
-                        a: 1
-                    }
-                },
-                borderColor: {
-                    alpha: 0,
-                    hex: "#BEBEBE",
-                    hexa: "#BEBEBEFF",
-                    hsla: {
-                        h: 0,
-                        s: 0,
-                        l: 0,
-                        a: 0,
-                    },
-                    hsva: {
-                        h: 0,
-                        s: 0,
-                        v: 0,
-                        a: 0,
-                    },
-                    hue: 0,
-                    rgba: {
-                        r: 0,
-                        g: 0,
-                        b: 0,
-                        a: 0
-                    }
-                },
-                borderWidth: '1',
-                width: "",
-                height: "",
-                borderShape: 0
-            };
+            rm.makeCanvasStyle();
             rm.canvas.style.backgroundColor = rm.canvasStyle.backgroundColor.hex
             rm.canvas.style.borderColor = rm.canvasStyle.borderColor.hex
             rm.canvas.style.borderWidth = rm.canvasStyle.borderWidth + "px"
@@ -335,67 +286,17 @@ class RLottieHandler {
         app.$root.selectedLayer = null;
         thumbnailHandler.reload(this.rlotties[0].layerTree.child, this.jsString);
 
-        if (!this.playing) this.play();
+        if (!this.playing) {
+            document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
+            this.play();
+        }
     }
 
     reset(idx) {
         var rm = this.rlotties[idx];
         rm.lottieHandle.load(this.jsString);
         rm.curFrame = this.curFrame;
-        rm.canvasStyle = {
-            backgroundColor: {
-                alpha: 1,
-                hex: "#FFFFFF",
-                hexa: "#FFFFFF00",
-                hsla: {
-                    h: 1,
-                    s: 0,
-                    l: 0.7450980392156863,
-                    a: 0,
-                },
-                hsva: {
-                    h: 1,
-                    s: 0,
-                    v: 0,
-                    a: 0.7450980392156863,
-                },
-                hue: 0,
-                rgba: {
-                    r: 190,
-                    g: 190,
-                    b: 190,
-                    a: 1
-                }
-            },
-            borderColor: {
-                alpha: 0,
-                hex: "#BEBEBE",
-                hexa: "#BEBEBEFF",
-                hsla: {
-                    h: 0,
-                    s: 0,
-                    l: 0,
-                    a: 0,
-                },
-                hsva: {
-                    h: 0,
-                    s: 0,
-                    v: 0,
-                    a: 0,
-                },
-                hue: 0,
-                rgba: {
-                    r: 0,
-                    g: 0,
-                    b: 0,
-                    a: 0
-                }
-            },
-            borderWidth: '1',
-            width: "",
-            height: "",
-            borderShape: 0
-        };
+        rm.makeCanvasStyle();
         rm.canvas.style.backgroundColor = rm.canvasStyle.backgroundColor.hex
         rm.canvas.style.borderColor = rm.canvasStyle.borderColor.hex
         rm.canvas.style.borderWidth = rm.canvasStyle.borderWidth + "px"
@@ -416,6 +317,14 @@ class RLottieHandler {
         this.playing = false;
     }
 
+    update() {
+        var curFrame = this.rlotties[this.mainCanvasId].curFrame;
+        this.rlotties.forEach(rm => {
+            rm.curFrame = curFrame;
+        })
+        this.render();
+    }
+
     play() {
         this.playing = true;
         var curFrame = this.rlotties[this.mainCanvasId].curFrame;
@@ -426,8 +335,9 @@ class RLottieHandler {
     }
 
     seek(value) {
-        this.rlotties.forEach(rlottie => {
-            rlottie.curFrame = value;
+        this.rlotties.forEach(rm => {
+            rm.curFrame = value;
+            rm.render(this.playSpeed);
         });
     }
 
@@ -449,16 +359,6 @@ class RLottieHandler {
             if(app.$root.isMultiView) size /= 2;
         }
         size = size < maxSize ? size : maxSize;
-        // console.log(size);
-
-        // if(!app.$root.isMultiView) {
-        //     this.rlotties[this.mainCanvasId].canvas.width = size;
-        //     this.rlotties[this.mainCanvasId].canvas.height = size;
-        //     this.rlotties[this.mainCanvasId].canvas.style.width = size + "px";
-        //     this.rlotties[this.mainCanvasId].canvas.style.height = size + "px";
-        // }
-        // else {
-        // }
         this.rlotties.forEach(rm => {
             rm.canvas.width = size;
             rm.canvas.height = size;
@@ -507,8 +407,10 @@ function windowResize() {
         rlottieHandler.relayoutCanvas();
         if(rlottieHandler.wasPlaying) {
             rlottieHandler.wasPlaying = false;
+            rlottieHandler.play();
+        } else {
+            rlottieHandler.update();
         }
-        rlottieHandler.play();
     }, 150);
 }
 
