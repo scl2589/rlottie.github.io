@@ -2,6 +2,7 @@
   <div class="sidebar">
     <p class="title">
       Preference
+      <!-- canvas info -->
       <v-chip
         v-if="multiview"
         class="ml-1 mb-1 text-caption"
@@ -12,7 +13,7 @@
       </v-chip>
     </p>
     
-    <!-- Background color controller -->
+    <!-- background color controller -->
     <div class="preference" v-if="canvasstyle">
       <p class="preference-title mb-2">Background color</p>
       <div class="text-left">
@@ -89,7 +90,7 @@
     </div>
 
 
-    <!-- Border Options -->
+    <!-- border Options -->
     <div class="preference" v-if="canvasstyle">
       <p class="preference-title mb-0">Border</p>
       <div class="row d-flex align-items-center no-gutters">

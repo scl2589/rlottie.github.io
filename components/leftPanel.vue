@@ -2,9 +2,10 @@
   <div class="sidebar left-sidebar">
     <!-- preview -->
     <div class="preview container py-3 d-flex align-items-center" @click="clickMain">
-      <h5 class="ml-2 name mb-0 text-white" id="contentName" title="FileName">FileName</h5>
+      <h5 class="ml-2 name mb-0 text-white" id="contentName" title="FileName">Anubis.json</h5>
     </div>
 
+    <!-- tabs -->
     <v-tabs
       fixed-tabs
       background-color="sidebar"
@@ -66,7 +67,7 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
-
+            <!-- change visibility for all layers -->
             <div class="d-none sidebar--text">{{allLayersVisible}}</div>
             <div v-if="layers" class="d-flex justify-content-start align-items-center">
               <v-tooltip bottom nudge-top="10">
@@ -97,7 +98,6 @@
               item-key="id"
               transition
             >
-
               <template v-slot:prepend="{ item }">
                 <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3 ml-3">
                   <div class="thumbnailbox"><canvas :id="item.id" width="60" height="60"></canvas></div>
