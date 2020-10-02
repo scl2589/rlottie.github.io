@@ -193,6 +193,7 @@ class RLottieModule {
             height: '',
             borderShape: 0
         }
+    }
 
     makeGifFile(filename) {
         var gif = new GIF({
