@@ -487,6 +487,10 @@
           changeIsMultiView(state) {
             this.isMultiView = state
             this.selectedLayerTrigger = !this.selectedLayerTrigger
+            rlottieHandler.rlotties.forEach(rm => {
+              rm.canvas.style.width = "200px";
+              rm.canvas.style.height = "200px";
+            });
           },
 
           selectCanvas(id) {
