@@ -10,6 +10,51 @@
     <div class="d-flex">
 
       <div class="d-none d-sm-block">
+        <!-- Shortcut -->
+        <v-dialog
+          v-model="exportDialog2"
+          max-width="500"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <button
+              class="btn accent mx-2" 
+              :class="{ 'text-white': $vuetify.theme.dark }" 
+              depressed 
+              v-bind="attrs"
+              v-on="on"
+            >
+              Shortcut
+            </button>
+          </template>
+          <v-card>
+            <v-card-title class="headline">
+              Shortcut
+            </v-card-title>
+            <v-card-text>
+              <div class="d-flex align-items-center">
+                <ul>
+                  <li>shift + space : play/pause</li>
+                  <li>shift + m : dark mode/light mode</li>
+                  <li>shift + v : multiview/singleview</li>
+                  <li>shift + 1/2/3/4: select canvas</li>
+                  <li>shift + p : snapshot</li>
+                </ul>
+              </div>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="text"
+                text
+                @click="exportDialog2 = false"
+              >
+                Close
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        
+
         <!-- single/multi view -->
         <button class="multiview-btn btn mx-2 view-count preview text-white"  @click="changeViewCount">{{ viewCount }}</button>
 
@@ -75,22 +120,17 @@ module.exports = {
   name: 'navbar',
   data: function () {
     return {
-      mode: 'Light Mode',
       viewCount: 'Multi View',
       exportDialog: false,
+      exportDialog2: false
     }
   },
   methods: {
     changeMode() {
-      if (this.mode == 'Light Mode') {
-        this.mode = 'Dark Mode'
-        this.$vuetify.theme.dark = false
-      } else {
-        this.mode = 'Light Mode'
-        this.$vuetify.theme.dark = true
-      }
+        this.$vuetify.theme.dark = !this.$vuetify.theme.dark
     },
     changeViewCount() {
+      console.log(1)
       if (this.viewCount === 'Multi View') {
         this.viewCount = 'Single View'
         this.$emit('viewcount-changed', true)

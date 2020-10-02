@@ -426,7 +426,7 @@
           exportDialog() {
             if (this.exportDialog) {
               if (rlottieHandler.playing) {
-                document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
+                document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
                 rlottieHandler.pause();
                 rlottieHandler.playing = true 
               } else {
@@ -434,7 +434,7 @@
               }
             } else {
               if (rlottieHandler.playing) {
-                document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
+                document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
                 rlottieHandler.play();
               }
               this.snapshotName = ''
@@ -487,6 +487,10 @@
           changeIsMultiView(state) {
             this.isMultiView = state
             this.selectedLayerTrigger = !this.selectedLayerTrigger
+            rlottieHandler.rlotties.forEach(rm => {
+              rm.canvas.style.width = "200px";
+              rm.canvas.style.height = "200px";
+            });
           },
 
           selectCanvas(id) {
