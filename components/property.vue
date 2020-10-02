@@ -24,7 +24,7 @@
     </div>
 
     <!-- color controller -->
-    <div class="property">
+    <div class="property mt-7">
       <p class="property-title mb-2">Color</p>
       <div class="text-left d-flex align-items-center" v-if="selectedLayer.child.length !== 0" @click="clickColorError">
         <v-menu
@@ -109,7 +109,21 @@
 
     <!-- position controller -->
     <div class="property">
-      <p class="property-title mb-2">Position</p>
+      <div class="d-flex align-items-center mb-2">
+        <p class="property-title m-0">Position</p>
+        <v-tooltip bottom nudge-right="60" nudge-bottom="60">
+          <template v-slot:activator="{ on, attrs }">
+            <i
+              class="far fa-question-circle fa-sm ml-2"
+              v-bind="attrs"
+              v-on="on"
+            >
+            </i>
+          </template>
+          <span>X axis and Y axis directions are relative concepts that can differ depending on the file</span>
+        </v-tooltip>
+      </div>
+
       <div class="position d-flex">
         <v-text-field
           light
@@ -131,8 +145,32 @@
       </div>
     </div>
 
+    <!-- anchor controller -->
+    <!-- <div class="property">
+      <p class="property-title mb-2">Anchor</p>
+      <div class="position d-flex">
+        <v-text-field
+          light
+          solo
+          prefix="x"
+          v-model=""
+          placeholder="0"
+          @change=""
+          class="mr-3"
+        ></v-text-field>
+        <v-text-field
+          light
+          solo
+          prefix="y"
+          v-model=""
+          placeholder="0"
+          @change=""
+        ></v-text-field>
+      </div>
+    </div> -->
+
     <!-- scale controller -->
-    <div class="property">
+    <!-- <div class="property">
       <div class="d-flex align-items-center mb-2">
         <p class="property-title m-0">Scale</p>
         <v-tooltip bottom nudge-right="100" nudge-bottom="60">
@@ -169,10 +207,10 @@
           ></v-text-field>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- rotation controller -->
-    <div class="property">
+    <!-- <div class="property">
       <div class="d-flex align-items-center mb-2">
         <p class="property-title m-0">Rotation</p>
         <v-tooltip bottom nudge-right="60" nudge-bottom="60">
@@ -197,7 +235,9 @@
           :placeholder="selectedLayer.rotation"
         ></v-text-field>
       </div>
-    </div>
+    </div> -->
+
+
   </div>
   
 </template>
