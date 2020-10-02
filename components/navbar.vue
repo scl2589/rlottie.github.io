@@ -127,7 +127,7 @@ module.exports = {
   },
   data: function () {
     return {
-      viewCount: 'Multi View'
+      viewCount: 'Multi View',
       gifname: ""
     }
   },
@@ -151,6 +151,7 @@ module.exports = {
     },
     clickShortcutClose() {
       this.$emit('shortcutdialog-changed')
+    },
     downloadGIF() {
       if(this.gifname == "") return;
       else rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname);
