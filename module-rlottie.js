@@ -208,25 +208,23 @@ class RLottieModule {
             let result = Uint8ClampedArray.from(buffer);
             let imageData = new ImageData(result, this.canvas.width, this.canvas.height);
 
-            for (let k = 0; k < imageData.data.length; k+=4) {
-                if (imageData.data[k+0]+imageData.data[k+1]+imageData.data[k+2] != 0) continue;
+            for (let k = 0; k < imageData.data.length; k += 4) {
+                // background color가 아니면 continue;
+                if (imageData.data[k + 0] + imageData.data[k + 1] + imageData.data[k + 2] != 0) continue;
 
                 // background color
-                imageData.data[k+0] = this.canvasStyle.backgroundColor.rgba.r;
-                imageData.data[k+1] = this.canvasStyle.backgroundColor.rgba.g;
-                imageData.data[k+2] = this.canvasStyle.backgroundColor.rgba.b;
-                imageData.data[k+3] = this.canvasStyle.backgroundColor.rgba.a;
+                imageData.data[k + 0] = this.canvasStyle.backgroundColor.rgba.r;
+                imageData.data[k + 1] = this.canvasStyle.backgroundColor.rgba.g;
+                imageData.data[k + 2] = this.canvasStyle.backgroundColor.rgba.b;
+                imageData.data[k + 3] = this.canvasStyle.backgroundColor.rgba.a;
             }
 
-            gif.addFrame(imageData, {delay: 1000/60});
+            gif.addFrame(imageData, {delay: 1000 / 60});
         }
 
-        gif.on('finished', function(blob) {
-            // window.open(URL.createObjectURL(blob));
-
+        gif.on('finished', blob => {
             var a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            // filename
             a.download = filename;
             document.body.appendChild(a);
             a.click();

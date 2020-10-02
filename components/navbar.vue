@@ -96,8 +96,9 @@
                 solo-reverse
                 color="text"
                 placeholder="File name"
+                v-model="gifname"
               ></v-text-field>
-              <v-btn class="ml-4" color="accent">Download</v-btn>
+              <v-btn class="ml-4" color="accent" @click="downloadGIF">Download</v-btn>
             </div>
           </v-card-text>
           <v-card-actions>
@@ -127,6 +128,7 @@ module.exports = {
   data: function () {
     return {
       viewCount: 'Multi View'
+      gifname: ""
     }
   },
   methods: {
@@ -149,6 +151,10 @@ module.exports = {
     },
     clickShortcutClose() {
       this.$emit('shortcutdialog-changed')
+    downloadGIF() {
+      if(this.gifname == "") return;
+      else rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname);
+      // 끝나고 close, this.gifname = "" 하기
     }
   }
 }
