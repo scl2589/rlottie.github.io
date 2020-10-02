@@ -8,14 +8,12 @@
     <title>rlottie viewer</title>
     <link rel="stylesheet" href="style.css">
     <!-- bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">   
     <!-- vuetify -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
-
     <!-- font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
     <style>
@@ -97,15 +95,16 @@
   <body>
     <v-app class="window" id="app">
       <div class="row no-gutters">
+        <!-- navbar component -->
         <navbar @viewcount-changed="changeIsMultiView" @exportdialog-changed="exportdialog = false" :exportdialog="exportdialog" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-12 zindex2"></navbar>
-
+        <!-- leftPanel component -->
         <leftpanel @layer-selected="layerSelected" :layers="layers" :canvasid="selectedCanvasId" :trigger="selectedLayerTrigger" class="col-3 zindex2"></leftpanel>
-
-        <!-- Player  -->
+        <!-- player  -->
         <div class="col-6 bg-white">
           <div id="player" class="player d-flex flex-column justify-content-between">
             <div class="screen my-auto mx-auto d-flex justify-content-center align-items-center">
               <div class="my-auto mx-auto d-flex justify-content-center align-items-center row" id="content">
+                <!-- canvas 1 -->
                 <div
                   class="d-flex justify-content-center align-items-center"
                   :class="{ 'col-6': isMultiView, 'col-12': !isMultiView }"
@@ -126,6 +125,7 @@
                     @click="selectCanvas(0)">
                   </canvas>
                 </div>
+                <!-- canvas 2 -->
                 <div
                   class="d-flex justify-content-center align-items-center"
                   :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }"
@@ -146,6 +146,7 @@
                     @click="selectCanvas(1)">
                   </canvas>
                 </div>
+                <!-- canvas 3 -->
                 <div
                   class="d-flex justify-content-center align-items-center"
                   :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }"
@@ -166,6 +167,7 @@
                     @click="selectCanvas(2)">
                   </canvas>
                 </div>
+                <!-- canvas 4 -->
                 <div
                   class="d-flex justify-content-center align-items-center"
                   :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }"
@@ -188,6 +190,7 @@
                 </div>
               </div>
             </div>
+            <!-- snapshot -->
             <div class="zindex3 d-flex justify-content-end mr-3 mb-3">
               <v-dialog
                 v-model="snapshotDialog"
@@ -224,7 +227,7 @@
                         placeholder="File name"
                         v-model="snapshotName"
                       ></v-text-field>
-                      <v-btn class="ml-4" color="canvas" :href="snapshotURL" :download="snapshotName">Download</v-btn>
+                      <v-btn class="btn ml-4" color="canvas" :href="snapshotURL" :download="snapshotName">Download</v-btn>
                     </div>
                   </v-card-text>
                   <v-card-actions>
@@ -240,7 +243,7 @@
                 </v-card>
               </v-dialog>
             </div>
-        
+            <!-- toolbox -->
             <div class="toolbox zindex2">
               <div class="collapse" id="collapseExtraTools">
                 <div class="extra-tools d-flex justify-content-around align-items-center">
@@ -288,6 +291,7 @@
                   </div>
                 </div>
               </div>
+              <!-- playbar -->
               <div class="d-flex justify-content-around align-items-center toolbox-basic" id="playbar">
                 <span class="play-button" type="button" id="playButton" onclick="buttonClicked()"><i class="fas fa-pause"></i></span>
                 <div class="d-flex flex-column align-items-between">
@@ -303,15 +307,11 @@
                 </span>
               </div>
             </div>
-          
           </div>
         </div>
-        
-
+        <!-- right panels - property component and preference component -->
         <property v-if="selectedLayer" :selected-layer="selectedLayer" :canvasid="selectedCanvasId" :multiview="isMultiView" class="col-3 zindex2"></property>
-
         <preference v-else :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" :multiview="isMultiView" class="col-3 zindex2"></preference>
-
       </div>
     </v-app>
 
@@ -329,6 +329,7 @@
       var app = new Vue({
         el: '#app',
         vuetify: new Vuetify({
+          // color themes for dark/light mode
           theme: {
             themes: {
               dark: {
@@ -358,13 +359,13 @@
         components: {
           'navbar': httpVueLoader('./components/navbar.vue'),
           'leftpanel': httpVueLoader('./components/leftPanel.vue'),
-          'player': httpVueLoader('./components/player.vue'),
           'property': httpVueLoader('./components/property.vue'),
           'preference': httpVueLoader('./components/preference.vue')
         },
 
         data() {
           return {
+            // layer data
             layers: [],
             selectedLayer: null,
             selectedLayerTrigger: false,
@@ -384,11 +385,13 @@
             selectedCanvasId: 0,
             selectedCanvas: null,
             selectedCanvasStyle: null,
-
+            
+            // snapshot
             snapshotDialog: false,
             snapshotName: '',
             snapshotURL: null,
 
+            // dialogs
             exportdialog: false,
             shortcutdialog: false
           }

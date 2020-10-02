@@ -8,7 +8,6 @@
 
     <!-- button group -->
     <div class="d-flex">
-
       <div class="d-none d-sm-block">
         <!-- Shortcut -->
         <v-dialog
@@ -55,22 +54,17 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        
-
         <!-- single/multi view -->
         <button class="multiview-btn btn mx-2 view-count preview text-white"  @click="changeViewCount">{{ viewCount }}</button>
-
         <!-- light/dark mode -->
         <button v-if="$vuetify.theme.dark" class="btn mx-2 mode" @click="changeMode"><v-icon class="text-dark">mdi-white-balance-sunny</v-icon></button>
         <button v-else class="btn mx-2 mode" @click="changeMode"><i class="fas fa-moon text-white"></i></button>
       </div>
-
       <!-- import/export -->
       <div class="filebox mx-2">
         <label for="fileSelector"><span class="d-inline-block pt-1">New Lottie</span></label>
         <input class="upload-hidden" type="file" id="fileSelector" accept=".json" placeholder="New Lottie">
       </div>
-
       <v-dialog
         v-model="exportdialog"
         max-width="500"
@@ -83,7 +77,8 @@
             v-bind="attrs"
             v-on="on"
           >
-            Export <i class="fas fa-download ml-2"></i>
+            Export 
+            <i class="fas fa-download ml-2"></i>
           </button>
         </template>
         <v-card>
@@ -113,7 +108,6 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      
     </div>
   </div>
 </template>

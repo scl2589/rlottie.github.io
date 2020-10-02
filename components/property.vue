@@ -2,6 +2,7 @@
   <div class="sidebar scroll-sect" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
     <p class="title">
       Property
+      <!-- canvas info -->
       <v-chip
         v-if="multiview"
         class="ml-1 mb-1 text-caption"
@@ -12,6 +13,7 @@
       </v-chip>
     </p>
 
+    <!-- keypath info -->
     <div class="mt-5">
       <p class="font-weight-medium">
         Keypath
