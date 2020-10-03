@@ -22,23 +22,23 @@
               v-bind="attrs"
               v-on="on"
             >
-              Shortcut
+              Shortcuts
             </button>
           </template>
           <v-card>
             <v-card-title class="headline">
-              Shortcut
+              Shortcuts
             </v-card-title>
             <v-card-text>
-              <div class="d-flex align-items-center">
+              <div class="d-flex align-items-center icon--text text-body-1 ml-3">
                 <ul>
-                  <li>shift + space : play/pause</li>
-                  <li>shift + m : dark mode/light mode</li>
-                  <li>shift + v : multiview/singleview</li>
-                  <li>shift + 1/2/3/4: select canvas</li>
-                  <li>shift + p : snapshot</li>
-                  <li>shift + s : export file to gif</li>
-                  <li>shift + c : shortcut</li>
+                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + space <v-icon small color="icon" class="mb-1">mdi-keyboard-space</v-icon> : Play / Pause</li>
+                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + m : Dark Mode / Light Mode</li>
+                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + v : Multiview / Singleview</li>
+                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + 1/2/3/4 : Select Canvas</li>
+                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + p : Snapshot</li>
+                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + s : Export File to GIF</li>
+                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + c : Shortcut</li>
                 </ul>
               </div>
             </v-card-text>
