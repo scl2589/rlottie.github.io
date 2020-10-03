@@ -381,6 +381,7 @@ class RLottieHandler {
             rm.curFrame = value;
             rm.render(this.playSpeed);
         });
+        currentFrame.innerText = String(Math.round(this.rlotties[this.mainCanvasId].curFrame - 1));
     }
 
     snapshot() {
