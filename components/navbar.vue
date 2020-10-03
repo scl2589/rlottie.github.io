@@ -76,7 +76,6 @@
             depressed 
             v-bind="attrs"
             v-on="on"
-            @click="getCanvasSize"
           >
             Export
             <i class="fas fa-download ml-2"></i>
@@ -129,6 +128,18 @@ module.exports = {
       canvasHeight: 0
     }
   },
+  watch: {
+    exportdialog(val) {
+      if(val) {
+        this.canvasWidth = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.width;
+        this.canvasHeight = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.height;
+        pause();
+      } else {
+        document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
+        rlottieHandler.play();
+      }
+    }
+  },
   methods: {
     changeMode() {
         this.$vuetify.theme.dark = !this.$vuetify.theme.dark
@@ -140,7 +151,6 @@ module.exports = {
       } else {
         this.viewCount = 'Multi View'
       }
-      console.log("aa");
       windowResize();
     },
     clickExportDialogClose() {
@@ -151,16 +161,12 @@ module.exports = {
       this.shortcutdialog = false
       this.$emit('shortcutdialog-changed')
     },
-    getCanvasSize() {
-      this.canvasWidth = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.width;
-      this.canvasHeight = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.height;
-    },
     downloadGIF() {
-      if(this.gifname == "") return;
-      else {
-        rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname);
-        this.clickExportDialogClose()
-      }// 끝나고 close, this.gifname = "" 하기
+      if(this.gifname == "") this.gifname = "download";
+      rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname, () => {
+        this.gifname = "";
+        this.clickExportDialogClose();
+      });
     }
   }
 }

@@ -190,13 +190,11 @@ class RLottieModule {
         }
     }
 
-    makeGifFile(filename) {
+    makeGifFile(filename, callback) {
         var gif = new GIF({
             workers: 10,
             quality: 1
         });
-
-        console.log(this.canvasStyle.backgroundColor.rgba);
 
         for (let i = 0; i <= this.frameCount; i++) {
             let buffer = this.lottieHandle.render(i, this.canvas.width, this.canvas.height);
@@ -223,6 +221,7 @@ class RLottieModule {
             a.download = filename;
             document.body.appendChild(a);
             a.click();
+            callback();
         });
 
         gif.render();
@@ -615,8 +614,10 @@ document.onkeydown = function(e) {
     // shift + space: play, pause
     if (e.which == 32 && isShift) {
         if (rlottieHandler.playing) {
+            document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
             rlottieHandler.pause()
         } else {
+            document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
             rlottieHandler.play()
         }
     }
