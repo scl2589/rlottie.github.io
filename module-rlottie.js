@@ -187,7 +187,8 @@ class RLottieModule {
             borderWidth: '1',
             width: '',
             height: '',
-            borderShape: 0
+            borderShape: 0,
+            degree: 0
         }
     }
 
