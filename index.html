@@ -452,32 +452,24 @@
           },
 
           changePlay() {
-            if (this.defaultDirection === 'Forward') {
-              setPlaySpeed(Number(this.defaultSpeed))
-            }
-            else {
-              setPlaySpeed(Number(this.defaultSpeed) * -1)
-            }
+            if (this.defaultDirection === 'Forward') setPlaySpeed(Number(this.defaultSpeed))
+            else setPlaySpeed(Number(this.defaultSpeed) * -1)
           },
 
           changePlayType() {
             if(this.defaultType === "Hover") {
-              rlottieHandler.pause();
-              document.getElementById("content").addEventListener("mouseover", play);
-              document.getElementById("content").addEventListener("mouseout", pause);
+              document.getElementById("content").addEventListener("mouseover", playDisable);
+              document.getElementById("content").addEventListener("mouseout", pauseDisable);
               rlottieHandler.isHover = true;
               this.hoverFlag = true;
-              if(rlottieHandler.playing) document.getElementById("playButton").innerHTML = "<i class='fas fa-play' style='color:#979797'></i>";
-              else document.getElementById("playButton").innerHTML = "<i class='fas fa-pause' style='color:#979797'></i>";
+              pauseDisable();
             }
             if(this.defaultType !== "Hover" && this.hoverFlag) {
-              rlottieHandler.play();
-              document.getElementById("content").removeEventListener("mouseover", play);
-              document.getElementById("content").removeEventListener("mouseout", pause);
+              document.getElementById("content").removeEventListener("mouseover", playDisable);
+              document.getElementById("content").removeEventListener("mouseout", pauseDisable);
               rlottieHandler.isHover = false;
               this.hoverFlag = false;
-              if(rlottieHandler.playing) document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
-              else document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
+              play();
             }
             if(this.defaultType === "Bounce") {
               rlottieHandler.isBounce = true;
@@ -491,35 +483,28 @@
           changeIsMultiView(state) {
             this.isMultiView = state
             this.selectedLayerTrigger = !this.selectedLayerTrigger
-            rlottieHandler.rlotties.forEach(rm => {
-              rm.canvas.style.width = "200px";
-              rm.canvas.style.height = "200px";
-            });
+            canvasResize(200, 200);
           },
 
           selectCanvas(id) {
             if (this.isMultiView) {
               this.selectedCanvasId = id;
               rlottieHandler.mainCanvasId = id;
-              this.selectedCanvas = rlottieHandler.rlotties[id].canvas;
-              this.selectedCanvasStyle = rlottieHandler.rlotties[id].canvasStyle;
-              this.layers = rlottieHandler.rlotties[id].layerTree.child;
+              this.selectedCanvas = getRModule(id).canvas;
+              this.selectedCanvasStyle = getRModule(id).canvasStyle;
+              this.layers = getRModule(id).layerTree.child;
               this.selectedLayerTrigger = !this.selectedLayerTrigger;
               this.selectedLayer = null;
-              setTimeout(() => {
-                thumbnailHandler.setModuleCanvas(rlottieHandler.rlotties[id].layerTree.child);
-              }, 100);
+              setTimeout(_ => thumbnailHandler.setModuleCanvas(getRModule(id).layerTree.child), 100);
             };
           },
 
           extraButtonClick() {
-            setTimeout(() => {
-              rlottieHandler.relayoutCanvas();
-            }, 350)
+            setTimeout(() => rlottieHandler.relayoutCanvas(), 350)
           },
 
           clickSnapShot() {
-            rlottieHandler.snapshot();
+            rlottieHandler.setSnapshotURL();
           },
 
           clickSnapshotClose() {

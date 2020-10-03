@@ -14,7 +14,7 @@ function setup() {
         Module.onRuntimeInitialized = _ => {
             rlottieHandler = new RLottieHandler(4);
             setTimeout(() => {
-                thumbnailHandler = new ThumbnailHandler(rlottieHandler.rlotties[0].layerTree.child, rlottieHandler.jsString);
+                thumbnailHandler = new ThumbnailHandler(getRModule(0).layerTree.child, rlottieHandler.jsString);
             }, 500);
             addListener();
             window.requestAnimationFrame(updater);
@@ -231,29 +231,23 @@ class RLottieModule {
 }
 
 class RLottieHandler {
-    rlotties = [];
-    isMultiView = false;
-    rafId = 0;
-    resizeId = {};
-    playing = true;
-    wasPlaying = false;
-    playDir = true;
-    playSpeed = 1;
-    isBounce = false;
-    slider = {};
-    frameCount = {};
-    currentFrame = {};
-    jsString = "";
-    curFrame = 0;
-    isHover = false;
-    searchList = [];
-    mainCanvasId = 0;
-
     constructor(size) {
         layerNodeSize = 0;
+        this.rafId = 0;
+        this.resizeId = {};
+        this.mainCanvasId = 0;
+        this.rlotties = [];
+        this.curFrame = 0;
+        this.playing = true;
+        this.wasPlaying = false;
+        this.playSpeed = 1;
+        this.playDir = true;;
+        this.isBounce = false;
+        this.isHover = false;
         for (let i = 1; i <= size; i++) {
             this.rlotties.push(new RLottieModule("myCanvas" + i));
         }
+
         this.relayoutCanvas();
         this.slider = document.getElementById("slider");
         this.frameCount = document.getElementById("frameCount");
@@ -273,9 +267,11 @@ class RLottieHandler {
         var nextDir = this.playDir;
         var isMultiView = app.$root.isMultiView;
         for(let i = 0; i < this.rlotties.length; i++) {
-            var rm = this.rlotties[i];
             if(!isMultiView && i != this.mainCanvasId) continue;
+
+            var rm = this.rlotties[i];
             rm.render(this.playSpeed);
+            
             if(this.playDir && rm.curFrame > rm.frameCount) {
                 if(this.isBounce) {
                     nextSpeed = -this.playSpeed;
@@ -294,64 +290,54 @@ class RLottieHandler {
         this.playSpeed = nextSpeed;
         this.playDir = nextDir;
         this.curFrame = this.rlotties[this.mainCanvasId].curFrame;
-        currentFrame.innerText = String(Math.round(this.rlotties[this.mainCanvasId].curFrame - 1));
-        slider.value = this.rlotties[this.mainCanvasId].curFrame;
+        currentFrame.innerText = String(Math.round(this.curFrame - 1));
+        slider.value = this.curFrame;
     }
 
     reload(jsString) {
         layerNodeSize = 0;
+        rlottieHandler.mainCanvasId = 0;
         this.rlotties.forEach(rm => {
             rm.lottieHandle.load(jsString);
             rm.frameCount = rm.lottieHandle.frames();
-            var newFrameCount = document.getElementById("frameCount");
-            newFrameCount.innerText = String(rm.frameCount);
             rm.curFrame = 0;
             rm.makeLayerTree();
             rm.makeCanvasStyle();
-            rm.canvas.style.backgroundColor = rm.canvasStyle.backgroundColor.hex
-            rm.canvas.style.borderColor = rm.canvasStyle.borderColor.hex
-            rm.canvas.style.borderWidth = rm.canvasStyle.borderWidth + "px"
-            rm.canvas.style.borderRadius = 0
-            this.relayoutCanvas()
         });
+        this.relayoutCanvas();
 
         this.jsString = jsString;
         this.slider.max = this.rlotties[0].frameCount;
         this.slider.value = 0;
-        this.frameCount = String(this.rlotties[0].frameCount);
+        this.frameCount.innerText = String(this.rlotties[0].frameCount);
         
         app.$root.layers = this.rlotties[0].layerTree.child;
         app.$root.selectedCanvas = this.rlotties[0].canvas;
         app.$root.selectedCanvasStyle = this.rlotties[0].canvasStyle;
         app.$root.selectedCanvasId = 0;
-        rlottieHandler.mainCanvasId = 0;
+        
         app.$root.selectedLayerTrigger = !app.$root.selectedLayerTrigger;
         app.$root.selectedLayer = null;
         thumbnailHandler.reload(this.rlotties[0].layerTree.child, this.jsString);
 
-        if (!this.playing) {
-            document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
-            this.play();
-        }
+        if(this.playing) return;
+        
+        document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
+        this.play();
     }
 
-    reset(idx) {
-        var rm = this.rlotties[idx];
+    reset(canvasId) {
+        var rm = this.rlotties[canvasId];
         rm.lottieHandle.load(this.jsString);
         rm.curFrame = this.curFrame;
-        rm.makeCanvasStyle();
-        rm.canvas.style.backgroundColor = rm.canvasStyle.backgroundColor.hex
-        rm.canvas.style.borderColor = rm.canvasStyle.borderColor.hex
-        rm.canvas.style.borderWidth = rm.canvasStyle.borderWidth + "px"
-        rm.canvas.style.borderRadius = 0
-        this.relayoutCanvas()
-        app.$root.selectedCanvasStyle = rm.canvasStyle
-
         rm.makeLayerTree();
+        rm.makeCanvasStyle();
+        this.relayoutCanvas();
+
+        app.$root.selectedCanvasStyle = rm.canvasStyle
         app.$root.layers = rm.layerTree.child;
-        setTimeout(() => {
-        thumbnailHandler.setModuleCanvas(rm.layerTree.child);
-        }, 100);
+
+        setTimeout(_ => thumbnailHandler.setModuleCanvas(rm.layerTree.child), 100);
         if(!this.playing) this.play();
     }
 
@@ -362,18 +348,15 @@ class RLottieHandler {
 
     update() {
         var curFrame = this.rlotties[this.mainCanvasId].curFrame;
-        this.rlotties.forEach(rm => {
-            rm.curFrame = curFrame;
-        })
+        this.rlotties.forEach(rm => rm.curFrame = curFrame);
         this.render();
     }
 
     play() {
+        if(this.playing) return;
         this.playing = true;
         var curFrame = this.rlotties[this.mainCanvasId].curFrame;
-        this.rlotties.forEach(rm => {
-            rm.curFrame = curFrame;
-        })
+        this.rlotties.forEach(rm => rm.curFrame = curFrame)
         this.rafId = window.requestAnimationFrame(updater);
     }
 
@@ -382,10 +365,11 @@ class RLottieHandler {
             rm.curFrame = value;
             rm.render(this.playSpeed);
         });
-        currentFrame.innerText = String(Math.round(this.rlotties[this.mainCanvasId].curFrame - 1));
+        this.curFrame = this.rlotties[this.mainCanvasId].curFrame;
+        currentFrame.innerText = String(Math.round(this.curFrame - 1));
     }
 
-    snapshot() {
+    setSnapshotURL() {
         var canvas = this.rlotties[this.mainCanvasId].canvas;
         if (canvas.width == 0 || canvas.height == 0) return;
         app.$root.snapshotURL = canvas.toDataURL()
@@ -418,19 +402,6 @@ class RLottieHandler {
     }
 }
 
-function getSearchItem() {
-    dfs(rlottieHandler.rlotties[rlottieHandler.mainCanvasId].layerTree);
-    rlottieHandler.searchList.shift();
-    return rlottieHandler.searchList;
-}
-
-function dfs(node, items) {
-    rlottieHandler.searchList.push(node.keypath);
-    for(let i = 0; i < node.child.length; i++) {
-        dfs(node.child[i]);
-    }
-}
-
 function updater() {
     rlottieHandler.rafId = window.requestAnimationFrame(updater);
     rlottieHandler.render();
@@ -438,13 +409,35 @@ function updater() {
 }
 
 function play() {
+    document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
+    rlottieHandler.play();
+}
+
+function playDisable() {
+    console.log("aa");
     document.getElementById("playButton").innerHTML = "<i class='fas fa-pause' style='color:#979797'></i>";
     rlottieHandler.play();
 }
 
 function pause() {
+    document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
+    rlottieHandler.pause();
+}
+
+function pauseDisable() {
     document.getElementById("playButton").innerHTML = "<i class='fas fa-play' style='color:#979797'></i>";
     rlottieHandler.pause();
+}
+
+function getRModule(canvasId) {
+    return rlottieHandler.rlotties[canvasId];
+}
+
+function canvasResize(width, height) {
+    rlottieHandler.rlotties.forEach(rm => {
+        rm.canvas.style.width = width + "px";
+        rm.canvas.style.height = height + "px";
+    });
 }
 
 function windowResize() {
@@ -452,28 +445,22 @@ function windowResize() {
         rlottieHandler.wasPlaying = true;
         rlottieHandler.pause();
     }
+
     clearTimeout(rlottieHandler.resizeId);
     rlottieHandler.resizeId = setTimeout(() => {
         rlottieHandler.relayoutCanvas();
         if(rlottieHandler.wasPlaying) {
             rlottieHandler.wasPlaying = false;
             rlottieHandler.play();
-        } else {
-            rlottieHandler.update();
-        }
+        } 
+        else rlottieHandler.update();
     }, 150);
 }
 
 function buttonClicked() {
     if(rlottieHandler.isHover) return;
-    if (rlottieHandler.playing) {
-        document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
-        rlottieHandler.pause();
-    }
-    else {
-        document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
-        rlottieHandler.play();
-    }
+    if (rlottieHandler.playing) pause();
+    else play();
 }
 
 function onSliderDrag(value) {
@@ -524,50 +511,46 @@ function handleFileSelect(event) {
     handleFiles(event.dataTransfer.files);
 }
 
-function getLayerList(lottieModule) {
-    return lottieModule.layerTree;
-}
-
 function setLayerColor(node, r, g, b, canvasid) {
     var keypath = node.keypath + ".**";
-    if(node.type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillColor(keypath, r, g, b);
-    else if(node.type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeColor(keypath, r, g, b);
+    if(node.type == "Fill") getRModule(canvasid).lottieHandle.setFillColor(keypath, r, g, b);
+    else if(node.type == "Stroke") getRModule(canvasid).lottieHandle.setStrokeColor(keypath, r, g, b);
     propertiesCascading(node, [{ name: "color",  value: node.color }]);
 }
 
 function setLayerOpacity(node, opacity, canvasid) {
     var keypath = node.keypath + ".**";
     node.beforeOpacity = node.opacity;
-    if(node.type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillOpacity(keypath, opacity);
-    else if(node.type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(keypath, opacity);
+    if(node.type == "Fill") getRModule(canvasid).lottieHandle.setFillOpacity(keypath, opacity);
+    else if(node.type == "Stroke") getRModule(canvasid).lottieHandle.setStrokeOpacity(keypath, opacity);
     else if(node.type == "both") {
-        rlottieHandler.rlotties[canvasid].lottieHandle.setFillOpacity(keypath, opacity);
-        rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(keypath, opacity);
+        getRModule(canvasid).lottieHandle.setFillOpacity(keypath, opacity);
+        getRModule(canvasid).lottieHandle.setStrokeOpacity(keypath, opacity);
     }
     propertiesCascading(node, [{ name: "opacity", value: opacity }]);
 }
 
 function setStrokeWidth(node, width, canvasid) {
     var keypath = node.keypath + ".**";
-    rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeWidth(keypath, width);
+    getRModule(canvasid).lottieHandle.setStrokeWidth(keypath, width);
     propertiesCascading(node, [{ name: "strokeWidth", value: width}]);
 }
 
 function setPosition(node, x, y, canvasid) {
     var keypath = node.keypath + ".**";
-    rlottieHandler.rlotties[canvasid].lottieHandle.setPosition(keypath, x, y);
+    getRModule(canvasid).lottieHandle.setPosition(keypath, x, y);
     propertiesCascading(node, [{ name: "xPos", value: x }, { name: "yPos", value: y }]);
 }
 
 function setScale(node, width, height, canvasid) {
     var keypath = node.keypath + ".**";
-    rlottieHandler.rlotties[canvasid].lottieHandle.setScale(keypath, width, height);
+    getRModule(canvasid).lottieHandle.setScale(keypath, width, height);
     propertiesCascading(node, [{ name: "scaleWidth", value: width }, { name: "scaleHeight", value: height }]);
 }
 
 function setRotation(node, degree, canvasid) {
     var keypath = node.keypath + ".**";
-    rlottieHandler.rlotties[canvasid].lottieHandle.setRotation(keypath, degree);
+    getRModule(canvasid).lottieHandle.setRotation(keypath, degree);
     propertiesCascading(node, [{ name: "rotation", value: degree }]);
 }
 
@@ -590,14 +573,6 @@ function propertiesCascading(node, properties) {
     });
     for(let i = 0; i < node.child.length; i++) {
         propertiesCascading(node.child[i], properties);
-    }
-}
-
-function allLayerTypeList() {
-    var layers = [];
-    var alv = rlottieHandler.rlotties[0].lottieHandle.allLayerTypeList();
-    for(let i=0;i<alv.size();i++) {
-        console.log(alv.get(i));
     }
 }
 
