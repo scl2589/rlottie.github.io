@@ -22,7 +22,7 @@
     <v-app class="window" id="app">
       <div class="row no-gutters">
         <!-- navbar component -->
-        <navbar @viewcount-changed="changeIsMultiView" @exportdialog-changed="exportdialog = false" :exportdialog="exportdialog" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-12 zindex2"></navbar>
+        <navbar @viewcount-changed="changeIsMultiView" @exportdialog-changed="exportdialog = false" :exportdialog="exportdialog" class="col-12 zindex2"></navbar>
         <!-- leftPanel component -->
         <leftpanel @layer-selected="layerSelected" :layers="layers" :canvasid="selectedCanvasId" :trigger="selectedLayerTrigger" class="col-3 zindex2"></leftpanel>
         <!-- player  -->
@@ -38,7 +38,7 @@
                   <v-chip
                     v-if="isMultiView"
                     class="mr-2 canvas-chip text-caption"
-                    color="#0fccce"
+                    color="canvas"
                     small
                   >1</v-chip>
                   <canvas
@@ -57,7 +57,7 @@
                   <v-chip
                     v-if="isMultiView"
                     class="mr-2 canvas-chip text-caption"
-                    color="#0fccce"
+                    color="canvas"
                     small
                   >2</v-chip>
                   <canvas
@@ -76,7 +76,7 @@
                   <v-chip
                     v-if="isMultiView"
                     class="mr-2 canvas-chip text-caption"
-                    color="#0fccce"
+                    color="canvas"
                     small
                   >3</v-chip>
                   <canvas
@@ -95,7 +95,7 @@
                   <v-chip
                     v-if="isMultiView"
                     class="mr-2 canvas-chip text-caption"
-                    color="#0fccce"
+                    color="canvas"
                     small
                   >4</v-chip>
                   <canvas
@@ -222,8 +222,8 @@
           </div>
         </div>
         <!-- right panels - property component and preference component -->
-        <property v-if="selectedLayer" :selected-layer="selectedLayer" :canvasid="selectedCanvasId" :multiview="isMultiView" class="col-3 zindex2"></property>
-        <preference v-else :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" :multiview="isMultiView" class="col-3 zindex2"></preference>
+        <property v-if="selectedLayer" :selected-layer="selectedLayer" :canvasid="selectedCanvasId" :multiview="isMultiView" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-3 zindex2"></property>
+        <preference v-else :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" :multiview="isMultiView" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-3 zindex2"></preference>
       </div>
     </v-app>
 
