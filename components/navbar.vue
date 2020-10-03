@@ -57,7 +57,7 @@
         <button class="multiview-btn btn mx-2 view-count preview text-white"  @click="changeViewCount">{{ viewCount }}</button>
         <!-- light/dark mode -->
         <button v-if="$vuetify.theme.dark" class="btn mx-2 mode" @click="changeMode"><v-icon class="text-dark">mdi-white-balance-sunny</v-icon></button>
-        <button v-else class="btn mx-2 mode" @click="changeMode"><i class="fas fa-moon text-white"></i></button>
+        <button v-else class="btn mx-2 mode" @click="changeMode"><em class="fas fa-moon text-white"></em></button>
       </div>
       <!-- import file -->
       <div class="filebox mx-2">
@@ -78,7 +78,7 @@
             v-on="on"
           >
             Export
-            <i class="fas fa-download ml-2"></i>
+            <em class="fas fa-download ml-2"></em>
           </button>
         </template>
         <v-card>
@@ -144,8 +144,8 @@ module.exports = {
   watch: {
     exportdialog(val) {
       if(val) {
-        this.canvasWidth = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.width;
-        this.canvasHeight = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.height;
+        this.canvasWidth = getRModule(rlottieHandler.mainCanvasId).canvas.width;
+        this.canvasHeight = getRModule(rlottieHandler.mainCanvasId).canvas.height;
         pause();
       } else {
         document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
@@ -179,7 +179,7 @@ module.exports = {
       this.downloadDisabled = true
       this.exportOverlay = true
       if (this.gifname == "") this.gifname = "download";
-      rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname, () => {
+      rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname, _ => {
         this.gifname = "";
         this.downloadDisabled = false
         this.exportOverlay = false;

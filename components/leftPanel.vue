@@ -73,8 +73,8 @@
               <v-tooltip bottom nudge-top="10">
                 <template v-slot:activator="{ on, attrs }">
                   <button @click="changeAllVisibility" class="eye-btn btn" v-bind="attrs" v-on="on">
-                    <i v-if="layers.allVisibility" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
-                    <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+                    <em v-if="layers.allVisibility" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></em>
+                    <em v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></em>
                   </button>
                 </template>
                 <span v-if="layers.allVisibility">Make all layers invisible</span>
@@ -116,8 +116,8 @@
               <template v-slot:append="{ item }">
                 <div v-if="topNodes.includes(item.keypath)" class="d-flex align-items-center">
                   <button @click.stop="changeVisibility(item)" class="eye-btn btn">
-                    <i v-if="item.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
-                    <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+                    <em v-if="item.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></em>
+                    <em v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></em>
                   </button>
                 </div>
               </template>
@@ -134,12 +134,12 @@
               <p class="title m-0">Search layer</p>
               <v-tooltip right>
                 <template v-slot:activator="{ on, attrs }">
-                  <i
+                  <em
                     class="far fa-question-circle fa-sm ml-2"
                     v-bind="attrs"
                     v-on="on"
                   >
-                  </i>
+                  </em>
                 </template>
                 <span>Keypath should be linked with periods</span>
               </v-tooltip>
@@ -189,8 +189,8 @@
               <template v-slot:append="{ item }">
                 <div v-if="topNodes.includes(item.keypath)" class="d-flex align-items-center">
                   <button @click="changeVisibility(item)" class="eye-btn btn">
-                    <i v-if="item.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></i>
-                    <i v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></i>
+                    <em v-if="item.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></em>
+                    <em v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></em>
                   </button>
                 </div>
               </template>
@@ -222,22 +222,19 @@ module.exports = {
   },
 
   computed: {
-
     topNodes() {
       var nodes = []
-      for (node of this.layers) {
+      for (let node of this.layers) {
         nodes.push(node.keypath)
       }
       return nodes
     },
-
   },
 
   watch: {
     trigger() {
       this.selectedLayer = []
     },
-
   },
 
   methods: {
@@ -275,10 +272,8 @@ module.exports = {
         });
       } else {
         this.layers.forEach(layer => {
-          if (!layer.visible) {
-            layer.opacity = layer.beforeOpacity
-          }
-          layer.visible = false
+          if (!layer.visible) layer.opacity = layer.beforeOpacity;
+          layer.visible = false;
           setLayerOpacity(layer, 0, this.canvasid)
         });
       }
