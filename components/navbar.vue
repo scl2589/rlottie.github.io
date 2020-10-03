@@ -106,6 +106,7 @@
               color="text"
               text
               @click="clickExportDialogClose"
+              :disabled="closeDisabled"
             >
               Close
             </v-btn>
@@ -140,6 +141,7 @@ module.exports = {
       canvasHeight: 0,
       exportOverlay: false,
       downloadDisabled: false,
+      closeDisabled: false,
     }
   },
   watch: {
@@ -177,11 +179,13 @@ module.exports = {
       this.$emit('shortcutdialog-changed')
     },
     downloadGIF() {
+      this.closeDisabled = true
       this.downloadDisabled = true
       this.exportOverlay = true
       if (this.gifname == "") this.gifname = "download";
       rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname, () => {
         this.gifname = "";
+        this.closeDisabled = true
         this.downloadDisabled = false
         this.exportOverlay = false;
         this.clickExportDialogClose();
