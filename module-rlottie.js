@@ -387,9 +387,8 @@ class RLottieHandler {
 
         var maxSize = width < height ? width : height;
         var size = width < height ? width : height;
-        if(typeof (app.$root.isMultiView) !== "undefined") {
+        if(typeof (app.$root.isMultiView) != "undefined") {
             maxSize = app.$root.isMultiView ?  width : height;
-
             if(app.$root.isMultiView) size /= 2;
         }
         size = size < maxSize ? size : maxSize;
@@ -409,23 +408,23 @@ function updater() {
 }
 
 function play() {
-    document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
+    document.getElementById("playButton").innerHTML = "<em class='fas fa-pause'></em>";
     rlottieHandler.play();
 }
 
 function playDisable() {
     console.log("aa");
-    document.getElementById("playButton").innerHTML = "<i class='fas fa-pause' style='color:#979797'></i>";
+    document.getElementById("playButton").innerHTML = "<em class='fas fa-pause' style='color:#979797'></em>";
     rlottieHandler.play();
 }
 
 function pause() {
-    document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
+    document.getElementById("playButton").innerHTML = "<em class='fas fa-play'></em>";
     rlottieHandler.pause();
 }
 
 function pauseDisable() {
-    document.getElementById("playButton").innerHTML = "<i class='fas fa-play' style='color:#979797'></i>";
+    document.getElementById("playButton").innerHTML = "<em class='fas fa-play' style='color:#979797'></em>";
     rlottieHandler.pause();
 }
 
@@ -601,10 +600,10 @@ document.onkeydown = function(e) {
     // shift + space: play, pause
     if (e.which == 32 && isShift) {
         if (rlottieHandler.playing) {
-            document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
+            document.getElementById("playButton").innerHTML = "<em class='fas fa-play'></em>";
             rlottieHandler.pause()
         } else {
-            document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
+            document.getElementById("playButton").innerHTML = "<em class='fas fa-pause'></em>";
             rlottieHandler.play()
         }
     }

@@ -16,80 +16,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <!-- font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
-    <style>
-      .player {
-          height: 92vh;
-          padding: 0;
-          background-color: none;
-        }
-
-        .screen {
-          height: 68vh;
-          background-color: none
-        }
-
-        .toolbox-basic {
-          height: 10vh;
-          width: 100%;
-        }
-
-        .play-button {
-          background-color: none;
-        }
-
-        .player-slider {
-          min-width: 30vw;
-        }
-
-        .extra-tools {
-          height: 12vh;
-        }
-
-        .scroll-sect {
-          overflow-y: scroll; 
-          height: 10vh;
-        }
-
-        .common-canvas {
-          width: 100px;
-          height: 100px;
-          border: 1px solid #BEBEBE;
-          transition: width 0.7s, height 0.7s, border-width 0.7s, border-radius 0.7s; 
-          z-index: 1;
-        }
-
-        .multiview-resizing {
-          width: 100px;
-          height: 100px;
-          border: 1px solid #BEBEBE;
-          transition: width 0.7s, height 0.7s, border-width 0.7s, border-radius 0.7s; 
-          z-index: 1;
-        }
-
-        .selected-canvas {
-          outline: 5px solid #0fccce;
-          transition: width 0.7s, height 0.7s, border-width 0.7s, border-radius 0.7s; 
-          z-index: 1;
-        }
-
-        .zindex2 {
-          z-index: 2;
-        }    
-
-        .canvas-chip {
-          position: relative;
-          bottom: 14vh;
-        }
-
-        .zindex3 {
-          z-index: 3;
-        }
-
-        .snapshot-container {
-          background-color: white;
-        }
-
-    </style>
   </head>
 
   <body>
@@ -114,9 +40,7 @@
                     class="mr-2 canvas-chip text-caption"
                     color="#0fccce"
                     small
-                  >
-                    1
-                  </v-chip>
+                  >1</v-chip>
                   <canvas
                     class="common-canvas"
                     :class="{ 'multiview-resizing': isMultiView, 'selected-canvas': isCanvas1Selected&&isMultiView }"
@@ -135,9 +59,7 @@
                     class="mr-2 canvas-chip text-caption"
                     color="#0fccce"
                     small
-                  >
-                    2
-                  </v-chip>
+                  >2</v-chip>
                   <canvas
                     class="multiview-resizing"
                     :class="{ 'selected-canvas': isCanvas2Selected&&isMultiView }"
@@ -156,9 +78,7 @@
                     class="mr-2 canvas-chip text-caption"
                     color="#0fccce"
                     small
-                  >
-                    3
-                  </v-chip>
+                  >3</v-chip>
                   <canvas
                     class="multiview-resizing"
                     :class="{ 'selected-canvas': isCanvas3Selected&&isMultiView }"
@@ -177,9 +97,7 @@
                     class="mr-2 canvas-chip text-caption"
                     color="#0fccce"
                     small
-                  >
-                    4
-                  </v-chip>
+                  >4</v-chip>
                   <canvas
                     class="multiview-resizing"
                     :class="{ 'selected-canvas': isCanvas4Selected&&isMultiView }"
@@ -205,7 +123,7 @@
                     v-on="on"
                     @click="clickSnapShot"
                   >
-                    <i class="fas fa-camera"></i>
+                    <em class="fas fa-camera"></em>
                   </button>
                 </template>
                 <v-card>
@@ -213,11 +131,7 @@
                     Export file to PNG
                   </v-card-title>
                   <div class="d-flex justify-content-center snapshot-container">
-                    <img
-                      id="snapshot-image"
-                      height="250"
-                      :src="snapshotURL"
-                    >
+                    <img id="snapshot-image" height="250" :src="snapshotURL" alt="">
                   </div>
                   <v-card-text>
                     <div class="d-flex align-items-center">
@@ -236,9 +150,7 @@
                       color="text"
                       text
                       @click="clickSnapshotClose"
-                    >
-                      Close
-                    </v-btn>
+                    >Close</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -293,7 +205,7 @@
               </div>
               <!-- playbar -->
               <div class="d-flex justify-content-around align-items-center toolbox-basic" id="playbar">
-                <span class="play-button" type="button" id="playButton" onclick="buttonClicked()"><i class="fas fa-pause"></i></span>
+                <span class="play-button" type="button" id="playButton" onclick="buttonClicked()"><em class="fas fa-pause"></em></span>
                 <div class="d-flex flex-column align-items-between">
                   <input class="player-slider mb-1" type="range" id="slider" min="0" max="100" value="0" oninput="onSliderDrag(this.value)">
                   <div class="d-flex justify-content-between">
@@ -303,7 +215,7 @@
                 </div>
                 <span class="" data-toggle="collapse" href="#collapseExtraTools" role="button" 
                   aria-expanded="false" aria-controls="collapseExtraTools" @click="extraButtonClick()">
-                  <i class="fas fa-bars"></i>
+                  <em class="fas fa-bars"></em>
                 </span>
               </div>
             </div>
@@ -431,13 +343,13 @@
           snapshotDialog() {
             if (this.snapshotDialog) {
               if (rlottieHandler.playing) {
-                document.getElementById("playButton").innerHTML = "<i class='fas fa-play'></i>";
+                document.getElementById("playButton").innerHTML = "<em class='fas fa-play'></em>";
                 rlottieHandler.pause();
                 rlottieHandler.wasPlaying = true;
               } 
             } else {
               if (!rlottieHandler.playing && rlottieHandler.wasPlaying) {
-                document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
+                document.getElementById("playButton").innerHTML = "<em class='fas fa-pause'></em>";
                 rlottieHandler.wasPlaying = false;
                 rlottieHandler.play();
               }
