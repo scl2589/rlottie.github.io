@@ -538,6 +538,10 @@ function setLayerOpacity(node, opacity, canvasid) {
     node.beforeOpacity = node.opacity;
     if(node.type == "Fill") rlottieHandler.rlotties[canvasid].lottieHandle.setFillOpacity(keypath, opacity);
     else if(node.type == "Stroke") rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(keypath, opacity);
+    else if(node.type == "both") {
+        rlottieHandler.rlotties[canvasid].lottieHandle.setFillOpacity(keypath, opacity);
+        rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(keypath, opacity);
+    }
     propertiesCascading(node, [{ name: "opacity", value: opacity }]);
 }
 
