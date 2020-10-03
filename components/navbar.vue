@@ -8,56 +8,11 @@
     <!-- button group -->
     <div class="d-flex">
       <div class="d-none d-sm-block">
-        <!-- Shortcut -->
-        <v-dialog
-          v-model="shortcutdialog"
-          max-width="500"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <button
-              class="shortcut-btn btn accent mx-2" 
-              :class="{ 'text-white': $vuetify.theme.dark }" 
-              depressed 
-              v-bind="attrs"
-              v-on="on"
-            >
-              Shortcuts
-            </button>
-          </template>
-          <v-card>
-            <v-card-title class="headline">
-              Shortcuts
-            </v-card-title>
-            <v-card-text>
-              <div class="d-flex align-items-center icon--text text-body-1 ml-3">
-                <ul>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + space <v-icon small color="icon" class="mb-1">mdi-keyboard-space</v-icon> : Play / Pause</li>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + m : Dark Mode / Light Mode</li>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + v : Multiview / Singleview</li>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + 1/2/3/4 : Select Canvas</li>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + p : Snapshot</li>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + s : Export File to GIF</li>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + c : Shortcut</li>
-                </ul>
-              </div>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn
-                color="text"
-                text
-                @click="clickShortcutClose"
-              >
-                Close
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
         <!-- single/multi view -->
-        <button class="multiview-btn btn mx-2 view-count preview text-white"  @click="changeViewCount">{{ viewCount }}</button>
+        <button class="multiview-btn btn mx-2 view-count preview text-white" @click="changeViewCount">{{ viewCount }}</button>
         <!-- light/dark mode -->
         <button v-if="$vuetify.theme.dark" class="btn mx-2 mode" @click="changeMode"><v-icon class="text-dark">mdi-white-balance-sunny</v-icon></button>
-        <button v-else class="btn mx-2 mode" @click="changeMode"><i class="fas fa-moon text-white"></i></button>
+        <button v-else class="btn mx-2 mode" @click="changeMode"><em class="fas fa-moon text-white"></em></button>
       </div>
       <!-- import file -->
       <div class="filebox mx-2">
@@ -78,7 +33,7 @@
             v-on="on"
           >
             Export
-            <i class="fas fa-download ml-2"></i>
+            <em class="fas fa-download ml-2"></em>
           </button>
         </template>
         <v-card>
@@ -105,6 +60,7 @@
               color="text"
               text
               @click="clickExportDialogClose"
+              :disabled="closeDisabled"
             >
               Close
             </v-btn>
@@ -129,7 +85,6 @@ module.exports = {
   name: 'navbar',
   props: {
     exportdialog: Boolean,
-    shortcutdialog: Boolean
   },
   data: function () {
     return {
@@ -139,13 +94,14 @@ module.exports = {
       canvasHeight: 0,
       exportOverlay: false,
       downloadDisabled: false,
+      closeDisabled: false,
     }
   },
   watch: {
     exportdialog(val) {
       if(val) {
-        this.canvasWidth = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.width;
-        this.canvasHeight = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.height;
+        this.canvasWidth = getRModule(rlottieHandler.mainCanvasId).canvas.width;
+        this.canvasHeight = getRModule(rlottieHandler.mainCanvasId).canvas.height;
         pause();
       } else {
         document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
@@ -171,16 +127,14 @@ module.exports = {
       this.exportdialog = false
       this.$emit('exportdialog-changed')
     },
-    clickShortcutClose() {
-      this.shortcutdialog = false
-      this.$emit('shortcutdialog-changed')
-    },
     downloadGIF() {
+      this.closeDisabled = true
       this.downloadDisabled = true
       this.exportOverlay = true
       if (this.gifname == "") this.gifname = "download";
-      rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname, () => {
+      rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname, _ => {
         this.gifname = "";
+        this.closeDisabled = false
         this.downloadDisabled = false
         this.exportOverlay = false;
         this.clickExportDialogClose();
@@ -245,9 +199,5 @@ module.exports = {
   .view-count {
     background-color: #fdfdfd;
     color: #1D3557
-  }
-
-  .shortcut-btn{
-    height: 48px;
   }
 </style>

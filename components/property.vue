@@ -6,7 +6,7 @@
       <v-chip
         v-if="multiview"
         class="ml-1 mb-1 text-caption"
-        color="#0fccce"
+        color="canvas"
         small
       >
         {{canvasid + 1}}
@@ -81,30 +81,30 @@
     </div>
 
     <!-- opacity controller -->
-    <div class="property mt-7">
+    <div class="property mt-8">
       <div class="d-flex align-items-center mb-2">
         <p class="property-title m-0">Opacity</p>
         <v-tooltip bottom nudge-right="65" nudge-bottom="60">
           <template v-slot:activator="{ on, attrs }">
-            <i
+            <em
               class="far fa-question-circle fa-sm ml-2"
               v-bind="attrs"
               v-on="on"
             >
-            </i>
+            </em>
           </template>
           <span>Number should be between 0 and 100</span>
         </v-tooltip>
       </div>
-
-      <div class="position d-flex">
+      <div class="position row no-gutters">
         <v-text-field
           light
           solo
           v-model="selectedLayer.opacity"
           placeholder="Opacity"
-          class="mr-3"
+          class="mr-3 col-12 col-md-6"
           @change="changeOpacity(selectedLayer.opacity)"
+          suffix="%"
         ></v-text-field>
       </div>
     </div>
@@ -112,17 +112,24 @@
     <!-- stroke width controller -->
     <div class="property" v-show="selectedLayer.child.length == 0 && selectedLayer.type == 'Stroke'">
       <div class="d-flex align-items-center mb-2">
-        <p class="property-title m-0">Stroke width</p>
-        <v-tooltip bottom nudge-right="30" nudge-bottom="60">
+        <p class="property-title m-0">Stroke Width</p>
+        <v-tooltip bottom nudge-right="50" nudge-bottom="60">
           <template v-slot:activator="{ on, attrs }">
             <em class="far fa-question-circle fa-sm ml-2" v-bind="attrs" v-on="on"></em>
           </template>
-          <span>Number should be between 0 and 100</span>
+          <span>Number should be greater than or equal to 0</span>
         </v-tooltip>
       </div>
-        <div class="position d-flex">
-          <v-text-field light solo v-model="selectedLayer.strokeWidth" placeholder="width" class="mr-3" @change="changeStrokeWidth">
-          </v-text-field>
+        <div class="position row no-gutters">
+          <v-text-field
+            light 
+            solo 
+            v-model="selectedLayer.strokeWidth" 
+            placeholder="width" 
+            class="mr-3 col-12" 
+            @change="changeStrokeWidth"
+            suffix="px"
+          ></v-text-field>
         </div>
     </div>
 
@@ -132,22 +139,22 @@
         <p class="property-title m-0">Position</p>
         <v-tooltip bottom nudge-right="100" nudge-bottom="60" max-width="350">
           <template v-slot:activator="{ on, attrs }">
-            <i
+            <em
               class="far fa-question-circle fa-sm ml-2"
               v-bind="attrs"
               v-on="on"
             >
-            </i>
+            </em>
           </template>
           <span>X axis and Y axis directions are relative concepts that can differ depending on the file</span>
         </v-tooltip>
       </div>
-
       <div class="position d-flex">
         <v-text-field
           light
           solo
-          prefix="x"
+          prefix="X"
+          suffix="px"
           v-model="selectedLayer.xPos"
           placeholder="0"
           @change="changeXPos(selectedLayer.xPos)"
@@ -156,77 +163,14 @@
         <v-text-field
           light
           solo
-          prefix="y"
+          prefix="Y"
+          suffix="px"
           v-model="selectedLayer.yPos"
           placeholder="0"
           @change="changeYPos(selectedLayer.yPos)"
         ></v-text-field>
       </div>
     </div>
-
-    <!-- anchor controller -->
-    <!-- <div class="property">
-      <p class="property-title mb-2">Anchor</p>
-      <div class="position d-flex">
-        <v-text-field
-          light
-          solo
-          prefix="x"
-          v-model=""
-          placeholder="0"
-          @change=""
-          class="mr-3"
-        ></v-text-field>
-        <v-text-field
-          light
-          solo
-          prefix="y"
-          v-model=""
-          placeholder="0"
-          @change=""
-        ></v-text-field>
-      </div>
-    </div> -->
-
-    <!-- scale controller -->
-    <!-- <div class="property">
-      <div class="d-flex align-items-center mb-2">
-        <p class="property-title m-0">Scale</p>
-        <v-tooltip bottom nudge-right="100" nudge-bottom="60">
-          <template v-slot:activator="{ on, attrs }">
-            <i
-              class="far fa-question-circle fa-sm ml-2"
-              v-bind="attrs"
-              v-on="on"
-            >
-            </i>
-          </template>
-          <span>Number should be greater than or equal to 0</span>
-        </v-tooltip>
-      </div>
-      
-      <div class="preference">
-        <div class="position d-flex">
-          <v-text-field
-            light
-            solo
-            prefix="W"
-            v-model="selectedLayer.scaleWidth"
-            class="mr-3"
-            @change="changeScaleWidth(selectedLayer.scaleWidth)"
-            placeholder="100"
-          ></v-text-field>
-          <v-text-field
-            light
-            solo
-            prefix="H"
-            v-model="selectedLayer.scaleHeight"
-            @change="changeScaleHeight(selectedLayer.scaleHeight)"
-            placeholder="100"
-          ></v-text-field>
-        </div>
-      </div>
-    </div> -->
 
     <!-- rotation controller -->
     <!-- <div class="property">
@@ -256,9 +200,53 @@
       </div>
     </div> -->
 
-
+    <!-- shortcut dialog -->
+    <v-dialog
+      v-model="shortcutdialog"
+      max-width="500"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          icon
+          class="shortcut-btn btn mx-2 d-none d-sm-block" 
+          :class="{ 'text-white': $vuetify.theme.dark }" 
+          depressed 
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon>mdi-information-outline</v-icon>
+        </v-btn>
+      </template>
+      <v-card>
+        <v-card-title class="headline">
+          Shortcuts
+        </v-card-title>
+        <v-card-text>
+          <div class="d-flex align-items-center icon--text text-body-1 ml-3">
+            <ul>
+              <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + space <v-icon small color="icon" class="mb-1">mdi-keyboard-space</v-icon> : Play / Pause</li>
+              <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + m : Dark Mode / Light Mode</li>
+              <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + v : Multiview / Singleview</li>
+              <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + 1/2/3/4 : Select Canvas</li>
+              <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + p : Snapshot</li>
+              <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + s : Export File to GIF</li>
+              <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + c : Shortcut</li>
+            </ul>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="text"
+            text
+            @click="clickShortcutClose"
+          >
+            Close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
-  
 </template>
 
 <script>
@@ -272,7 +260,8 @@ module.exports = {
   props: {
     selectedLayer: Object,
     canvasid: Number,
-    multiview: Boolean
+    multiview: Boolean,
+    shortcutdialog: Boolean
   },
   computed: {
     swatchStyle() {
@@ -293,9 +282,9 @@ module.exports = {
       handler() {
         if (this.selectedLayer.color.hex !== String()) {
           var currentLayerColor = this.selectedLayer.color
-          r = currentLayerColor.rgba.r / 255;
-          g = currentLayerColor.rgba.g / 255;
-          b = currentLayerColor.rgba.b / 255;
+          let r = currentLayerColor.rgba.r / 255;
+          let g = currentLayerColor.rgba.g / 255;
+          let b = currentLayerColor.rgba.b / 255;
           setLayerColor(this.selectedLayer, r, g, b, this.canvasid);
         }
         this.isColorError = false
@@ -344,7 +333,7 @@ module.exports = {
     },
     changeYPos(yPos) {
       if (this.selectedLayer.xPos) {
-         setPosition(this.selectedLayer, Number(this.selectedLayer.xPos), Number(yPos), this.canvasid)
+        setPosition(this.selectedLayer, Number(this.selectedLayer.xPos), Number(yPos), this.canvasid)
       } else {
         setPosition(this.selectedLayer, 0, Number(yPos), this.canvasid)
       }
@@ -356,7 +345,11 @@ module.exports = {
     },
     clickColorError() {
       this.isColorError = true
-    }
+    },
+    clickShortcutClose() {
+      this.shortcutdialog = false
+      this.$emit('shortcutdialog-changed')
+    },
   }
 }
 </script>
@@ -407,5 +400,11 @@ p {
 
 .error-text {
   color: rgb(255, 94, 94);
+}
+
+.shortcut-btn {
+  position: fixed;
+  bottom: 15px;
+  right: 10px;
 }
 </style>
