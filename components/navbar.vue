@@ -150,6 +150,7 @@ module.exports = {
         this.$emit('viewcount-changed', true)
       } else {
         this.viewCount = 'Multi View'
+        this.$emit('viewcount-changed', false);
       }
       windowResize();
     },
