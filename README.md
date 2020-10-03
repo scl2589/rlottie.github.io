@@ -16,9 +16,9 @@ Prettyview is the most convenient lottie web player.
 
     각 layer에 기존에 적용시켰던 정보값들을 기록하여 사용자들이 바로바로 확인할 수 있도록 하였습니다. light/dark mode 통해 편안한 환경을 제공하였습니다. 그리고 다양한 단축키들을 통해 더 빠르고 쉽게 사용할 수 있게 하였습니다.
 
-## Features
+<br>
 
-[How to use](https://www.youtube.com/)
+## Features
 
 - [x] Change layer color
 - [x] Change layer opacity
@@ -31,6 +31,8 @@ Prettyview is the most convenient lottie web player.
 - [ ] Transforms
 - [ ] Mask Opacity
 - [ ] Gradient
+
+<br>
 
 ## Getting Started
 ### Env Setup
@@ -55,7 +57,16 @@ $ cp builddir_wasm/src/rlottie-wasm.* ../
 $ run ./test.sh
 ```
 
+<br>
+
+## How to Use
+
+[video](https://youtu.be/Fz7KcsjXHv8)
+
+<br>
+
 ## License
+
 No License
 
 **But [gif.js](https://github.com/jnordberg/gif.js) has MIT License**
