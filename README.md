@@ -19,7 +19,6 @@ Prettyview is the most convenient lottie web player.
 <br>
 
 ## Features
-
 - [x] Change layer color
 - [x] Change layer opacity
 - [x] Change layer position
