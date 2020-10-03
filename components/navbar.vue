@@ -76,8 +76,9 @@
             depressed 
             v-bind="attrs"
             v-on="on"
+            @click="getCanvasSize"
           >
-            Export 
+            Export
             <i class="fas fa-download ml-2"></i>
           </button>
         </template>
@@ -85,6 +86,7 @@
           <v-card-title class="headline">
             Export file to GIF
           </v-card-title>
+          <v-card-subtitle>{{canvasWidth}}x{{canvasHeight}}</v-card-subtitle>
           <v-card-text>
             <div class="d-flex align-items-center">
               <v-text-field
@@ -122,7 +124,9 @@ module.exports = {
   data: function () {
     return {
       viewCount: 'Multi View',
-      gifname: ""
+      gifname: "",
+      canvasWidth: 0,
+      canvasHeight: 0
     }
   },
   methods: {
@@ -135,8 +139,8 @@ module.exports = {
         this.$emit('viewcount-changed', true)
       } else {
         this.viewCount = 'Multi View'
-        this.$emit('viewcount-changed', false)
       }
+      console.log("aa");
       windowResize();
     },
     clickExportDialogClose() {
@@ -146,6 +150,10 @@ module.exports = {
     clickShortcutClose() {
       this.shortcutdialog = false
       this.$emit('shortcutdialog-changed')
+    },
+    getCanvasSize() {
+      this.canvasWidth = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.width;
+      this.canvasHeight = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.height;
     },
     downloadGIF() {
       if(this.gifname == "") return;
