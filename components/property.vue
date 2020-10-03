@@ -86,12 +86,12 @@
         <p class="property-title m-0">Opacity</p>
         <v-tooltip bottom nudge-right="65" nudge-bottom="60">
           <template v-slot:activator="{ on, attrs }">
-            <i
+            <em
               class="far fa-question-circle fa-sm ml-2"
               v-bind="attrs"
               v-on="on"
             >
-            </i>
+            </em>
           </template>
           <span>Number should be between 0 and 100</span>
         </v-tooltip>
@@ -139,12 +139,12 @@
         <p class="property-title m-0">Position</p>
         <v-tooltip bottom nudge-right="100" nudge-bottom="60" max-width="350">
           <template v-slot:activator="{ on, attrs }">
-            <i
+            <em
               class="far fa-question-circle fa-sm ml-2"
               v-bind="attrs"
               v-on="on"
             >
-            </i>
+            </em>
           </template>
           <span>X axis and Y axis directions are relative concepts that can differ depending on the file</span>
         </v-tooltip>
@@ -171,70 +171,6 @@
         ></v-text-field>
       </div>
     </div>
-
-    <!-- anchor controller -->
-    <!-- <div class="property">
-      <p class="property-title mb-2">Anchor</p>
-      <div class="position d-flex">
-        <v-text-field
-          light
-          solo
-          prefix="x"
-          v-model=""
-          placeholder="0"
-          @change=""
-          class="mr-3"
-        ></v-text-field>
-        <v-text-field
-          light
-          solo
-          prefix="y"
-          v-model=""
-          placeholder="0"
-          @change=""
-        ></v-text-field>
-      </div>
-    </div> -->
-
-    <!-- scale controller -->
-    <!-- <div class="property">
-      <div class="d-flex align-items-center mb-2">
-        <p class="property-title m-0">Scale</p>
-        <v-tooltip bottom nudge-right="100" nudge-bottom="60">
-          <template v-slot:activator="{ on, attrs }">
-            <i
-              class="far fa-question-circle fa-sm ml-2"
-              v-bind="attrs"
-              v-on="on"
-            >
-            </i>
-          </template>
-          <span>Number should be greater than or equal to 0</span>
-        </v-tooltip>
-      </div>
-      
-      <div class="preference">
-        <div class="position d-flex">
-          <v-text-field
-            light
-            solo
-            prefix="W"
-            v-model="selectedLayer.scaleWidth"
-            class="mr-3"
-            @change="changeScaleWidth(selectedLayer.scaleWidth)"
-            placeholder="100"
-          ></v-text-field>
-          <v-text-field
-            light
-            solo
-            prefix="H"
-            v-model="selectedLayer.scaleHeight"
-            @change="changeScaleHeight(selectedLayer.scaleHeight)"
-            placeholder="100"
-          ></v-text-field>
-        </div>
-      </div>
-    </div> -->
 
     <!-- rotation controller -->
     <!-- <div class="property">
@@ -311,7 +247,6 @@
       </v-card>
     </v-dialog>
   </div>
-  
 </template>
 
 <script>
@@ -347,9 +282,9 @@ module.exports = {
       handler() {
         if (this.selectedLayer.color.hex !== String()) {
           var currentLayerColor = this.selectedLayer.color
-          r = currentLayerColor.rgba.r / 255;
-          g = currentLayerColor.rgba.g / 255;
-          b = currentLayerColor.rgba.b / 255;
+          let r = currentLayerColor.rgba.r / 255;
+          let g = currentLayerColor.rgba.g / 255;
+          let b = currentLayerColor.rgba.b / 255;
           setLayerColor(this.selectedLayer, r, g, b, this.canvasid);
         }
         this.isColorError = false
@@ -398,7 +333,7 @@ module.exports = {
     },
     changeYPos(yPos) {
       if (this.selectedLayer.xPos) {
-         setPosition(this.selectedLayer, Number(this.selectedLayer.xPos), Number(yPos), this.canvasid)
+        setPosition(this.selectedLayer, Number(this.selectedLayer.xPos), Number(yPos), this.canvasid)
       } else {
         setPosition(this.selectedLayer, 0, Number(yPos), this.canvasid)
       }

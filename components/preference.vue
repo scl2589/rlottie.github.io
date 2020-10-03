@@ -41,14 +41,8 @@
       </div>
     </div>
 
-    <!-- Canvas Resize -->
-    <!-- <div class="d-flex flex-column justify-content-center align-items-start preference">
-      <label class="mb-2" for="slider2">Canvas Resize</label>
-      <input class="canvasSlider" type="range" id="slider2" min="0" max="100" value="100"
-        oninput="onResizeSliderDrag(this.value)">
-    </div> -->
 
-    <!-- canvas size controller -->
+    <!-- Dimension controller -->
     <div class="preference" v-if="canvasstyle">
       <p class="preference-title mb-2">Canvas Resize</p>
       <div class="position d-flex">
