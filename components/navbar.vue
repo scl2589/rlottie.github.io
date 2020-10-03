@@ -77,7 +77,7 @@
             v-bind="attrs"
             v-on="on"
           >
-            Export 
+            Export
             <i class="fas fa-download ml-2"></i>
           </button>
         </template>
@@ -85,6 +85,7 @@
           <v-card-title class="headline">
             Export file to GIF
           </v-card-title>
+          <v-card-subtitle>{{canvasWidth}}x{{canvasHeight}}</v-card-subtitle>
           <v-card-text>
             <div class="d-flex align-items-center">
               <v-text-field
@@ -122,7 +123,21 @@ module.exports = {
   data: function () {
     return {
       viewCount: 'Multi View',
-      gifname: ""
+      gifname: "",
+      canvasWidth: 0,
+      canvasHeight: 0
+    }
+  },
+  watch: {
+    exportdialog(val) {
+      if(val) {
+        this.canvasWidth = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.width;
+        this.canvasHeight = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.height;
+        pause();
+      } else {
+        document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
+        rlottieHandler.play();
+      }
     }
   },
   methods: {
@@ -135,7 +150,6 @@ module.exports = {
         this.$emit('viewcount-changed', true)
       } else {
         this.viewCount = 'Multi View'
-        this.$emit('viewcount-changed', false)
       }
       windowResize();
     },
@@ -148,11 +162,11 @@ module.exports = {
       this.$emit('shortcutdialog-changed')
     },
     downloadGIF() {
-      if(this.gifname == "") return;
-      else {
-        rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname);
-        this.clickExportDialogClose()
-      }// 끝나고 close, this.gifname = "" 하기
+      if(this.gifname == "") this.gifname = "download";
+      rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname, () => {
+        this.gifname = "";
+        this.clickExportDialogClose();
+      });
     }
   }
 }
