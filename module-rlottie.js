@@ -37,6 +37,7 @@ class LayerNode {
         this.selected = false;
         this.opacity = 100;
         this.beforeOpacity = 100;
+        this.strokeWidth = Number();
         // this.xPos = 0;
         // this.yPos = 0;
         // this.scaleWidth = 100;
@@ -543,6 +544,12 @@ function setLayerOpacity(node, opacity, canvasid) {
         rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeOpacity(keypath, opacity);
     }
     propertiesCascading(node, [{ name: "opacity", value: opacity }]);
+}
+
+function setStrokeWidth(node, width, canvasid) {
+    var keypath = node.keypath + ".**";
+    rlottieHandler.rlotties[canvasid].lottieHandle.setStrokeWidth(keypath, width);
+    propertiesCascading(node, [{ name: "strokeWidth", value: width}]);
 }
 
 function setPosition(node, x, y, canvasid) {

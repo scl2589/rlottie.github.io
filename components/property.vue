@@ -109,8 +109,25 @@
       </div>
     </div>
 
+    <!-- stroke width controller -->
+    <div class="property" v-show="selectedLayer.child.length == 0 && selectedLayer.type == 'Stroke'">
+      <div class="d-flex align-items-center mb-2">
+        <p class="property-title m-0">Stroke width</p>
+        <v-tooltip bottom nudge-right="30" nudge-bottom="60">
+          <template v-slot:activator="{ on, attrs }">
+            <em class="far fa-question-circle fa-sm ml-2" v-bind="attrs" v-on="on"></em>
+          </template>
+          <span>Number should be between 0 and 100</span>
+        </v-tooltip>
+      </div>
+        <div class="position d-flex">
+          <v-text-field light solo v-model="selectedLayer.strokeWidth" placeholder="width" class="mr-3" @change="changeStrokeWidth">
+          </v-text-field>
+        </div>
+    </div>
+
     <!-- position controller -->
-    <div class="property">
+    <div class="property" v-show="selectedLayer.child.length > 0">
       <div class="d-flex align-items-center mb-2">
         <p class="property-title m-0">Position</p>
         <v-tooltip bottom nudge-right="100" nudge-bottom="60" max-width="350">
@@ -293,6 +310,9 @@ module.exports = {
         }
       }
     },
+    changeStrokeWidth(width) {
+      setStrokeWidth(this.selectedLayer, Number(width), this.canvasid);
+    },
     changeScaleWidth(scaleWidth) {
       if (scaleWidth >= 0) {
         if (this.selectedLayer.scaleHeight) {
@@ -306,10 +326,10 @@ module.exports = {
     },
     changeScaleHeight(scaleHeight) {
       if (scaleHeight >= 0) {
-         if (this.selectedLayer.scaleWidth) {
-           if (this.selectedLayer.scaleWidth >= 0) {
-             setScale(this.selectedLayer, Number(this.selectedLayer.scaleWidth), Number(scaleHeight), this.canvasid)
-           }
+        if (this.selectedLayer.scaleWidth) {
+          if (this.selectedLayer.scaleWidth >= 0) {
+            setScale(this.selectedLayer, Number(this.selectedLayer.scaleWidth), Number(scaleHeight), this.canvasid)
+          }
         } else {
           setScale(this.selectedLayer, 100, Number(scaleHeight), this.canvasid)
         }
