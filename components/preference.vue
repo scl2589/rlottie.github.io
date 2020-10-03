@@ -76,6 +76,20 @@
       </div>
     </div>
 
+    <!-- canvas rotation options -->
+    <div class="preference" v-if="canvasstyle">
+      <p class="preference-title mb-0">Canvas Rotation</p>
+      <div class="row d-flex align-items-center-no-gutters">
+        <div class="col-6 pl-1">
+          <v-text-field 
+            light solo suffix="°"
+            @change="changeCanvasRotation(canvasstyle.degree)"
+            v-model="canvasstyle.degree"
+          ></v-text-field>
+        </div>
+      </div>
+    </div>
+
     <!-- canvas shape -->
     <div class="preference" v-if="canvasstyle">
       <p class="preference-title mb-2">Canvas Shape</p>
@@ -88,7 +102,6 @@
         </v-btn>
       </v-btn-toggle>
     </div>
-
 
     <!-- border Options -->
     <div class="preference" v-if="canvasstyle">
@@ -172,6 +185,9 @@ module.exports = {
       } else {
         this.canvas.style.borderRadius = 0
       }
+    },
+    changeCanvasRotation(degree) {
+      this.canvas.style.transform = `rotate(${degree}deg)`;
     }
   }
 }
