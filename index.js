@@ -62,6 +62,17 @@ function canvasResize(width, height) {
     });
 }
 
+function windowResizeDone() {
+    rlottieHandler.relayoutCanvas();
+    if(rlottieHandler.wasPlaying) {
+        rlottieHandler.wasPlaying = false;
+        rlottieHandler.play();
+    } 
+    else {
+        rlottieHandler.update();
+    }
+}
+
 function windowResize() {
     if(rlottieHandler.playing){
         rlottieHandler.wasPlaying = true;
@@ -69,14 +80,7 @@ function windowResize() {
     }
 
     clearTimeout(rlottieHandler.resizeId);
-    rlottieHandler.resizeId = setTimeout(() => {
-        rlottieHandler.relayoutCanvas();
-        if(rlottieHandler.wasPlaying) {
-            rlottieHandler.wasPlaying = false;
-            rlottieHandler.play();
-        } 
-        else rlottieHandler.update();
-    }, 150);
+    rlottieHandler.resizeId = setTimeout(windowResizeDone, 150);
 }
 
 function buttonClicked() {

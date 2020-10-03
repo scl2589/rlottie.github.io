@@ -302,7 +302,8 @@
             snapshotDialog: false,
             snapshotName: '',
             snapshotURL: null,
-
+            snapshotPause: false,
+            
             // dialogs
             exportdialog: false,
             shortcutdialog: false
@@ -342,15 +343,13 @@
         watch: {
           snapshotDialog() {
             if (this.snapshotDialog) {
-              if (rlottieHandler.playing) {
-                document.getElementById("playButton").innerHTML = "<em class='fas fa-play'></em>";
-                rlottieHandler.pause();
-                rlottieHandler.wasPlaying = true;
-              } 
+              document.getElementById("playButton").innerHTML = "<em class='fas fa-play'></em>";
+              if(rlottieHandler.playing) this.snapshotPause = true;
+              rlottieHandler.pause();
             } else {
-              if (!rlottieHandler.playing && rlottieHandler.wasPlaying) {
+              if (this.snapshotPause) {
                 document.getElementById("playButton").innerHTML = "<em class='fas fa-pause'></em>";
-                rlottieHandler.wasPlaying = false;
+                this.snapshotPause = false;
                 rlottieHandler.play();
               }
               this.snapshotName = '';
