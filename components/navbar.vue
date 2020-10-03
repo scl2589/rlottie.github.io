@@ -2,8 +2,7 @@
   <div class="navbar d-flex justify-content-between">
     <!-- logo -->
     <div class="d-flex align-items-center">
-        <img class="logo" src="../static/logo.png" alt="logo">
-        <h2 class="ml-3">PrettyView</h2>
+        <img class="logo" src="../static/logo.png" alt="logo" height="100%">
     </div>
 
     <!-- button group -->
@@ -22,23 +21,23 @@
               v-bind="attrs"
               v-on="on"
             >
-              Shortcuts
+              Shortcut
             </button>
           </template>
           <v-card>
             <v-card-title class="headline">
-              Shortcuts
+              Shortcut
             </v-card-title>
             <v-card-text>
-              <div class="d-flex align-items-center icon--text text-body-1 ml-3">
+              <div class="d-flex align-items-center">
                 <ul>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + space <v-icon small color="icon" class="mb-1">mdi-keyboard-space</v-icon> : Play / Pause</li>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + m : Dark Mode / Light Mode</li>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + v : Multiview / Singleview</li>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + 1/2/3/4 : Select Canvas</li>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + p : Snapshot</li>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + s : Export File to GIF</li>
-                  <li class="my-2">shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + c : Shortcut</li>
+                  <li>shift + space : play/pause</li>
+                  <li>shift + m : dark mode/light mode</li>
+                  <li>shift + v : multiview/singleview</li>
+                  <li>shift + 1/2/3/4: select canvas</li>
+                  <li>shift + p : snapshot</li>
+                  <li>shift + s : export file to gif</li>
+                  <li>shift + c : shortcut</li>
                 </ul>
               </div>
             </v-card-text>
@@ -60,12 +59,11 @@
         <button v-if="$vuetify.theme.dark" class="btn mx-2 mode" @click="changeMode"><v-icon class="text-dark">mdi-white-balance-sunny</v-icon></button>
         <button v-else class="btn mx-2 mode" @click="changeMode"><i class="fas fa-moon text-white"></i></button>
       </div>
-      <!-- import file -->
+      <!-- import/export -->
       <div class="filebox mx-2">
         <label for="fileSelector"><span class="d-inline-block pt-1">New Lottie</span></label>
         <input class="upload-hidden" type="file" id="fileSelector" accept=".json" placeholder="New Lottie">
       </div>
-      <!-- export to gif -->
       <v-dialog
         v-model="exportdialog"
         max-width="500"
@@ -78,17 +76,14 @@
             v-bind="attrs"
             v-on="on"
           >
-            Export
+            Export 
             <i class="fas fa-download ml-2"></i>
           </button>
         </template>
         <v-card>
-          <v-card-title class="headline mb-2">
+          <v-card-title class="headline">
             Export file to GIF
           </v-card-title>
-          <v-card-subtitle>
-            Size: {{canvasWidth}}px x {{canvasHeight}}px
-          </v-card-subtitle>
           <v-card-text>
             <div class="d-flex align-items-center">
               <v-text-field
@@ -97,7 +92,7 @@
                 placeholder="File name"
                 v-model="gifname"
               ></v-text-field>
-              <v-btn class="ml-4" color="accent" @click="downloadGIF" :disabled="downloadDisabled">Download</v-btn>
+              <v-btn class="ml-4" color="accent" @click="downloadGIF">Download</v-btn>
             </div>
           </v-card-text>
           <v-card-actions>
@@ -110,15 +105,6 @@
               Close
             </v-btn>
           </v-card-actions>
-          <v-overlay :value="exportOverlay" opacity="0.6">
-            <div class="d-flex flex-column justify-content-center align-items-center">
-              <h4 class="mb-5">Creating GIF file...</h4>
-              <v-progress-circular
-                indeterminate
-                size="50"
-              ></v-progress-circular>
-            </div>
-          </v-overlay>
         </v-card>
       </v-dialog>
     </div>
@@ -135,23 +121,7 @@ module.exports = {
   data: function () {
     return {
       viewCount: 'Multi View',
-      gifname: "",
-      canvasWidth: 0,
-      canvasHeight: 0,
-      exportOverlay: false,
-      downloadDisabled: false,
-    }
-  },
-  watch: {
-    exportdialog(val) {
-      if(val) {
-        this.canvasWidth = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.width;
-        this.canvasHeight = rlottieHandler.rlotties[rlottieHandler.mainCanvasId].canvas.height;
-        pause();
-      } else {
-        document.getElementById("playButton").innerHTML = "<i class='fas fa-pause'></i>";
-        rlottieHandler.play();
-      }
+      gifname: ""
     }
   },
   methods: {
@@ -164,7 +134,7 @@ module.exports = {
         this.$emit('viewcount-changed', true)
       } else {
         this.viewCount = 'Multi View'
-        this.$emit('viewcount-changed', false);
+        this.$emit('viewcount-changed', false)
       }
       windowResize();
     },
@@ -177,15 +147,11 @@ module.exports = {
       this.$emit('shortcutdialog-changed')
     },
     downloadGIF() {
-      this.downloadDisabled = true
-      this.exportOverlay = true
-      if (this.gifname == "") this.gifname = "download";
-      rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname, () => {
-        this.gifname = "";
-        this.downloadDisabled = false
-        this.exportOverlay = false;
-        this.clickExportDialogClose();
-      });
+      if(this.gifname == "") return;
+      else {
+        rlottieHandler.rlotties[rlottieHandler.mainCanvasId].makeGifFile(this.gifname);
+        this.clickExportDialogClose()
+      }// 끝나고 close, this.gifname = "" 하기
     }
   }
 }
