@@ -1,7 +1,7 @@
 <center><img src="./static/logo.png"></center>
 
 ## Introduction
-Prettyview is the most convenient lottie web player.
+PrettyView is the most convenient lottie web player. It is created to help communication between designers and developers. Not only does PrettyView helps designers and developers to check if the animation is rendered well on the website, but PrettyView also allows to customize animation layers.
 
 - **Simple Customization**: In the left panel(called the Layer Panel), the layers are shown in a tree structure, and users can access each layer by clicking on it or searching the keypath. If one of the layers are clicked, the Property Panel will be activated on the right side. In the Property Panel, you can easily adjust properties such as color, opacity, and position, and find out the immediate changes. In addition, various options are provided to allow users to freely adjust the playback settings.
 
