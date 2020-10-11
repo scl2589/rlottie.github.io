@@ -12,7 +12,7 @@ class RLottieHandler {
         this.isBounce = false;
         this.isHover = false;
         for (let i = 1; i <= size; i++) {
-            this.rlotties.push(new RLottieModule("myCanvas" + i));
+            this.rlotties.push(new RLottieModule("myCanvas" + i, false));
         }
 
         this.relayoutCanvas();
