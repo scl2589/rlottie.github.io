@@ -1,13 +1,17 @@
 class RLottieModule {
-    constructor(canvasId) {
+    constructor(canvasId, isThumbnail) {
         this.canvas = document.getElementById(canvasId);
         this.makeCanvasStyle();
-
+        
         this.context = this.canvas.getContext("2d");
         this.lottieHandle = new Module.RlottieWasm();
         this.frameCount = this.lottieHandle.frames();
         this.makeLayerTree();
         this.curFrame = 0;
+
+        if(isThumbnail) return;
+        this.preview = document.getElementById(canvasId+'Preview');
+        this.contextPreview = this.preview.getContext("2d");
     }
 
     render(speed) {
@@ -17,6 +21,14 @@ class RLottieModule {
         var result = Uint8ClampedArray.from(buffer);
         var imageData = new ImageData(result, this.canvas.width, this.canvas.height);
         this.context.putImageData(imageData, 0, 0);
+    }
+
+    previewRender(frame) {
+        if (this.preview.width == 0 || this.preview.height == 0) return;
+        var bufferPreview = this.lottieHandle.render(frame, this.preview.width, this.preview.height);
+        var resultPreview = Uint8ClampedArray.from(bufferPreview);
+        var imageDataPreview = new ImageData(resultPreview, this.preview.width, this.preview.height);
+        this.contextPreview.putImageData(imageDataPreview, 0, 0);
     }
 
     makeLayerTree() {

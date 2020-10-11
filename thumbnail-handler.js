@@ -5,7 +5,7 @@ class ThumbnailHandler {
         this.fullKeypaths = [];
         this.makeFullLayers();
         layers.forEach(l => {
-            var rm = new RLottieModule(l.id);
+            var rm = new RLottieModule(l.id, true);
             this.makeThumbnail(rm, l.idx);
             this.rlotties.push(rm);
         });
