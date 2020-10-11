@@ -8,6 +8,9 @@
     <!-- button group -->
     <div class="d-flex">
       <div class="d-none d-sm-block">
+        <!-- <button class="btn mx-2 view-count preview text-white" id="urlInput">Temporary</button>  -->
+        <input type="text" id="urlInput"/>
+        <button id="getByUrl" @click="enterURL()">url 입력</button>
         <!-- single/multi view -->
         <button class="multiview-btn btn mx-2 view-count preview text-white" @click="changeViewCount">{{ viewCount }}</button>
         <!-- light/dark mode -->

@@ -123,6 +123,38 @@ function handleFiles(files) {
     }
 }
 
+function enterURL() {
+    var input = prompt("Please enter lottie animation url in JSON format from https://lottiefiles.com/");
+    if (input) {
+      getLottieFromUrl(input);
+    }
+}
+
+function getLottieFromUrl(input) {
+    var url = input.trim();
+    if (url == "" || !(url.startsWith("http://") || url.startsWith("https://"))) {
+      alert("Please enter correct URL that starts with 'http://' or 'https://'");
+      return;
+    }
+  
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      if (xhr.status == 200) {
+        var data = xhr.responseText;
+        try {
+          JSON.parse(data);
+        } catch (error) {
+          throw new Error("The URL you entered is not in JSON format");
+        }
+        rlottieHandler.reload(data);
+      } else {
+        throw new Error("Your request failed. Please type in another URL.");
+      }
+    };
+    xhr.open("GET", url);
+    xhr.send(null);
+  }
+
 function handleDragOver(event) {
     event.stopPropagation();
     event.preventDefault();
