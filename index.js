@@ -94,11 +94,16 @@ function onSliderDrag(value) {
 }
 
 function addListener() {
-    var input = document.getElementById("fileSelector");
-    input.addEventListener("change", fileSelectionChanged);
+    // var input = document.getElementById("fileSelector");
+    // input.addEventListener("change", fileSelectionChanged);
     window.addEventListener("dragover", handleDragOver, false);
     window.addEventListener("drop", handleFileSelect, false);
     window.addEventListener("resize", windowResize);
+}
+
+function addImportListener() {
+    var input = document.getElementById("fileSelector");
+    input.addEventListener("change", fileSelectionChanged);
 }
 
 function fileSelectionChanged() {
@@ -123,12 +128,12 @@ function handleFiles(files) {
     }
 }
 
-function enterURL() {
-    var input = prompt("Please enter lottie animation url in JSON format from https://lottiefiles.com/");
-    if (input) {
-      getLottieFromUrl(input);
-    }
-}
+// function enterURL() {
+//     var input = prompt("Please enter lottie animation url in JSON format from https://lottiefiles.com/");
+//     if (input) {
+//       getLottieFromUrl(input);
+//     }
+// }
 
 function getLottieFromUrl(input) {
     var url = input.trim();
@@ -162,6 +167,7 @@ function handleDragOver(event) {
 }
 
 function handleFileSelect(event) {
+    console.log(event)
     event.stopPropagation();
     event.preventDefault();
     var contentName = document.getElementById('contentName')
