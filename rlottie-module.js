@@ -33,33 +33,35 @@ class RLottieModule {
 
     makeLayerTree() {
         this.layerTree = new LayerNode("**", "root", "", layerNodeSize++, 0);
-        var fullLayers = [];
-        let layer_vector = [];
+        var full_layers = [];
+
+        // get fill layers and append to full_layers
         let fill_layer_vector = this.lottieHandle.getFillLayers();
-        let stroke_layer_vector = this.lottieHandle.getStrokeLayers();
-        let transform_layer_vector = this.lottieHandle.getTransformLayers();
         for(let i = 0; i < fill_layer_vector.size(); i++) {
             let layer = fill_layer_vector.get(i);
             layer.type = "fill";
-            layer_vector.push(layer);
+            full_layers.push(layer);
         }
+        
+        // get stroke layers and append to full_layers
+        let stroke_layer_vector = this.lottieHandle.getStrokeLayers();
         for(let i = 0; i < stroke_layer_vector.size(); i++) {
             let layer = stroke_layer_vector.get(i);
             layer.type = "stroke";
-            layer_vector.push(layer);
+            full_layers.push(layer);
         }
+        
+        // get transform properties and append to full_layers
+        let transform_layer_vector = this.lottieHandle.getTransformLayers();
         for(let i = 0; i < transform_layer_vector.size(); i++) {
             let layer = transform_layer_vector.get(i);
             layer.type = "transform";
-            layer_vector.push(layer);
+            full_layers.push(layer);
         }
-        console.log(layer_vector);
+        console.log(full_layers);
 
-        // var layer_vector = this.lottieHandle.allLayerTypeList();
-        // for(let i = 0; i < layer_vector.size(); i++) {
-        //     fullLayers.push(layer_vector.get(i));
-        // }
-        // var commonId = 1;
+        let commonId = 1;
+        full_layers.
         // fullLayers.forEach(element => {
         //     var layer = element.split("::");
         //     var type = "Stroke";
