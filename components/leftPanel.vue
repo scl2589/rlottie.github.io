@@ -245,6 +245,7 @@ module.exports = {
     },
     
     clickLayer(layer) {
+      console.log(layer[0]);
       this.$emit('layer-selected', layer[0])
     },
     

@@ -12,10 +12,10 @@ function setup() {
 
     script.onload = _ => {
         Module.onRuntimeInitialized = _ => {
-            rlottieHandler = new RLottieHandler(4);
-            setTimeout(() => {
-                thumbnailHandler = new ThumbnailHandler(getRModule(0).layerTree.child, rlottieHandler.jsString);
-            }, 500);
+            rlottieHandler = new RLottieHandler(1);
+            // setTimeout(() => {
+            //     thumbnailHandler = new ThumbnailHandler(getRModule(0).layerTree.child, rlottieHandler.jsString);
+            // }, 500);
             addListener();
             window.requestAnimationFrame(updater);
 
@@ -142,7 +142,7 @@ function setLayerColor(node, r, g, b, canvasid) {
     var keypath = node.keypath + ".**";
     if(node.type == "Fill") getRModule(canvasid).lottieHandle.setFillColor(keypath, r, g, b);
     else if(node.type == "Stroke") getRModule(canvasid).lottieHandle.setStrokeColor(keypath, r, g, b);
-    propertiesCascading(node, [{ name: "color",  value: node.color }]);
+    // propertiesCascading(node, [{ name: "color",  value: node.color }]);
 }
 
 function setLayerOpacity(node, opacity, canvasid) {

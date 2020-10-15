@@ -39,7 +39,7 @@ class RLottieModule {
         let fill_layer_vector = this.lottieHandle.getFillLayers();
         for(let i = 0; i < fill_layer_vector.size(); i++) {
             let layer = fill_layer_vector.get(i);
-            layer.type = "fill";
+            layer.type = "Fill";
             full_layers.push(layer);
         }
         
@@ -47,7 +47,7 @@ class RLottieModule {
         let stroke_layer_vector = this.lottieHandle.getStrokeLayers();
         for(let i = 0; i < stroke_layer_vector.size(); i++) {
             let layer = stroke_layer_vector.get(i);
-            layer.type = "stroke";
+            layer.type = "Stroke";
             full_layers.push(layer);
         }
         
@@ -55,44 +55,46 @@ class RLottieModule {
         let transform_layer_vector = this.lottieHandle.getTransformLayers();
         for(let i = 0; i < transform_layer_vector.size(); i++) {
             let layer = transform_layer_vector.get(i);
-            layer.type = "transform";
+            layer.type = "Transform";
             full_layers.push(layer);
         }
-        console.log(full_layers);
+        // console.log(full_layers);
 
         let commonId = 1;
-        full_layers.
-        // fullLayers.forEach(element => {
-        //     var layer = element.split("::");
-        //     var type = "Stroke";
-        //     if(layer[0] == "Fill") type = "Fill";
-        //     var curr = this.layerTree;
-        //     var keypath = layer[2];
-        //     this.layerTree.child.forEach(l => {
-        //         if(l.idx == layer[1] && l.name == layer[2]) curr = l;
-        //     })
-        //     if(curr.name == "root") {
-        //         let node = new LayerNode(keypath, keypath, type, layerNodeSize++, commonId++)
-        //         node.idx = layer[1];
-        //         curr.child.push(node);
-        //         curr = node;
-        //     }
-            
-        //     for(let i = 3; i < layer.length; i++) {
-        //         keypath += "." + layer[i];
-        //         let flag = false;
-        //         for(let j = 0; j < curr.child.length; j++) {
-        //             if(curr.child[j].name != layer[i]) continue;
-        //             if(curr.child[j].type != type) curr.type = curr.child[j].type = "both";
-        //             curr = curr.child[j];
-        //             flag = true;
-        //         }
-        //         if(flag) continue;
-        //         let node = new LayerNode(keypath, layer[i], type, layerNodeSize++, commonId++);
-        //         curr.child.push(node);
-        //         curr = node;
-        //     }
-        // })
+        full_layers.forEach(element => {
+            let keypath_split = element.keypath.split("::");
+            let type = element.type;
+            var curr = this.layerTree;
+            let keypath = "";
+            for(let i = 0; i < keypath_split.length; i++) {
+                keypath += "." + keypath_split[i];
+                let is_path_exist = false;
+                for(let j = 0; j < curr.child.length; j++) {
+                    if(curr.child[j].name != keypath_split[i]) continue;
+                    if(type != "Transform" && curr.child[j].type != type) curr.child[j].type = "both";
+                    curr = curr.child[j];
+                    is_path_exist = true;
+                }
+                if(is_path_exist) continue;
+                if(type == "Transform") continue;
+                let node = new LayerNode(keypath.substr(1, keypath.length), keypath_split[i], type, layerNodeSize++, commonId++);
+                // node.color.rgba.r = element.red;
+                // node.color.rgba.g = element.green;
+                // node.color.rgba.b = element.blue;
+                
+                curr.child.push(node);
+                curr = node;
+            }
+            if(type == "Transform") {
+                curr.anchorX = element.anchorX;
+                curr.anchorY = element.anchorY;
+                curr.posX = element.posX;
+                curr.posY = element.posY;
+                curr.scaleWidth = 100;
+                curr.scaleHeight = 100;
+                curr.rotation = 0;
+            }
+        })
         this.layerTree.child.allVisibility = true
     }
     
