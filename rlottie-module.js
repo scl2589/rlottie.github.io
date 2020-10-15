@@ -34,42 +34,63 @@ class RLottieModule {
     makeLayerTree() {
         this.layerTree = new LayerNode("**", "root", "", layerNodeSize++, 0);
         var fullLayers = [];
-        var layer_vector = this.lottieHandle.allLayerTypeList();
-        for(let i = 0; i < layer_vector.size(); i++) {
-            fullLayers.push(layer_vector.get(i));
+        let layer_vector = [];
+        let fill_layer_vector = this.lottieHandle.getFillLayers();
+        let stroke_layer_vector = this.lottieHandle.getStrokeLayers();
+        let transform_layer_vector = this.lottieHandle.getTransformLayers();
+        for(let i = 0; i < fill_layer_vector.size(); i++) {
+            let layer = fill_layer_vector.get(i);
+            layer.type = "fill";
+            layer_vector.push(layer);
         }
-        var commonId = 1;
-        fullLayers.forEach(element => {
-            var layer = element.split("::");
-            var type = "Stroke";
-            if(layer[0] == "Fill") type = "Fill";
-            var curr = this.layerTree;
-            var keypath = layer[2];
-            this.layerTree.child.forEach(l => {
-                if(l.idx == layer[1] && l.name == layer[2]) curr = l;
-            })
-            if(curr.name == "root") {
-                let node = new LayerNode(keypath, keypath, type, layerNodeSize++, commonId++)
-                node.idx = layer[1];
-                curr.child.push(node);
-                curr = node;
-            }
+        for(let i = 0; i < stroke_layer_vector.size(); i++) {
+            let layer = stroke_layer_vector.get(i);
+            layer.type = "stroke";
+            layer_vector.push(layer);
+        }
+        for(let i = 0; i < transform_layer_vector.size(); i++) {
+            let layer = transform_layer_vector.get(i);
+            layer.type = "transform";
+            layer_vector.push(layer);
+        }
+        console.log(layer_vector);
+
+        // var layer_vector = this.lottieHandle.allLayerTypeList();
+        // for(let i = 0; i < layer_vector.size(); i++) {
+        //     fullLayers.push(layer_vector.get(i));
+        // }
+        // var commonId = 1;
+        // fullLayers.forEach(element => {
+        //     var layer = element.split("::");
+        //     var type = "Stroke";
+        //     if(layer[0] == "Fill") type = "Fill";
+        //     var curr = this.layerTree;
+        //     var keypath = layer[2];
+        //     this.layerTree.child.forEach(l => {
+        //         if(l.idx == layer[1] && l.name == layer[2]) curr = l;
+        //     })
+        //     if(curr.name == "root") {
+        //         let node = new LayerNode(keypath, keypath, type, layerNodeSize++, commonId++)
+        //         node.idx = layer[1];
+        //         curr.child.push(node);
+        //         curr = node;
+        //     }
             
-            for(let i = 3; i < layer.length; i++) {
-                keypath += "." + layer[i];
-                let flag = false;
-                for(let j = 0; j < curr.child.length; j++) {
-                    if(curr.child[j].name != layer[i]) continue;
-                    if(curr.child[j].type != type) curr.type = curr.child[j].type = "both";
-                    curr = curr.child[j];
-                    flag = true;
-                }
-                if(flag) continue;
-                let node = new LayerNode(keypath, layer[i], type, layerNodeSize++, commonId++);
-                curr.child.push(node);
-                curr = node;
-            }
-        })
+        //     for(let i = 3; i < layer.length; i++) {
+        //         keypath += "." + layer[i];
+        //         let flag = false;
+        //         for(let j = 0; j < curr.child.length; j++) {
+        //             if(curr.child[j].name != layer[i]) continue;
+        //             if(curr.child[j].type != type) curr.type = curr.child[j].type = "both";
+        //             curr = curr.child[j];
+        //             flag = true;
+        //         }
+        //         if(flag) continue;
+        //         let node = new LayerNode(keypath, layer[i], type, layerNodeSize++, commonId++);
+        //         curr.child.push(node);
+        //         curr = node;
+        //     }
+        // })
         this.layerTree.child.allVisibility = true
     }
     
