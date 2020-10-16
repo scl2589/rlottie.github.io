@@ -8,6 +8,10 @@
     <!-- button group -->
     <div class="d-flex">
       <div class="d-none d-sm-block">
+        <!-- <button class="btn mx-2 view-count preview text-white" id="urlInput">Temporary</button>  -->
+        <!-- <input type="text" id="urlInput"/>
+        <button id="getByUrl" @click="enterLottieURL">url 입력</button> -->
+
         <!-- single/multi view -->
         <button class="multiview-btn btn mx-2 view-count preview text-white" @click="changeViewCount">{{ viewCount }}</button>
         <!-- light/dark mode -->
@@ -15,10 +19,59 @@
         <button v-else class="btn mx-2 mode" @click="changeMode"><em class="fas fa-moon text-white"></em></button>
       </div>
       <!-- import file -->
-      <div class="filebox mx-2">
+      <!-- <div class="filebox mx-2">
         <label for="fileSelector"><span class="d-inline-block pt-1">New Lottie</span></label>
         <input class="upload-hidden" type="file" id="fileSelector" accept=".json" placeholder="New Lottie">
-      </div>
+      </div> -->
+
+      <!-- import dialog -->
+      <v-dialog
+        v-model="importDialog"
+        max-width="500"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <button
+            class="btn accent mx-2"
+            :class="{ 'text-white': $vuetify.theme.dark }" 
+            depressed 
+            v-bind="attrs"
+            v-on="on"
+          >
+            New Lottie
+          </button>
+        </template>
+        <v-card>
+          <v-card-title class="headline mb-4">
+            Import New Lottie File
+          </v-card-title>
+          <v-card-text class="pt-3">
+            <div class="filebox pa-3 border">
+              <input class="upload-hidden" type="file" id="fileSelector" accept=".json" placeholder="New Lottie" @click="clickFileUpload">
+            </div>
+            <h5 class="my-3 text-center">or</h5>
+            <div class="d-flex align-items-center">
+              <v-text-field
+                outlined
+                placeholder="Lottie File URL"
+                v-model="lottieURL"
+                hide-details
+                color="icon"
+              ></v-text-field>
+              <v-btn large class="ml-4" color="accent" @click="enterLottieURL">Import</v-btn>
+            </div>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              text
+              @click="clickImportDialogClose"
+            >
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
       <!-- export to gif -->
       <v-dialog
         v-model="exportdialog"
@@ -95,6 +148,8 @@ module.exports = {
       exportOverlay: false,
       downloadDisabled: false,
       closeDisabled: false,
+      importDialog: false,
+      lottieURL: "",
     }
   },
   watch: {
@@ -122,6 +177,16 @@ module.exports = {
         this.$emit('viewcount-changed', false);
       }
       windowResize();
+    },
+    clickImportDialogClose() {
+      this.importDialog = false
+    },
+    clickFileUpload() {
+      addImportListener()
+    },
+    enterLottieURL() {
+      getLottieFromUrl(this.lottieURL)
+      this.importDialog = false
     },
     clickExportDialogClose() {
       this.exportdialog = false
@@ -171,7 +236,7 @@ module.exports = {
     border: 0;
   }
 
-  .filebox label {
+  /* .filebox label {
     display: inline-block;
     padding: .5em .75em;
     color: #1D3557;
@@ -185,7 +250,7 @@ module.exports = {
     border-radius: .25em;
     margin-bottom: 0;
     height: 48px;
-  }
+  } */
 
   .mode {
     width: 50px;
