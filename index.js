@@ -13,9 +13,9 @@ function setup() {
     script.onload = _ => {
         Module.onRuntimeInitialized = _ => {
             rlottieHandler = new RLottieHandler(4);
-            // setTimeout(() => {
-            //     thumbnailHandler = new ThumbnailHandler(getRModule(0).layerTree.child, rlottieHandler.jsString);
-            // }, 500);
+            setTimeout(() => {
+                thumbnailHandler = new ThumbnailHandler(getRModule(0).layerTree.child, rlottieHandler.jsString);
+            }, 500);
             addListener();
             window.requestAnimationFrame(updater);
 
@@ -60,6 +60,10 @@ function canvasResize(width, height) {
         rm.canvas.style.width = width + "px";
         rm.canvas.style.height = height + "px";
     });
+}
+
+function getDefaultSize() {
+    return rlottieHandler.getDefaultSize();
 }
 
 function windowResizeDone() {

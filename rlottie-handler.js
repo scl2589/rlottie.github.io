@@ -165,4 +165,8 @@ class RLottieHandler {
             rm.canvas.style.height = size + "px";
         });
     }
+
+    getDefaultSize() {
+        return this.rlotties[0].lottieHandle.getDefaultSize();
+    }
 }
