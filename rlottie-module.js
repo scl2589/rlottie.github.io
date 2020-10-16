@@ -58,7 +58,6 @@ class RLottieModule {
             layer.type = "Transform";
             full_layers.push(layer);
         }
-        // console.log(full_layers);
 
         let commonId = 1;
         full_layers.forEach(element => {
@@ -78,9 +77,6 @@ class RLottieModule {
                 if(is_path_exist) continue;
                 if(type == "Transform") continue;
                 let node = new LayerNode(keypath.substr(1, keypath.length), keypath_split[i], type, layerNodeSize++, commonId++);
-                // node.color.rgba.r = element.red;
-                // node.color.rgba.g = element.green;
-                // node.color.rgba.b = element.blue;
                 
                 curr.child.push(node);
                 curr = node;
@@ -93,6 +89,12 @@ class RLottieModule {
                 curr.scaleWidth = 100;
                 curr.scaleHeight = 100;
                 curr.rotation = 0;
+            }
+            else {
+                curr.color.hex = this.rbgToHex(element.red, element.green, element.blue);
+                curr.color.rgba.r = element.red;
+                curr.color.rgba.g = element.green;
+                curr.color.rgba.b = element.blue;
             }
         })
         this.layerTree.child.allVisibility = true
@@ -200,5 +202,14 @@ class RLottieModule {
         });
 
         gif.render();
+    }
+
+    componentToHex(c) {
+        let hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+    }
+
+    rbgToHex(r, g, b) {
+        return "#" + this.componentToHex(r) + this.componentToHex(g) + this.componentToHex(b)
     }
 }

@@ -39,7 +39,7 @@ class RLottieHandler {
             var rm = this.rlotties[i];
             rm.render(this.playSpeed);
             
-            if(this.playDir && rm.curFrame > rm.frameCount) {
+            if(this.playDir && rm.curFrame >= rm.frameCount) {
                 if(this.isBounce) {
                     nextSpeed = -this.playSpeed;
                     nextDir = !this.playDir;
