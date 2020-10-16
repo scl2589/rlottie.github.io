@@ -8,9 +8,6 @@
     <!-- button group -->
     <div class="d-flex">
       <div class="d-none d-sm-block">
-        <!-- <button class="btn mx-2 view-count preview text-white" id="urlInput">Temporary</button>  -->
-        <!-- <input type="text" id="urlInput"/>
-        <button id="getByUrl" @click="enterLottieURL">url 입력</button> -->
 
         <!-- single/multi view -->
         <button class="multiview-btn btn mx-2 view-count preview text-white" @click="changeViewCount">{{ viewCount }}</button>
@@ -18,11 +15,6 @@
         <button v-if="$vuetify.theme.dark" class="btn mx-2 mode" @click="changeMode"><v-icon class="text-dark">mdi-white-balance-sunny</v-icon></button>
         <button v-else class="btn mx-2 mode" @click="changeMode"><em class="fas fa-moon text-white"></em></button>
       </div>
-      <!-- import file -->
-      <!-- <div class="filebox mx-2">
-        <label for="fileSelector"><span class="d-inline-block pt-1">New Lottie</span></label>
-        <input class="upload-hidden" type="file" id="fileSelector" accept=".json" placeholder="New Lottie">
-      </div> -->
 
       <!-- import dialog -->
       <v-dialog
@@ -37,7 +29,8 @@
             v-bind="attrs"
             v-on="on"
           >
-            New Lottie
+            Import
+            <em class="fas fa-file-import ml-2"></em>
           </button>
         </template>
         <v-card>
@@ -45,8 +38,12 @@
             Import New Lottie File
           </v-card-title>
           <v-card-text class="pt-3">
-            <div class="filebox pa-3 border">
-              <input class="upload-hidden" type="file" id="fileSelector" accept=".json" placeholder="New Lottie" @click="clickFileUpload">
+            <div class="filebox d-flex justify-center">
+              <input class="upload-hidden" type="file" id="fileSelector" accept=".json" placeholder="New Lottie" @click="clickFileUpload" @change="clickImportDialogClose" hidden>
+              <v-btn outlined color="upload" width="100%" class="py-7" @click="clickNewLottie">
+                <v-icon class="mr-2">mdi-paperclip</v-icon>
+                Upload Lottie File
+              </v-btn>
             </div>
             <h5 class="my-3 text-center">or</h5>
             <div class="d-flex align-items-center">
@@ -86,7 +83,7 @@
             v-on="on"
           >
             Export
-            <em class="fas fa-download ml-2"></em>
+            <em class="fas fa-file-export ml-2"></em>
           </button>
         </template>
         <v-card>
@@ -184,9 +181,13 @@ module.exports = {
     clickFileUpload() {
       addImportListener()
     },
+    clickNewLottie() {
+      var fileInput = document.getElementById('fileSelector')
+      fileInput.click()
+    },
     enterLottieURL() {
       getLottieFromUrl(this.lottieURL)
-      this.importDialog = false
+      this.clickImportDialogClose()
     },
     clickExportDialogClose() {
       this.exportdialog = false
@@ -224,33 +225,6 @@ module.exports = {
     background-color: #fdfdfd;
     color: #1D3557;
   }
-
-  .filebox input[type="file"] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip:rect(0,0,0,0);
-    border: 0;
-  }
-
-  /* .filebox label {
-    display: inline-block;
-    padding: .5em .75em;
-    color: #1D3557;
-    font-size: inherit;
-    line-height: normal;
-    vertical-align: middle;
-    background-color: #ECEFF1;
-    cursor: pointer;
-    border: 1px solid #ECEFF1;
-    border-bottom-color: #ECEFF1;
-    border-radius: .25em;
-    margin-bottom: 0;
-    height: 48px;
-  } */
 
   .mode {
     width: 50px;

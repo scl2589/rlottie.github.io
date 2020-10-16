@@ -128,13 +128,6 @@ function handleFiles(files) {
     }
 }
 
-// function enterURL() {
-//     var input = prompt("Please enter lottie animation url in JSON format from https://lottiefiles.com/");
-//     if (input) {
-//       getLottieFromUrl(input);
-//     }
-// }
-
 function getLottieFromUrl(input) {
     var url = input.trim();
     if (url == "" || !(url.startsWith("http://") || url.startsWith("https://"))) {
