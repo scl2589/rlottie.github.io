@@ -8,9 +8,6 @@
     <!-- button group -->
     <div class="d-flex">
       <div class="d-none d-sm-block">
-        <!-- <button class="btn mx-2 view-count preview text-white" id="urlInput">Temporary</button>  -->
-        <!-- <input type="text" id="urlInput"/>
-        <button id="getByUrl" @click="enterLottieURL">url 입력</button> -->
 
         <!-- single/multi view -->
         <button class="multiview-btn btn mx-2 view-count preview text-white" @click="changeViewCount">{{ viewCount }}</button>
@@ -37,7 +34,8 @@
             v-bind="attrs"
             v-on="on"
           >
-            New Lottie
+            Import
+            <em class="fas fa-file-import ml-2"></em>
           </button>
         </template>
         <v-card>
@@ -86,7 +84,7 @@
             v-on="on"
           >
             Export
-            <em class="fas fa-download ml-2"></em>
+            <em class="fas fa-file-export ml-2"></em>
           </button>
         </template>
         <v-card>
