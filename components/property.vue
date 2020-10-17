@@ -172,6 +172,70 @@
       </div>
     </div>
 
+    <!-- anchor controller -->
+    <!-- <div class="property">
+      <p class="property-title mb-2">Anchor</p>
+      <div class="position d-flex">
+        <v-text-field
+          light
+          solo
+          prefix="x"
+          v-model=""
+          placeholder="0"
+          @change=""
+          class="mr-3"
+        ></v-text-field>
+        <v-text-field
+          light
+          solo
+          prefix="y"
+          v-model=""
+          placeholder="0"
+          @change=""
+        ></v-text-field>
+      </div>
+    </div> -->
+
+    <!-- scale controller -->
+    <!-- <div class="property">
+      <div class="d-flex align-items-center mb-2">
+        <p class="property-title m-0">Scale</p>
+        <v-tooltip bottom nudge-right="100" nudge-bottom="60">
+          <template v-slot:activator="{ on, attrs }">
+            <i
+              class="far fa-question-circle fa-sm ml-2"
+              v-bind="attrs"
+              v-on="on"
+            >
+            </i>
+          </template>
+          <span>Number should be greater than or equal to 0</span>
+        </v-tooltip>
+      </div>
+      
+      <div class="preference">
+        <div class="position d-flex">
+          <v-text-field
+            light
+            solo
+            prefix="W"
+            v-model="selectedLayer.scaleWidth"
+            class="mr-3"
+            @change="changeScaleWidth(selectedLayer.scaleWidth)"
+            placeholder="100"
+          ></v-text-field>
+          <v-text-field
+            light
+            solo
+            prefix="H"
+            v-model="selectedLayer.scaleHeight"
+            @change="changeScaleHeight(selectedLayer.scaleHeight)"
+            placeholder="100"
+          ></v-text-field>
+        </div>
+      </div>
+    </div> -->
+
     <!-- rotation controller -->
     <!-- <div class="property">
       <div class="d-flex align-items-center mb-2">

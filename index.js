@@ -98,8 +98,6 @@ function onSliderDrag(value) {
 }
 
 function addListener() {
-    // var input = document.getElementById("fileSelector");
-    // input.addEventListener("change", fileSelectionChanged);
     window.addEventListener("dragover", handleDragOver, false);
     window.addEventListener("drop", handleFileSelect, false);
     window.addEventListener("resize", windowResize);
