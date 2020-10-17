@@ -41,20 +41,19 @@ class RLottieHandler {
 
             var rm = this.rlotties[i];
             rm.render(this.playSpeed);
-            
-            if(this.playDir && rm.curFrame >= rm.frameCount) {
+            if(this.playDir && rm.curFrame >= rm.frameCount - 1) {
                 if(this.isBounce) {
                     nextSpeed = -this.playSpeed;
                     nextDir = !this.playDir;
                 }
-                else rm.curFrame = 0;
+                else if(rm.curFrame >= rm.frameCount) rm.curFrame = 0;
             }
             if(!this.playDir && rm.curFrame <= 0) {
                 if(this.isBounce) {
                     nextSpeed = -this.playSpeed;
                     nextDir = !this.playDir;
                 }
-                else rm.curFrame = rm.frameCount - 1;
+                else if(rm.curFrame < 0) rm.curFrame = rm.frameCount - 1;
             }
         }
         this.playSpeed = nextSpeed;
