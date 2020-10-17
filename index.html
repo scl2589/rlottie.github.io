@@ -232,7 +232,7 @@
 
         <!-- right panels - property component and preference component -->
         <property v-if="selectedLayer" :selected-layer="selectedLayer" :canvasid="selectedCanvasId" :multiview="isMultiView" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-3 zindex2"></property>
-        <preference v-else :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" :multiview="isMultiView" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-3 zindex2"></preference>
+        <preference v-else :defaultwidth="defaultWidth" :defaultheight="defaultHeight" :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" :multiview="isMultiView" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-3 zindex2"></preference>
       </div>
     </v-app>
 
@@ -294,6 +294,10 @@
             layers: [],
             selectedLayer: null,
             selectedLayerTrigger: false,
+            
+            // default canvas data
+            defaultWidth: null,
+            defaultHeight: null,
             
             // player settings
             content: true,

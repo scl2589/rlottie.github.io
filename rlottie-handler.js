@@ -27,6 +27,9 @@ class RLottieHandler {
         app.$root.layers = this.rlotties[0].layerTree.child;
         app.$root.selectedCanvas = this.rlotties[0].canvas;
         app.$root.selectedCanvasStyle = this.rlotties[0].canvasStyle;
+
+        app.$root.defaultWidth = this.getDefaultSize().width;
+        app.$root.defaultHeight = this.getDefaultSize().height;
     }
 
     render() {
