@@ -8,7 +8,7 @@ class RLottieHandler {
         this.playing = true;
         this.wasPlaying = false;
         this.playSpeed = 1;
-        this.playDir = true;;
+        this.playDir = true;
         this.isBounce = false;
         this.isHover = false;
         for (let i = 1; i <= size; i++) {
@@ -54,7 +54,7 @@ class RLottieHandler {
                     nextSpeed = -this.playSpeed;
                     nextDir = !this.playDir;
                 }
-                else rm.curFrame = rm.frameCount;
+                else rm.curFrame = rm.frameCount - 1;
             }
         }
         this.playSpeed = nextSpeed;
