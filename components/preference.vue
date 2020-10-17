@@ -12,7 +12,6 @@
         {{canvasid + 1}}
       </v-chip>
     </p>
-    <p>Default Size: {{defaultwidth}} x {{defaultheight}}</p>
     
     <!-- background color controller -->
     <div class="preference" v-if="canvasstyle">
