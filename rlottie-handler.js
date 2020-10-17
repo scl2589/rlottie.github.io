@@ -21,8 +21,8 @@ class RLottieHandler {
         this.currentFrame = document.getElementById("currentFrame");
         this.jsString = this.rlotties[0].lottieHandle.getDefaultLottie();
 
-        frameCount.innerText = String(this.rlotties[0].frameCount);
-        this.slider.max = this.rlotties[0].frameCount;
+        frameCount.innerText = String(this.rlotties[0].frameCount - 1);
+        this.slider.max = this.rlotties[0].frameCount - 1;
 
         app.$root.layers = this.rlotties[0].layerTree.child;
         app.$root.selectedCanvas = this.rlotties[0].canvas;
@@ -60,7 +60,7 @@ class RLottieHandler {
         this.playSpeed = nextSpeed;
         this.playDir = nextDir;
         this.curFrame = this.rlotties[this.mainCanvasId].curFrame;
-        currentFrame.innerText = String(Math.round(this.curFrame - 1));
+        currentFrame.innerText = String(Math.round(this.curFrame));
         slider.value = this.curFrame;
     }
 
@@ -76,9 +76,9 @@ class RLottieHandler {
         this.relayoutCanvas();
 
         this.jsString = jsString;
-        this.slider.max = this.rlotties[0].frameCount;
+        this.slider.max = this.rlotties[0].frameCount - 1;
         this.slider.value = 0;
-        this.frameCount.innerText = String(this.rlotties[0].frameCount);
+        this.frameCount.innerText = String(this.rlotties[0].frameCount - 1);
         
         app.$root.layers = this.rlotties[0].layerTree.child;
         app.$root.selectedCanvas = this.rlotties[0].canvas;
@@ -135,7 +135,7 @@ class RLottieHandler {
             rm.render(this.playSpeed);
         });
         this.curFrame = this.rlotties[this.mainCanvasId].curFrame;
-        currentFrame.innerText = String(Math.round(this.curFrame - 1));
+        currentFrame.innerText = String(Math.round(this.curFrame - this.playSpeed));
     }
 
     setSnapshotURL() {
