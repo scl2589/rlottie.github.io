@@ -17,7 +17,7 @@ class RLottieModule {
     render(speed) {
         if (this.canvas.width == 0 || this.canvas.height == 0) return;
         this.curFrame = Number(this.curFrame) + speed;
-        var buffer = this.lottieHandle.render(this.curFrame, this.canvas.width, this.canvas.height);
+        var buffer = this.lottieHandle.render(this.curFrame - speed, this.canvas.width, this.canvas.height);
         var result = Uint8ClampedArray.from(buffer);
         var imageData = new ImageData(result, this.canvas.width, this.canvas.height);
         this.context.putImageData(imageData, 0, 0);
