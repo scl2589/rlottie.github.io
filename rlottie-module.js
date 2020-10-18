@@ -178,9 +178,8 @@ class RLottieModule {
             let imageData = new ImageData(result, this.canvas.width, this.canvas.height);
 
             for (let k = 0; k < imageData.data.length; k += 4) {
-                // background color가 아니면 continue;
+                // if there is no background color, continue
                 if (imageData.data[k + 0] + imageData.data[k + 1] + imageData.data[k + 2] +imageData.data[k + 3] != 0) continue;
-
 
                 // background color
                 imageData.data[k + 0] = this.canvasStyle.backgroundColor.rgba.r;
