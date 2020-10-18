@@ -8,11 +8,11 @@ class RLottieHandler {
         this.playing = true;
         this.wasPlaying = false;
         this.playSpeed = 1;
-        this.playDir = true;;
+        this.playDir = true;
         this.isBounce = false;
         this.isHover = false;
         for (let i = 1; i <= size; i++) {
-            this.rlotties.push(new RLottieModule("myCanvas" + i));
+            this.rlotties.push(new RLottieModule("myCanvas" + i, false));
         }
 
         this.relayoutCanvas();
@@ -21,12 +21,15 @@ class RLottieHandler {
         this.currentFrame = document.getElementById("currentFrame");
         this.jsString = this.rlotties[0].lottieHandle.getDefaultLottie();
 
-        frameCount.innerText = String(this.rlotties[0].frameCount);
-        this.slider.max = this.rlotties[0].frameCount;
+        frameCount.innerText = String(this.rlotties[0].frameCount - 1);
+        this.slider.max = this.rlotties[0].frameCount - 1;
 
         app.$root.layers = this.rlotties[0].layerTree.child;
         app.$root.selectedCanvas = this.rlotties[0].canvas;
         app.$root.selectedCanvasStyle = this.rlotties[0].canvasStyle;
+
+        app.$root.defaultWidth = this.getDefaultSize().width;
+        app.$root.defaultHeight = this.getDefaultSize().height;
     }
 
     render() {
@@ -38,26 +41,25 @@ class RLottieHandler {
 
             var rm = this.rlotties[i];
             rm.render(this.playSpeed);
-            
-            if(this.playDir && rm.curFrame > rm.frameCount) {
+            if(this.playDir && rm.curFrame >= rm.frameCount - 1) {
                 if(this.isBounce) {
                     nextSpeed = -this.playSpeed;
                     nextDir = !this.playDir;
                 }
-                else rm.curFrame = 0;
+                else if(rm.curFrame >= rm.frameCount) rm.curFrame = 0;
             }
             if(!this.playDir && rm.curFrame <= 0) {
                 if(this.isBounce) {
                     nextSpeed = -this.playSpeed;
                     nextDir = !this.playDir;
                 }
-                else rm.curFrame = rm.frameCount;
+                else if(rm.curFrame < 0) rm.curFrame = rm.frameCount - 1;
             }
         }
         this.playSpeed = nextSpeed;
         this.playDir = nextDir;
         this.curFrame = this.rlotties[this.mainCanvasId].curFrame;
-        currentFrame.innerText = String(Math.round(this.curFrame - 1));
+        currentFrame.innerText = String(Math.round(this.curFrame));
         slider.value = this.curFrame;
     }
 
@@ -73,9 +75,9 @@ class RLottieHandler {
         this.relayoutCanvas();
 
         this.jsString = jsString;
-        this.slider.max = this.rlotties[0].frameCount;
+        this.slider.max = this.rlotties[0].frameCount - 1;
         this.slider.value = 0;
-        this.frameCount.innerText = String(this.rlotties[0].frameCount);
+        this.frameCount.innerText = String(this.rlotties[0].frameCount - 1);
         
         app.$root.layers = this.rlotties[0].layerTree.child;
         app.$root.selectedCanvas = this.rlotties[0].canvas;
@@ -132,7 +134,7 @@ class RLottieHandler {
             rm.render(this.playSpeed);
         });
         this.curFrame = this.rlotties[this.mainCanvasId].curFrame;
-        currentFrame.innerText = String(Math.round(this.curFrame - 1));
+        currentFrame.innerText = String(Math.round(this.curFrame - this.playSpeed));
     }
 
     setSnapshotURL() {
@@ -164,5 +166,9 @@ class RLottieHandler {
             rm.canvas.style.width = size + "px";
             rm.canvas.style.height = size + "px";
         });
+    }
+
+    getDefaultSize() {
+        return this.rlotties[0].lottieHandle.getDefaultSize();
     }
 }

@@ -155,6 +155,7 @@
                 </v-card>
               </v-dialog>
             </div>
+
             <!-- toolbox -->
             <div class="toolbox zindex2">
               <div class="collapse" id="collapseExtraTools">
@@ -207,7 +208,14 @@
               <div class="d-flex justify-content-around align-items-center toolbox-basic" id="playbar">
                 <span class="play-button" type="button" id="playButton" onclick="buttonClicked()"><em class="fas fa-pause"></em></span>
                 <div class="d-flex flex-column align-items-between">
-                  <input class="player-slider mb-1" type="range" id="slider" min="0" max="100" value="0" oninput="onSliderDrag(this.value)">
+                  <!-- timeline-preview -->
+                  <div class="timeline-preview" :style="{'left':clientX+'px', 'top':clientY+'px'}">
+                    <canvas v-show="isPreview && isCanvas1Selected" id="myCanvas1Preview" class="preview-canvas" width="100" height="100"></canvas>
+                    <canvas v-show="isPreview && isCanvas2Selected" id="myCanvas2Preview" class="preview-canvas" width="100" height="100"></canvas>
+                    <canvas v-show="isPreview && isCanvas3Selected" id="myCanvas3Preview" class="preview-canvas" width="100" height="100"></canvas>
+                    <canvas v-show="isPreview && isCanvas4Selected" id="myCanvas4Preview" class="preview-canvas" width="100" height="100"></canvas>
+                  </div>
+                  <input @mouseleave="outPreview" @mousemove="followSlider" class="player-slider my-1" type="range" id="slider" min="0" max="100" value="0" oninput="onSliderDrag(this.value)">
                   <div class="d-flex justify-content-between">
                     <span class="badge badge-light" id="currentFrame"></span>
                     <span class="badge badge-light" id="frameCount"></span>
@@ -221,9 +229,10 @@
             </div>
           </div>
         </div>
+
         <!-- right panels - property component and preference component -->
         <property v-if="selectedLayer" :selected-layer="selectedLayer" :canvasid="selectedCanvasId" :multiview="isMultiView" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-3 zindex2"></property>
-        <preference v-else :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" :multiview="isMultiView" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-3 zindex2"></preference>
+        <preference v-else :defaultwidth="defaultWidth" :defaultheight="defaultHeight" :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" :multiview="isMultiView" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-3 zindex2"></preference>
       </div>
     </v-app>
 
@@ -237,6 +246,8 @@
     <!-- http-vue-loader -->
     <script src="https://unpkg.com/http-vue-loader"></script> 
     <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js" crossorigin="anonymous"></script>
     <script>
       var app = new Vue({
         el: '#app',
@@ -252,7 +263,8 @@
                 preview: '#0b6687',
                 icon: '#FFFFFF',
                 mode: '#ECEFF1',
-                canvas: '#0FCCCE'
+                canvas: '#0FCCCE',
+                upload: '#bcbcbc',
               },
               light: {
                 navbar: '#90A4AE',
@@ -262,7 +274,8 @@
                 preview: '#56a6c2',
                 icon: '#000000',
                 mode: '#37474F',
-                canvas: '#0FCCCE'
+                canvas: '#0FCCCE',
+                upload: '#9e9e9e',
               }
             },
           },
@@ -281,6 +294,10 @@
             layers: [],
             selectedLayer: null,
             selectedLayerTrigger: false,
+            
+            // default canvas data
+            defaultWidth: null,
+            defaultHeight: null,
             
             // player settings
             content: true,
@@ -306,7 +323,12 @@
             
             // dialogs
             exportdialog: false,
-            shortcutdialog: false
+            shortcutdialog: false,
+
+            //timeline-preview
+            isPreview: false,
+            clientX: null,
+            clientY: null,
           }
         },
         computed: {
@@ -420,6 +442,28 @@
 
           clickSnapshotClose() {
             this.snapshotDialog = false
+          },
+
+          outPreview() {
+            this.isPreview = false;
+          },
+
+          followSlider(e) {
+            this.isPreview = true;
+            if (this.isPreview) {
+              this.clientX = e.clientX - 50;
+              this.clientY = e.target.offsetTop - 45;
+              var rm = rlottieHandler.rlotties[this.selectedCanvasId];
+              var x = e.offsetX;
+              var sliderLength = e.target.offsetWidth;
+              let frame = Math.round(rm.frameCount * (x / sliderLength)); 
+              if (frame <= 0) {
+                frame = 0;
+              } else if (frame > rm.frameCount) {
+                frame = rm.frameCount
+              }
+              rm.previewRender(frame)
+            }
           }
         },
 

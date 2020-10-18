@@ -62,6 +62,10 @@ function canvasResize(width, height) {
     });
 }
 
+function getDefaultSize() {
+    return rlottieHandler.getDefaultSize();
+}
+
 function windowResizeDone() {
     rlottieHandler.relayoutCanvas();
     if(rlottieHandler.wasPlaying) {
@@ -94,11 +98,14 @@ function onSliderDrag(value) {
 }
 
 function addListener() {
-    var input = document.getElementById("fileSelector");
-    input.addEventListener("change", fileSelectionChanged);
     window.addEventListener("dragover", handleDragOver, false);
     window.addEventListener("drop", handleFileSelect, false);
     window.addEventListener("resize", windowResize);
+}
+
+function addImportListener() {
+    var input = document.getElementById("fileSelector");
+    input.addEventListener("change", fileSelectionChanged);
 }
 
 function fileSelectionChanged() {
@@ -123,6 +130,31 @@ function handleFiles(files) {
     }
 }
 
+function getLottieFromUrl(input) {
+    var url = input.trim();
+    if (url == "" || !(url.startsWith("http://") || url.startsWith("https://"))) {
+      alert("Please enter correct URL that starts with 'http://' or 'https://'");
+      return;
+    }
+  
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      if (xhr.status == 200) {
+        var data = xhr.responseText;
+        try {
+          JSON.parse(data);
+        } catch (error) {
+          throw new Error("The URL you entered is not in JSON format");
+        }
+        rlottieHandler.reload(data);
+      } else {
+        throw new Error("Your request failed. Please type in another URL.");
+      }
+    };
+    xhr.open("GET", url);
+    xhr.send(null);
+  }
+
 function handleDragOver(event) {
     event.stopPropagation();
     event.preventDefault();
@@ -130,6 +162,7 @@ function handleDragOver(event) {
 }
 
 function handleFileSelect(event) {
+    console.log(event)
     event.stopPropagation();
     event.preventDefault();
     var contentName = document.getElementById('contentName')
@@ -142,7 +175,6 @@ function setLayerColor(node, r, g, b, canvasid) {
     var keypath = node.keypath + ".**";
     if(node.type == "Fill") getRModule(canvasid).lottieHandle.setFillColor(keypath, r, g, b);
     else if(node.type == "Stroke") getRModule(canvasid).lottieHandle.setStrokeColor(keypath, r, g, b);
-    propertiesCascading(node, [{ name: "color",  value: node.color }]);
 }
 
 function setLayerOpacity(node, opacity, canvasid) {

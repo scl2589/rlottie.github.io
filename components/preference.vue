@@ -15,7 +15,7 @@
     
     <!-- background color controller -->
     <div class="preference" v-if="canvasstyle">
-      <p class="preference-title mb-2">Background color</p>
+      <p class="preference-title mb-2">Background Color</p>
       <div class="text-left">
         <v-menu 
           offset-y 
@@ -210,10 +210,8 @@ module.exports = {
     canvasstyle: Object,
     multiview: Boolean,
     shortcutdialog: Boolean,
-  },
-  data: function () {
-    return {
-    }
+    defaultwidth: Number,
+    defaultheight: Number,
   },
   watch: {
     canvasstyle: {

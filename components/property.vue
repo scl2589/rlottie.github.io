@@ -172,34 +172,6 @@
       </div>
     </div>
 
-    <!-- rotation controller -->
-    <!-- <div class="property">
-      <div class="d-flex align-items-center mb-2">
-        <p class="property-title m-0">Rotation</p>
-        <v-tooltip bottom nudge-right="60" nudge-bottom="60">
-          <template v-slot:activator="{ on, attrs }">
-            <i
-              class="far fa-question-circle fa-sm ml-2"
-              v-bind="attrs"
-              v-on="on"
-            >
-            </i>
-          </template>
-          <span>Number should be between 0 and 360</span>
-        </v-tooltip>
-      </div>
-      <div class="rotation m-0">
-         <v-text-field
-          light
-          solo
-          suffix="°"
-          @change="changeRotation(selectedLayer.rotation)"
-          v-model="selectedLayer.rotation"
-          :placeholder="selectedLayer.rotation"
-        ></v-text-field>
-      </div>
-    </div> -->
-
     <!-- shortcut dialog -->
     <v-dialog
       v-model="shortcutdialog"
