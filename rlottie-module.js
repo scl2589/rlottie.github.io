@@ -187,7 +187,6 @@ class RLottieModule {
         imageData.data[k + 2] = this.canvasStyle.backgroundColor.rgba.b;
         imageData.data[k + 3] = this.canvasStyle.backgroundColor.rgba.a;
       }
-
       gif.addFrame(imageData, { delay: 1000 / 60 });
     }
 
@@ -199,7 +198,6 @@ class RLottieModule {
       a.click();
       callback();
     });
-
     gif.render();
   }
 

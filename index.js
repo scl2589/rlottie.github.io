@@ -66,6 +66,10 @@ function getDefaultSize() {
   return rlottieHandler.getDefaultSize();
 }
 
+function getDefaultSize() {
+    return rlottieHandler.getDefaultSize();
+}
+
 function windowResizeDone() {
   rlottieHandler.relayoutCanvas();
   if (rlottieHandler.wasPlaying) {
@@ -106,6 +110,11 @@ function addListener() {
 function addImportListener() {
   var input = document.getElementById("fileSelector");
   input.addEventListener("change", fileSelectionChanged);
+}
+
+function addImportListener() {
+    var input = document.getElementById("fileSelector");
+    input.addEventListener("change", fileSelectionChanged);
 }
 
 function fileSelectionChanged() {
@@ -154,6 +163,31 @@ function getLottieFromUrl(input) {
   xhr.open("GET", url);
   xhr.send(null);
 }
+
+function getLottieFromUrl(input) {
+    var url = input.trim();
+    if (url == "" || !(url.startsWith("http://") || url.startsWith("https://"))) {
+      alert("Please enter correct URL that starts with 'http://' or 'https://'");
+      return;
+    }
+  
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      if (xhr.status == 200) {
+        var data = xhr.responseText;
+        try {
+          JSON.parse(data);
+        } catch (error) {
+          throw new Error("The URL you entered is not in JSON format");
+        }
+        rlottieHandler.reload(data);
+      } else {
+        throw new Error("Your request failed. Please type in another URL.");
+      }
+    };
+    xhr.open("GET", url);
+    xhr.send(null);
+  }
 
 function handleDragOver(event) {
   event.stopPropagation();

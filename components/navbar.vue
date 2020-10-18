@@ -12,6 +12,7 @@
     <!-- button group -->
     <div class="d-flex">
       <div class="d-none d-sm-block">
+
         <!-- single/multi view -->
         <button
           class="multiview-btn btn mx-2 view-count preview text-white" 
