@@ -2,24 +2,118 @@
   <div class="navbar d-flex justify-content-between">
     <!-- logo -->
     <div class="d-flex align-items-center">
-      <img class="logo" src="https://user-images.githubusercontent.com/25967949/94992643-7173a580-05c6-11eb-8514-322f459a88d8.png" alt="logo">
+      <img 
+        class="logo" 
+        src="https://user-images.githubusercontent.com/25967949/94992643-7173a580-05c6-11eb-8514-322f459a88d8.png" 
+        alt="logo"
+      >
     </div>
 
     <!-- button group -->
     <div class="d-flex">
       <div class="d-none d-sm-block">
+
         <!-- single/multi view -->
-        <button class="multiview-btn btn mx-2 view-count preview text-white" @click="changeViewCount">{{ viewCount }}</button>
+        <button
+          class="multiview-btn btn mx-2 view-count preview text-white" 
+          @click="changeViewCount"
+        >
+          {{ viewCount }}
+        </button>
         <!-- light/dark mode -->
-        <button v-if="$vuetify.theme.dark" class="btn mx-2 mode" @click="changeMode"><v-icon class="text-dark">mdi-white-balance-sunny</v-icon></button>
-        <button v-else class="btn mx-2 mode" @click="changeMode"><em class="fas fa-moon text-white"></em></button>
+        <button 
+          class="btn mx-2 mode"
+          v-if="$vuetify.theme.dark"
+          @click="changeMode"
+        >
+          <v-icon class="text-dark">
+            mdi-white-balance-sunny
+          </v-icon>
+        </button>
+        <button 
+          class="btn mx-2 mode"
+          v-else
+          @click="changeMode"
+        >
+          <em class="fas fa-moon text-white"></em>
+        </button>
       </div>
-      <!-- import file -->
-      <div class="filebox mx-2">
-        <label for="fileSelector"><span class="d-inline-block pt-1">New Lottie</span></label>
-        <input class="upload-hidden" type="file" id="fileSelector" accept=".json" placeholder="New Lottie">
-      </div>
-      <!-- export to gif -->
+
+      <!-- import dialog -->
+      <v-dialog
+        v-model="importDialog"
+        max-width="500"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <button
+            class="btn accent mx-2"
+            :class="{ 'text-white': $vuetify.theme.dark }" 
+            depressed 
+            v-bind="attrs"
+            v-on="on"
+          >
+            Import
+            <em class="fas fa-file-import ml-2"></em>
+          </button>
+        </template>
+        <v-card>
+          <v-card-title class="headline mb-4">
+            Import New Lottie File
+          </v-card-title>
+          <v-card-text class="pt-3">
+            <div class="filebox d-flex justify-center">
+              <input 
+                class="upload-hidden" 
+                id="fileSelector" 
+                hidden
+                type="file" 
+                accept=".json" 
+                placeholder="New Lottie" 
+                @click="clickFileUpload" 
+                @change="clickImportDialogClose" 
+              >
+              <v-btn 
+                class="py-7" 
+                outlined 
+                color="upload" 
+                width="100%" 
+                @click="clickNewLottie"
+              >
+                <v-icon class="mr-2">mdi-paperclip</v-icon>
+                Upload Lottie File
+              </v-btn>
+            </div>
+            <h5 class="my-3 text-center">or</h5>
+            <div class="d-flex align-items-center">
+              <v-text-field
+                outlined
+                hide-details
+                v-model="lottieURL"
+                placeholder="Lottie File URL"
+                color="icon"
+              ></v-text-field>
+              <v-btn
+                large class="ml-4"
+                color="accent"
+                @click="enterLottieURL"
+              >
+                Import
+              </v-btn>
+            </div>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              text
+              @click="clickImportDialogClose"
+            >
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <!-- export dialog -->
       <v-dialog
         v-model="exportdialog"
         max-width="500"
@@ -33,7 +127,7 @@
             v-on="on"
           >
             Export
-            <em class="fas fa-download ml-2"></em>
+            <em class="fas fa-file-export ml-2"></em>
           </button>
         </template>
         <v-card>
@@ -47,11 +141,18 @@
             <div class="d-flex align-items-center">
               <v-text-field
                 solo-reverse
+                v-model="gifname"
                 color="text"
                 placeholder="File name"
-                v-model="gifname"
               ></v-text-field>
-              <v-btn class="ml-4" color="accent" @click="downloadGIF" :disabled="downloadDisabled">Download</v-btn>
+              <v-btn
+                class="ml-4"
+                color="accent"
+                :disabled="downloadDisabled"
+                @click="downloadGIF"
+              >
+                Download
+              </v-btn>
             </div>
           </v-card-text>
           <v-card-actions>
@@ -59,13 +160,16 @@
             <v-btn
               color="text"
               text
-              @click="clickExportDialogClose"
               :disabled="closeDisabled"
+              @click="clickExportDialogClose"
             >
               Close
             </v-btn>
           </v-card-actions>
-          <v-overlay :value="exportOverlay" opacity="0.6">
+          <v-overlay
+            :value="exportOverlay"
+            opacity="0.6"
+          >
             <div class="d-flex flex-column justify-content-center align-items-center">
               <h4 class="mb-5">Creating GIF file...</h4>
               <v-progress-circular
@@ -95,6 +199,8 @@ module.exports = {
       exportOverlay: false,
       downloadDisabled: false,
       closeDisabled: false,
+      importDialog: false,
+      lottieURL: "",
     }
   },
   watch: {
@@ -122,6 +228,20 @@ module.exports = {
         this.$emit('viewcount-changed', false);
       }
       windowResize();
+    },
+    clickImportDialogClose() {
+      this.importDialog = false
+    },
+    clickFileUpload() {
+      addImportListener()
+    },
+    clickNewLottie() {
+      var fileInput = document.getElementById('fileSelector')
+      fileInput.click()
+    },
+    enterLottieURL() {
+      getLottieFromUrl(this.lottieURL)
+      this.clickImportDialogClose()
     },
     clickExportDialogClose() {
       this.exportdialog = false
@@ -158,33 +278,6 @@ module.exports = {
   .lottie-input {
     background-color: #fdfdfd;
     color: #1D3557;
-  }
-
-  .filebox input[type="file"] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip:rect(0,0,0,0);
-    border: 0;
-  }
-
-  .filebox label {
-    display: inline-block;
-    padding: .5em .75em;
-    color: #1D3557;
-    font-size: inherit;
-    line-height: normal;
-    vertical-align: middle;
-    background-color: #ECEFF1;
-    cursor: pointer;
-    border: 1px solid #ECEFF1;
-    border-bottom-color: #ECEFF1;
-    border-radius: .25em;
-    margin-bottom: 0;
-    height: 48px;
   }
 
   .mode {
