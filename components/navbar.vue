@@ -2,18 +2,40 @@
   <div class="navbar d-flex justify-content-between">
     <!-- logo -->
     <div class="d-flex align-items-center">
-      <img class="logo" src="https://user-images.githubusercontent.com/25967949/94992643-7173a580-05c6-11eb-8514-322f459a88d8.png" alt="logo">
+      <img 
+        class="logo" 
+        src="https://user-images.githubusercontent.com/25967949/94992643-7173a580-05c6-11eb-8514-322f459a88d8.png" 
+        alt="logo"
+      >
     </div>
 
     <!-- button group -->
     <div class="d-flex">
       <div class="d-none d-sm-block">
-
         <!-- single/multi view -->
-        <button class="multiview-btn btn mx-2 view-count preview text-white" @click="changeViewCount">{{ viewCount }}</button>
+        <button
+          class="multiview-btn btn mx-2 view-count preview text-white" 
+          @click="changeViewCount"
+        >
+          {{ viewCount }}
+        </button>
         <!-- light/dark mode -->
-        <button v-if="$vuetify.theme.dark" class="btn mx-2 mode" @click="changeMode"><v-icon class="text-dark">mdi-white-balance-sunny</v-icon></button>
-        <button v-else class="btn mx-2 mode" @click="changeMode"><em class="fas fa-moon text-white"></em></button>
+        <button 
+          class="btn mx-2 mode"
+          v-if="$vuetify.theme.dark"
+          @click="changeMode"
+        >
+          <v-icon class="text-dark">
+            mdi-white-balance-sunny
+          </v-icon>
+        </button>
+        <button 
+          class="btn mx-2 mode"
+          v-else
+          @click="changeMode"
+        >
+          <em class="fas fa-moon text-white"></em>
+        </button>
       </div>
 
       <!-- import dialog -->
@@ -39,8 +61,23 @@
           </v-card-title>
           <v-card-text class="pt-3">
             <div class="filebox d-flex justify-center">
-              <input class="upload-hidden" type="file" id="fileSelector" accept=".json" placeholder="New Lottie" @click="clickFileUpload" @change="clickImportDialogClose" hidden>
-              <v-btn outlined color="upload" width="100%" class="py-7" @click="clickNewLottie">
+              <input 
+                class="upload-hidden" 
+                id="fileSelector" 
+                hidden
+                type="file" 
+                accept=".json" 
+                placeholder="New Lottie" 
+                @click="clickFileUpload" 
+                @change="clickImportDialogClose" 
+              >
+              <v-btn 
+                class="py-7" 
+                outlined 
+                color="upload" 
+                width="100%" 
+                @click="clickNewLottie"
+              >
                 <v-icon class="mr-2">mdi-paperclip</v-icon>
                 Upload Lottie File
               </v-btn>
@@ -49,12 +86,18 @@
             <div class="d-flex align-items-center">
               <v-text-field
                 outlined
-                placeholder="Lottie File URL"
-                v-model="lottieURL"
                 hide-details
+                v-model="lottieURL"
+                placeholder="Lottie File URL"
                 color="icon"
               ></v-text-field>
-              <v-btn large class="ml-4" color="accent" @click="enterLottieURL">Import</v-btn>
+              <v-btn
+                large class="ml-4"
+                color="accent"
+                @click="enterLottieURL"
+              >
+                Import
+              </v-btn>
             </div>
           </v-card-text>
           <v-card-actions>
@@ -69,7 +112,7 @@
         </v-card>
       </v-dialog>
 
-      <!-- export to gif -->
+      <!-- export dialog -->
       <v-dialog
         v-model="exportdialog"
         max-width="500"
@@ -97,11 +140,18 @@
             <div class="d-flex align-items-center">
               <v-text-field
                 solo-reverse
+                v-model="gifname"
                 color="text"
                 placeholder="File name"
-                v-model="gifname"
               ></v-text-field>
-              <v-btn class="ml-4" color="accent" @click="downloadGIF" :disabled="downloadDisabled">Download</v-btn>
+              <v-btn
+                class="ml-4"
+                color="accent"
+                :disabled="downloadDisabled"
+                @click="downloadGIF"
+              >
+                Download
+              </v-btn>
             </div>
           </v-card-text>
           <v-card-actions>
@@ -109,13 +159,16 @@
             <v-btn
               color="text"
               text
-              @click="clickExportDialogClose"
               :disabled="closeDisabled"
+              @click="clickExportDialogClose"
             >
               Close
             </v-btn>
           </v-card-actions>
-          <v-overlay :value="exportOverlay" opacity="0.6">
+          <v-overlay
+            :value="exportOverlay"
+            opacity="0.6"
+          >
             <div class="d-flex flex-column justify-content-center align-items-center">
               <h4 class="mb-5">Creating GIF file...</h4>
               <v-progress-circular

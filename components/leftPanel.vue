@@ -1,16 +1,25 @@
 <template>
   <div class="sidebar left-sidebar">
     <!-- preview -->
-    <div class="preview container py-3 d-flex align-items-center" @click="clickMain">
-      <h5 class="ml-2 name mb-0 text-white" id="contentName" title="FileName">Anubis.json</h5>
+    <div 
+      class="preview container py-3 d-flex align-items-center" 
+      @click="clickMain"
+    >
+      <h5 
+        class="ml-2 name mb-0 text-white" 
+        id="contentName" 
+        title="FileName"
+      >
+        Anubis.json
+      </h5>
     </div>
 
     <!-- tabs -->
     <v-tabs
       fixed-tabs
+      v-model="tab"
       background-color="sidebar"
       color="text"
-      v-model="tab"
     >
       <v-tabs-slider color="preview"></v-tabs-slider>
       <v-tab @click="changeTab">
@@ -24,7 +33,10 @@
     <v-tabs-items v-model="tab">
       <!-- layers tab -->
       <v-tab-item>
-        <v-card color="sidebar" flat>
+        <v-card 
+          flat
+          color="sidebar" 
+        >
           <div class="d-flex justify-content-between align-items-center container pb-2">
             <!-- reset button -->
             <v-dialog
@@ -34,9 +46,9 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   class="btn" 
-                  color="preview" 
                   depressed 
                   rounded 
+                  color="preview" 
                   v-bind="attrs"
                   v-on="on"
                 >
@@ -68,13 +80,34 @@
               </v-card>
             </v-dialog>
             <!-- change visibility for all layers -->
-            <div class="d-none sidebar--text">{{allLayersVisible}}</div>
-            <div v-if="layers" class="d-flex justify-content-start align-items-center">
-              <v-tooltip bottom nudge-top="10">
+            <div class="d-none sidebar--text">
+              {{ allLayersVisible }}
+            </div>
+            <div 
+              class="d-flex justify-content-start align-items-center"
+              v-if="layers" 
+            >
+              <v-tooltip 
+                bottom 
+                nudge-top="10"
+              >
                 <template v-slot:activator="{ on, attrs }">
-                  <button @click="changeAllVisibility" class="eye-btn btn" v-bind="attrs" v-on="on">
-                    <em v-if="layers.allVisibility" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></em>
-                    <em v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></em>
+                  <button 
+                    class="eye-btn btn" 
+                    v-bind="attrs" 
+                    v-on="on"
+                    @click="changeAllVisibility" 
+                  >
+                    <em 
+                      class="far fa-eye" 
+                      :class="{ 'text-white': $vuetify.theme.dark }"
+                      v-if="layers.allVisibility" 
+                    ></em>
+                    <em 
+                      class="far fa-eye-slash" 
+                      :class="{ 'text-white': $vuetify.theme.dark }"
+                      v-else 
+                    ></em>
                   </button>
                 </template>
                 <span v-if="layers.allVisibility">Make all layers invisible</span>
@@ -83,41 +116,74 @@
             </div>
           </div>
           <!-- layer list -->
-          <div class="layer-list container py-3 px-0" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
+          <div 
+            class="layer-list container py-3 px-0" 
+            :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }"
+          >
             <v-treeview 
-              :items="layers"
-              activatable
-              color="text"
               hoverable
+              activatable
               return-object
-              expand-icon="mdi-chevron-down"
+              transition
+              :items="layers"
               :active.sync="selectedLayer"
               :active-class="$vuetify.theme.dark ? 'selected-layer-dark' : 'selected-layer-light'"
-              @update:active="clickLayer(selectedLayer)"
+              color="text"
+              expand-icon="mdi-chevron-down"
               item-children="child"
               item-key="id"
-              transition
+              @update:active="clickLayer(selectedLayer)"
             >
               <template v-slot:prepend="{ item }">
-                <div v-if="topNodes.includes(item.keypath)" class="d-flex justify-content-center align-items-center my-3 ml-3">
-                  <div class="thumbnailbox"><canvas :id="item.id" width="60" height="60"></canvas></div>
+                <div 
+                  class="d-flex justify-content-center align-items-center my-3 ml-3"
+                  v-if="topNodes.includes(item.keypath)" 
+                >
+                  <div class="thumbnailbox">
+                    <canvas 
+                      :id="item.id" 
+                      width="60" 
+                      height="60"
+                    ></canvas>
+                  </div>
                 </div>
               </template>
               <template v-slot:label="{ item }">
                 <div class="d-flex align-items-center">
-                    <p v-if="topNodes.includes(item.keypath)" class="ml-3 mb-0 layer-name" :title="item.keypath">
+                    <p 
+                      class="ml-3 mb-0 layer-name" 
+                      v-if="topNodes.includes(item.keypath)" 
+                      :title="item.keypath"
+                    >
                       {{ item.name }}
                     </p>
-                    <p v-else class="mb-0 layer-name child-layer-name" :title="item.keypath">
+                    <p 
+                      class="mb-0 layer-name child-layer-name" 
+                      v-else 
+                      :title="item.keypath">
                       {{ item.name }}
                     </p>
                 </div>
               </template>
               <template v-slot:append="{ item }">
-                <div v-if="topNodes.includes(item.keypath)" class="d-flex align-items-center">
-                  <button @click.stop="changeVisibility(item)" class="eye-btn btn">
-                    <em v-if="item.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></em>
-                    <em v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></em>
+                <div 
+                  class="d-flex align-items-center"
+                  v-if="topNodes.includes(item.keypath)" 
+                >
+                  <button 
+                    class="eye-btn btn"
+                    @click.stop="changeVisibility(item)" 
+                  >
+                    <em 
+                      class="far fa-eye" 
+                      :class="{ 'text-white': $vuetify.theme.dark }"
+                      v-if="item.visible" 
+                    ></em>
+                    <em 
+                      class="far fa-eye-slash" 
+                      :class="{ 'text-white': $vuetify.theme.dark }"
+                      v-else 
+                    ></em>
                   </button>
                 </div>
               </template>
@@ -128,7 +194,10 @@
       
       <!-- search tab -->
       <v-tab-item>
-        <v-card color="sidebar" flat>
+        <v-card 
+          flat
+          color="sidebar" 
+        >
           <div class="search-bar container">
             <div class="d-flex align-items-center mb-3">
               <p class="title m-0">Search layer</p>
@@ -147,50 +216,70 @@
             <div class="row no-gutters">
               <!-- search bar -->
               <v-text-field
-                v-model="searchKeyword"
-                placeholder="ex) parentLayer.childLayer"
-                prepend-icon="mdi-magnify"
                 solo
                 rounded
                 hide-details
                 clearable
+                v-model="searchKeyword"
+                placeholder="ex) parentLayer.childLayer"
+                prepend-icon="mdi-magnify"
                 color="text"
                 clear-icon="mdi-close-circle-outline"
               ></v-text-field>
             </div>
           </div>
           <!-- search result -->
-          <div class="search-layer-list container mt-4 px-0" :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }">
+          <div 
+            class="search-layer-list container mt-4 px-0" 
+            :class="{ 'scroll-sect-dark': $vuetify.theme.dark, 'scroll-sect-light': !$vuetify.theme.dark }"
+          >
             <v-treeview 
-              :items="layers"
               activatable
               hoverable
               return-object
+              transition
               open-all
-              color="text"
-              expand-icon="mdi-chevron-down"
+              v-show="searchKeyword"
+              :items="layers"
               :active.sync="selectedLayer"
               :active-class="$vuetify.theme.dark ? 'selected-layer-dark' : 'selected-layer-light'"
-              @update:active="clickLayer(selectedLayer)"
+              :search="searchKeyword"
+              color="text"
+              expand-icon="mdi-chevron-down"
               item-children="child"
               item-key="id"
               item-text="keypath"
-              :search="searchKeyword"
-              v-show="searchKeyword"
-              transition
+              @update:active="clickLayer(selectedLayer)"
             >
               <template v-slot:label="{ item }">
                 <div class="d-flex align-items-center ml-3">
-                    <p class="mb-0 layer-name" :title="item.keypath">
+                    <p 
+                      class="mb-0 layer-name" 
+                      :title="item.keypath"
+                    >
                       {{ item.name }}
                     </p>
                 </div>
               </template>
               <template v-slot:append="{ item }">
-                <div v-if="topNodes.includes(item.keypath)" class="d-flex align-items-center">
-                  <button @click="changeVisibility(item)" class="eye-btn btn">
-                    <em v-if="item.visible" class="far fa-eye" :class="{ 'text-white': $vuetify.theme.dark }"></em>
-                    <em v-else class="far fa-eye-slash" :class="{ 'text-white': $vuetify.theme.dark }"></em>
+                <div 
+                  class="d-flex align-items-center"
+                  v-if="topNodes.includes(item.keypath)" 
+                >
+                  <button 
+                    class="eye-btn btn"
+                    @click="changeVisibility(item)" 
+                  >
+                    <em 
+                      class="far fa-eye" 
+                      :class="{ 'text-white': $vuetify.theme.dark }"
+                      v-if="item.visible" 
+                    ></em>
+                    <em 
+                      class="far fa-eye-slash" 
+                      :class="{ 'text-white': $vuetify.theme.dark }"
+                      v-else 
+                    ></em>
                   </button>
                 </div>
               </template>
@@ -211,7 +300,7 @@ module.exports = {
     trigger: Boolean
   },
 
-  data: function () {
+  data() {
     return {
       tab: 0,
       allLayersVisible: true,
@@ -243,16 +332,16 @@ module.exports = {
         this.searchKeyword = null
       }
     },
-    
+
     clickLayer(layer) {
       this.$emit('layer-selected', layer[0])
     },
-    
+
     clickMain() {
       this.selectedLayer = []
       this.$emit('layer-selected', null)
-    },
-    
+    },  
+
     changeVisibility(layer) {
       layer.visible = !layer.visible
       if (layer.visible) {
@@ -278,7 +367,7 @@ module.exports = {
         });
       }
     },
-    
+
     clickReset(index) {
       rlottieHandler.reset(index)
       this.resetDialog = false
@@ -358,7 +447,7 @@ module.exports = {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
 

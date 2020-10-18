@@ -19,27 +19,47 @@
   </head>
 
   <body>
-    <v-app class="window" id="app">
+    <v-app 
+      class="window" 
+      id="app"
+    >
       <div class="row no-gutters">
         <!-- navbar component -->
-        <navbar @viewcount-changed="changeIsMultiView" @exportdialog-changed="exportdialog = false" :exportdialog="exportdialog" class="col-12 zindex2"></navbar>
+        <navbar 
+          class="col-12 zindex2"
+          @viewcount-changed="changeIsMultiView" 
+          @exportdialog-changed="exportdialog = false" 
+          :exportdialog="exportdialog" 
+        ></navbar>
         <!-- leftPanel component -->
-        <leftpanel @layer-selected="layerSelected" :layers="layers" :canvasid="selectedCanvasId" :trigger="selectedLayerTrigger" class="col-3 zindex2"></leftpanel>
+        <leftpanel 
+          class="col-3 zindex2"
+          :layers="layers" 
+          :canvasid="selectedCanvasId" 
+          :trigger="selectedLayerTrigger" 
+          @layer-selected="layerSelected" 
+        ></leftpanel>
         <!-- player  -->
         <div class="col-6 bg-white">
-          <div id="player" class="player d-flex flex-column justify-content-between">
+          <div 
+            class="player d-flex flex-column justify-content-between"
+            id="player" 
+          >
             <div class="screen my-auto mx-auto d-flex justify-content-center align-items-center">
-              <div class="my-auto mx-auto d-flex justify-content-center align-items-center row" id="content">
+              <div 
+                class="my-auto mx-auto d-flex justify-content-center align-items-center row" 
+                id="content"
+              >
                 <!-- canvas 1 -->
                 <div
                   class="d-flex justify-content-center align-items-center"
                   :class="{ 'col-6': isMultiView, 'col-12': !isMultiView }"
                 >
                   <v-chip
-                    v-if="isMultiView"
                     class="mr-2 canvas-chip text-caption"
-                    color="canvas"
                     small
+                    v-if="isMultiView"
+                    color="canvas"
                   >1</v-chip>
                   <canvas
                     class="common-canvas"
@@ -55,17 +75,20 @@
                   :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }"
                 >
                   <v-chip
-                    v-if="isMultiView"
                     class="mr-2 canvas-chip text-caption"
-                    color="canvas"
                     small
-                  >2</v-chip>
+                    v-if="isMultiView"
+                    color="canvas"
+                  >
+                    2
+                  </v-chip>
                   <canvas
                     class="multiview-resizing"
                     :class="{ 'selected-canvas': isCanvas2Selected&&isMultiView }"
                     v-show="isMultiView | (!isMultiView&&isCanvas2Selected)"
                     id="myCanvas2"
-                    @click="selectCanvas(1)">
+                    @click="selectCanvas(1)"
+                  >
                   </canvas>
                 </div>
                 <!-- canvas 3 -->
@@ -74,11 +97,13 @@
                   :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }"
                 >
                   <v-chip
-                    v-if="isMultiView"
                     class="mr-2 canvas-chip text-caption"
-                    color="canvas"
                     small
-                  >3</v-chip>
+                    v-if="isMultiView"
+                    color="canvas"
+                  >
+                    3
+                  </v-chip>
                   <canvas
                     class="multiview-resizing"
                     :class="{ 'selected-canvas': isCanvas3Selected&&isMultiView }"
@@ -93,11 +118,13 @@
                   :class="{ 'col-6': isMultiView, 'col-0': !isMultiView }"
                 >
                   <v-chip
-                    v-if="isMultiView"
                     class="mr-2 canvas-chip text-caption"
-                    color="canvas"
                     small
-                  >4</v-chip>
+                    v-if="isMultiView"
+                    color="canvas"
+                  >
+                    4
+                  </v-chip>
                   <canvas
                     class="multiview-resizing"
                     :class="{ 'selected-canvas': isCanvas4Selected&&isMultiView }"
@@ -131,7 +158,12 @@
                     Export file to PNG
                   </v-card-title>
                   <div class="d-flex justify-content-center snapshot-container">
-                    <img id="snapshot-image" height="250" :src="snapshotURL" alt="">
+                    <img 
+                      id="snapshot-image" 
+                      :src="snapshotURL" 
+                      height="250" 
+                      alt="snapshot"
+                    >
                   </div>
                   <v-card-text>
                     <div class="d-flex align-items-center">
@@ -141,14 +173,21 @@
                         placeholder="File name"
                         v-model="snapshotName"
                       ></v-text-field>
-                      <v-btn class="btn ml-4" color="canvas" :href="snapshotURL" :download="snapshotName">Download</v-btn>
+                      <v-btn 
+                        class="btn ml-4" 
+                        color="canvas" 
+                        :href="snapshotURL" 
+                        :download="snapshotName"
+                      >
+                        Download
+                      </v-btn>
                     </div>
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn
-                      color="text"
                       text
+                      color="text"
                       @click="clickSnapshotClose"
                     >Close</v-btn>
                   </v-card-actions>
@@ -165,10 +204,10 @@
                       <v-col cols="12">
                         <v-select
                           color="grey lighten-5"
+                          label="Play Speed"
                           v-model="defaultSpeed"
                           :items="speed"
                           :menu-props="{ top: true, offsetY: true }"
-                          label="Play Speed"
                           @change="changePlay"
                         ></v-select>
                       </v-col>
@@ -179,10 +218,10 @@
                       <v-col cols="12">
                         <v-select
                           color="grey lighten-5"
+                          label="Play Type"
                           v-model="defaultType"
                           :items="types"
                           :menu-props="{ top: true, offsetY: true }"
-                          label="Play Type"
                           @change="changePlayType"
                         ></v-select>
                       </v-col>
@@ -193,10 +232,10 @@
                       <v-col cols="12">
                         <v-select
                           color="grey lighten-5"
+                          label="Play Direction"
                           v-model="defaultDirection"
                           :items="directions"
                           :menu-props="{ top: true, offsetY: true }"
-                          label="Play Direction"
                           @change="changePlay"
                         ></v-select>
                       </v-col>
@@ -205,24 +244,83 @@
                 </div>
               </div>
               <!-- playbar -->
-              <div class="d-flex justify-content-around align-items-center toolbox-basic" id="playbar">
-                <span class="play-button" type="button" id="playButton" onclick="buttonClicked()"><em class="fas fa-pause"></em></span>
+              <div 
+                class="d-flex justify-content-around align-items-center toolbox-basic" 
+                id="playbar"
+              >
+                <span 
+                  class="play-button" 
+                  type="button" 
+                  id="playButton" 
+                  @click="buttonClicked()"
+                >
+                  <em class="fas fa-pause"></em>
+                </span>
                 <div class="d-flex flex-column align-items-between">
                   <!-- timeline-preview -->
-                  <div class="timeline-preview" :style="{'left':clientX+'px', 'top':clientY+'px'}">
-                    <canvas v-show="isPreview && isCanvas1Selected" id="myCanvas1Preview" class="preview-canvas" width="100" height="100"></canvas>
-                    <canvas v-show="isPreview && isCanvas2Selected" id="myCanvas2Preview" class="preview-canvas" width="100" height="100"></canvas>
-                    <canvas v-show="isPreview && isCanvas3Selected" id="myCanvas3Preview" class="preview-canvas" width="100" height="100"></canvas>
-                    <canvas v-show="isPreview && isCanvas4Selected" id="myCanvas4Preview" class="preview-canvas" width="100" height="100"></canvas>
+                  <div 
+                    class="timeline-preview" 
+                    :style="{'left':clientX+'px', 'top':clientY+'px'}"
+                  >
+                    <canvas 
+                      class="preview-canvas" 
+                      v-show="isPreview && isCanvas1Selected" 
+                      id="myCanvas1Preview" 
+                      width="100" 
+                      height="100"
+                    ></canvas>
+                    <canvas 
+                      class="preview-canvas" 
+                      v-show="isPreview && isCanvas2Selected" 
+                      id="myCanvas2Preview" 
+                      width="100" 
+                      height="100"
+                    ></canvas>
+                    <canvas 
+                      class="preview-canvas" 
+                      v-show="isPreview && isCanvas3Selected" 
+                      id="myCanvas3Preview" 
+                      width="100" 
+                      height="100"
+                    ></canvas>
+                    <canvas 
+                      class="preview-canvas" 
+                      v-show="isPreview && isCanvas4Selected" 
+                      id="myCanvas4Preview" 
+                      width="100" 
+                      height="100"
+                    ></canvas>
                   </div>
-                  <input @mouseleave="outPreview" @mousemove="followSlider" class="player-slider my-1" type="range" id="slider" min="0" max="100" value="0" oninput="onSliderDrag(this.value)">
+                  <input 
+                    class="player-slider my-1" 
+                    id="slider" 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    value="0" 
+                    @mouseleave="outPreview" 
+                    @mousemove="followSlider" 
+                    oninput="onSliderDrag(this.value)"
+                  >
                   <div class="d-flex justify-content-between">
-                    <span class="badge badge-light" id="currentFrame"></span>
-                    <span class="badge badge-light" id="frameCount"></span>
+                    <span 
+                      class="badge badge-light" 
+                      id="currentFrame"
+                    ></span>
+                    <span 
+                      class="badge badge-light" 
+                      id="frameCount"
+                    ></span>
                   </div>
                 </div>
-                <span class="" data-toggle="collapse" href="#collapseExtraTools" role="button" 
-                  aria-expanded="false" aria-controls="collapseExtraTools" @click="extraButtonClick()">
+                <span 
+                  data-toggle="collapse" 
+                  href="#collapseExtraTools" 
+                  role="button" 
+                  aria-expanded="false" 
+                  aria-controls="collapseExtraTools" 
+                  @click="extraButtonClick"
+                >
                   <em class="fas fa-bars"></em>
                 </span>
               </div>
@@ -231,8 +329,83 @@
         </div>
 
         <!-- right panels - property component and preference component -->
-        <property v-if="selectedLayer" :selected-layer="selectedLayer" :canvasid="selectedCanvasId" :multiview="isMultiView" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-3 zindex2"></property>
-        <preference v-else :defaultwidth="defaultWidth" :defaultheight="defaultHeight" :canvas="selectedCanvas" :canvasid="selectedCanvasId" :canvasstyle="selectedCanvasStyle" :multiview="isMultiView" @shortcutdialog-changed="shortcutdialog = false" :shortcutdialog="shortcutdialog" class="col-3 zindex2"></preference>
+        <div class="col-3 zindex2">
+          <property 
+            v-if="selectedLayer" 
+            :selected-layer="selectedLayer" 
+            :canvasid="selectedCanvasId" 
+            :multiview="isMultiView"
+          ></property>
+          <preference 
+            v-else 
+            :defaultwidth="defaultWidth" 
+            :defaultheight="defaultHeight" 
+            :canvas="selectedCanvas" 
+            :canvasid="selectedCanvasId" 
+            :canvasstyle="selectedCanvasStyle" 
+            :multiview="isMultiView"
+          ></preference>
+          <!-- shortcut dialog -->
+          <v-dialog
+            v-model="shortcutdialog"
+            max-width="500"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="shortcut-btn btn mx-2 d-none d-sm-block" 
+                icon
+                depressed 
+                :class="{ 'text-white': $vuetify.theme.dark }" 
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-information-outline</v-icon>
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title class="headline">
+                Shortcuts
+              </v-card-title>
+              <v-card-text>
+                <div class="d-flex align-items-center icon--text text-body-1 ml-3">
+                  <ul>
+                    <li class="my-2">
+                      shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + space <v-icon small color="icon" class="mb-1">mdi-keyboard-space</v-icon> : Play / Pause
+                    </li>
+                    <li class="my-2">
+                      shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + m : Dark Mode / Light Mode
+                    </li>
+                    <li class="my-2">
+                      shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + v : Multiview / Singleview
+                    </li>
+                    <li class="my-2">
+                      shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + 1/2/3/4 : Select Canvas
+                    </li>
+                    <li class="my-2">
+                      shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + p : Snapshot
+                    </li>
+                    <li class="my-2">
+                      shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + s : Export File to GIF
+                    </li>
+                    <li class="my-2">
+                      shift <v-icon small color="icon">mdi-apple-keyboard-shift</v-icon> + c : Shortcut
+                    </li>
+                  </ul>
+                </div>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  text
+                  color="text"
+                  @click="clickShortcutClose"
+                >
+                  Close
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
       </div>
     </v-app>
 
@@ -328,9 +501,10 @@
             //timeline-preview
             isPreview: false,
             clientX: null,
-            clientY: null,
+            clientY: null
           }
         },
+
         computed: {
           isCanvas1Selected() {
             if (this.selectedCanvasId === 0) {
@@ -464,7 +638,11 @@
               }
               rm.previewRender(frame)
             }
-          }
+          },
+
+          clickShortcutClose() {
+            this.shortcutdialog = false
+          },
         },
 
         created() {
